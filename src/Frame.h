@@ -6,5 +6,5 @@
 class Frame : public wxFrame {
     public:
         Frame(const wxSize& size);
-        wxTextCtrl *editor;
+        wxStyledTextCtrl *editor;
 };
