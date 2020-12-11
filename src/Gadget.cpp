@@ -2,7 +2,10 @@
 #include "Frame.h"
 
 bool Gadget::OnInit() {
-    Frame *f = new Frame();
+    wxSize s = wxGetDisplaySize();
+    s.Scale(0.5, 0.5);
+
+    Frame *f = new Frame(s);
     f->Show(true);
     return true;
 }

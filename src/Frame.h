@@ -1,8 +1,10 @@
 #pragma once
 
 #include <wx/wx.h>
+#include <wx/stc/stc.h>
 
 class Frame : public wxFrame {
     public:
-        Frame();
+        Frame(const wxSize& size);
+        wxTextCtrl *editor;
 };
