@@ -1,12 +1,11 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <wx/stc/stc.h>
 
-#include "Editor.h"
+#include "Window.h"
 
 class Frame : public wxFrame {
     public:
         Frame(const wxSize& size);
-        Editor *editor;
+        Window *window;
 };
