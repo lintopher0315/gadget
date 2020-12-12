@@ -12,4 +12,5 @@ class Window : public wxWindow {
         Window(wxWindow *parent);
         Editor *editor;
         StatusBar *statusBar;
+        wxBoxSizer *sizer;
 };
