@@ -1,18 +1,7 @@
 #include "Command.h"
 
 void Command::add(char c) {
-    if (c == ':') {
-        if (prefix == "") {
-            prefix += c;
-        }
-        else {
-            action += c;
-        }
-    }
-    else if (isalpha(c)) {
-        action += c;
-    }
-    else if (isdigit(c)) {
+    if (isdigit(c)) {
         if (action == "") {
             if (!c) {
                 return;
@@ -26,10 +15,13 @@ void Command::add(char c) {
             action += c;
         }
     }
+    else {
+        action += c;
+    }
 }
 
 void Command::clear() {
-    prefix = "";
+    prefix = NORMAL_PREFIX;
     number = 0;
     action = "";
 }

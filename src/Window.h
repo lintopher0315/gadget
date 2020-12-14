@@ -4,6 +4,7 @@
 
 #include "Editor.h"
 #include "StatusBar.h"
+#include "Command.h"
 
 #define NORMAL_MODE 0
 #define EDIT_MODE 1
