@@ -10,4 +10,6 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     sizer->Add(statusBar, 0, wxEXPAND | wxALL, 0);
 
     SetSizer(sizer);
+
+    mode = NORMAL_MODE;
 }
