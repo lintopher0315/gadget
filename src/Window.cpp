@@ -4,6 +4,7 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     sizer = new wxBoxSizer(wxVERTICAL);
 
     editor = new Editor(this);
+
     statusBar = new StatusBar(this);
 
     sizer->Add(editor, 1, wxEXPAND | wxALL, 0);

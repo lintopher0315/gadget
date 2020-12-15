@@ -15,4 +15,5 @@ class Command {
         unsigned short prefix;
         unsigned int number;
         std::string action;
+        //vector<string> args;
 };
