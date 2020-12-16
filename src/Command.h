@@ -2,18 +2,22 @@
 
 #include <string>
 #include <ctype.h>
+#include <regex>
 
 #define NORMAL_PREFIX 0
 #define COMMAND_PREFIX 1
 
 class Command {
     public:
-        void add(char c);
+        Command();
+
         void clear(void);
         bool checkValid(void); // checks using regex if current command is executable
 
         unsigned short prefix;
-        unsigned int number;
-        std::string action;
-        //vector<string> args;
+        std::string cmd;
+
+    private:
+        const std::string CMD_LIST[2];
+        const std::string ACT_LIST[2];
 };

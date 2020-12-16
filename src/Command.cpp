@@ -1,31 +1,28 @@
 #include "Command.h"
 
-void Command::add(char c) {
-    if (isdigit(c)) {
-        if (action == "") {
-            if (!c) {
-                return;
-            }
-            else {
-                number *= 10;
-                number += c - '0';
-            }
-        }
-        else {
-            action += c;
-        }
-    }
-    else {
-        action += c;
-    }
+Command::Command() {
+    const std::string CMD_LIST[]={"(wq|w|q|e)", "tabedit [^ ]+"};
+    const std::string ACT_LIST[]={"[iIaA]", "[0-9]+[hjkl]"};
 }
 
 void Command::clear() {
     prefix = NORMAL_PREFIX;
-    number = 0;
-    action = "";
+    cmd = "";
 }
 
 bool Command::checkValid() {
-
+    if (prefix == NORMAL_PREFIX) {
+        for (int i = 0; i < sizeof(ACT_LIST) / sizeof(ACT_LIST[0]); ++i) {
+            if (std::regex_match(cmd, std::regex(CMD_LIST[i]))) {
+                return true;
+            }
+        }
+    }
+    else if (prefix == COMMAND_PREFIX) {
+        for (int i = 0; i < sizeof(CMD_LIST) / sizeof(CMD_LIST[0]); ++i) {
+            if (std::regex_match(cmd, std::regex(CMD_LIST[i]))) {
+                return true;
+            }
+        }
+    }
 }
