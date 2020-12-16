@@ -14,4 +14,5 @@ class Editor : public wxStyledTextCtrl {
 
         Window *getWindow();
         void onChar(wxKeyEvent& event);
+        void onKey(wxKeyEvent& event);
 };

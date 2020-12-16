@@ -11,6 +11,7 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
     StyleSetFont(0, *font);
 
     Bind(wxEVT_CHAR, &Editor::onChar, this);
+    Bind(wxEVT_KEY_DOWN, &Editor::onKey, this);
 }
 
 Window *Editor::getWindow() {
@@ -21,9 +22,21 @@ void Editor::onChar(wxKeyEvent& event) {
     wxChar c = event.GetUnicodeKey();
     if (c != WXK_NONE) {
         if (c >= 32) {
-            getWindow()->statusBar->AppendText(c);
+            if (getWindow()->mode == NORMAL_MODE) {
+                getWindow()->statusBar->AppendText(c);
+                return;
+            }
             // also add to parent command object
         }
+    }
+    event.Skip();
+}
+
+void Editor::onKey(wxKeyEvent& event) {
+    switch (event.GetKeyCode()) {
+        case WXK_ESCAPE:
+            getWindow()->mode = NORMAL_MODE;
+            break;
     }
     event.Skip();
 }
