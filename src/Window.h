@@ -19,7 +19,7 @@ class Window : public wxWindow {
         Editor *editor;
         StatusBar *statusBar;
         wxBoxSizer *sizer;
-        //Command *command;
+        Command *command;
 
         unsigned short mode;
 };

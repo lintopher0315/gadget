@@ -12,5 +12,7 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
 
     SetSizer(sizer);
 
+    command = new Command();
+
     mode = NORMAL_MODE;
 }
