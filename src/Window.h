@@ -4,6 +4,7 @@
 
 #include "Editor.h"
 #include "StatusBar.h"
+#include "CommandBar.h"
 #include "Command.h"
 
 #define NORMAL_MODE 0
@@ -18,6 +19,7 @@ class Window : public wxWindow {
 
         Editor *editor;
         StatusBar *statusBar;
+        CommandBar *commandBar;
         wxBoxSizer *sizer;
         Command *command;
 

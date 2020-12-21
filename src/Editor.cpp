@@ -24,7 +24,7 @@ void Editor::onChar(wxKeyEvent& event) {
     if (c != WXK_NONE) {
         if (c >= 32) {
             if (w->mode == NORMAL_MODE) {
-                w->statusBar->AppendText(c);
+                w->commandBar->AppendText(c);
                 if (c == ':' && w->command->cmd.empty()) {
                     w->command->prefix = COMMAND_PREFIX;
                     return;
@@ -47,7 +47,7 @@ void Editor::onKey(wxKeyEvent& event) {
         case WXK_ESCAPE:
             w->mode = NORMAL_MODE;
             w->command->clear();
-            w->statusBar->Clear();
+            w->commandBar->Clear();
             break;
         case WXK_RETURN:
             // TODO:
@@ -63,8 +63,8 @@ void Editor::onKey(wxKeyEvent& event) {
                         w->command->prefix = NORMAL_PREFIX;
                     }
                 }
-                int l = w->statusBar->GetLineLength(0);
-                w->statusBar->Remove(l-1, l);
+                int l = w->commandBar->GetLineLength(0);
+                w->commandBar->Remove(l-1, l);
             }
             return;
     }
