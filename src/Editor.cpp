@@ -34,6 +34,9 @@ void Editor::onChar(wxKeyEvent& event) {
                 // if NORMAL_PREFIX
                 // check if command is valid
                 // execute and clear
+                if (w->command->prefix == NORMAL_PREFIX && w->command->isValid()) {
+                    w->executeCommand();
+                }
                 return;
             }
         }
@@ -48,13 +51,20 @@ void Editor::onKey(wxKeyEvent& event) {
             w->mode = NORMAL_MODE;
             w->command->clear();
             w->commandBar->Clear();
-            break;
+
+            // change status bar; prob update this later
+            w->statusBar->Clear();
+            w->statusBar->AppendText("~ NORMAL ~");
+            return;
         case WXK_RETURN:
+            if (w->mode == NORMAL_MODE) {
+                return;
+            }
+            break;
             // TODO:
             // check mode
             // if normal, check if command is valid
             // execute and clear
-            return;
         case WXK_BACK:
             if (w->mode == NORMAL_MODE) {
                 if (!w->command->cmd.empty()) {
@@ -65,8 +75,9 @@ void Editor::onKey(wxKeyEvent& event) {
                 }
                 int l = w->commandBar->GetLineLength(0);
                 w->commandBar->Remove(l-1, l);
+                return;
             }
-            return;
+            break;
     }
     event.Skip();
 }

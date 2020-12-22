@@ -1,8 +1,7 @@
 #include "Command.h"
 
 Command::Command() {
-    const std::string CMD_LIST[]={"(wq|w|q|e)", "tabedit [^ ]+"};
-    const std::string ACT_LIST[]={"[iIaA]", "[0-9]+[hjkl]"};
+    prefix = NORMAL_PREFIX;
 }
 
 void Command::clear() {
@@ -10,10 +9,11 @@ void Command::clear() {
     cmd = "";
 }
 
-bool Command::checkValid() {
+bool Command::isValid() {
+    // instead of looping; concatenate with proper regex and check for match
     if (prefix == NORMAL_PREFIX) {
         for (int i = 0; i < sizeof(ACT_LIST) / sizeof(ACT_LIST[0]); ++i) {
-            if (std::regex_match(cmd, std::regex(CMD_LIST[i]))) {
+            if (std::regex_match(cmd, std::regex(ACT_LIST[i]))) {
                 return true;
             }
         }
@@ -25,4 +25,5 @@ bool Command::checkValid() {
             }
         }
     }
+    return false;
 }

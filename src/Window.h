@@ -15,7 +15,7 @@ class Window : public wxWindow {
     public:
         Window(wxWindow *parent);
 
-        //void executeCommand(); // execute the command object we'll add later
+        void executeCommand();
 
         Editor *editor;
         StatusBar *statusBar;

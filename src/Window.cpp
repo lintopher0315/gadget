@@ -17,3 +17,15 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
 
     mode = NORMAL_MODE;
 }
+
+void Window::executeCommand() {
+    if (command->cmd == "i") {
+        mode = EDIT_MODE;
+
+        // change status bar; prob update this later
+        statusBar->Clear();
+        statusBar->AppendText("~ EDIT ~");
+    }
+    command->clear();
+    commandBar->Clear();
+}
