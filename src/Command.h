@@ -12,12 +12,12 @@ class Command {
         Command();
 
         void clear(void);
-        bool isValid(void); // checks using regex if current command is executable
+        int isValid(void);
 
         unsigned short prefix;
         std::string cmd;
 
     private:
         const std::string CMD_LIST[2]={"(wq|w|q|e)", "tabedit [^ ]+"};
-        const std::string ACT_LIST[2]={"[iIaA]", "[0-9]+[hjkl]"};
+        const std::string ACT_LIST[2]={"[iIaA]", "[0-9]*[hjkl]"};
 };

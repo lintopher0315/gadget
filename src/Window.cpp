@@ -18,14 +18,41 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     mode = NORMAL_MODE;
 }
 
-void Window::executeCommand() {
-    if (command->cmd == "i") {
+void Window::executeCommand(int cmdInd) {
+    if (cmdInd == 0) {
         mode = EDIT_MODE;
 
         // change status bar; prob update this later
         statusBar->Clear();
         statusBar->AppendText("~ EDIT ~");
     }
+    else if (cmdInd == 1) {
+        int dist = 1;
+        std::string cmdCpy = command->cmd;
+        if (cmdCpy.size() > 1) {
+            dist = std::max(dist, stoi(cmdCpy.substr(0, cmdCpy.size()-1)));
+        }
+        for (int i = 0; i < dist; ++i) {
+            switch(cmdCpy[cmdCpy.size()-1]) {
+                case 'h':
+                    editor->CharLeft();
+                    break;
+                case 'j':
+                    editor->LineDown();
+                    break;
+                case 'k':
+                    editor->LineUp();
+                    break;
+                case 'l':
+                    editor->CharRight();
+                    break;
+            }
+        }
+    }
     command->clear();
     commandBar->Clear();
 }
+
+// TODO:
+// create function that accepts (int, *func) and does that func that many times
+// useful for any command that can be prepended by a number
