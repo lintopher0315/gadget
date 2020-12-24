@@ -27,25 +27,19 @@ void Window::executeCommand(int cmdInd) {
         statusBar->AppendText("~ EDIT ~");
     }
     else if (cmdInd == 1) {
-        int dist = 1;
-        std::string cmdCpy = command->cmd;
-        if (cmdCpy.size() > 1) {
-            dist = std::max(dist, stoi(cmdCpy.substr(0, cmdCpy.size()-1)));
-        }
-        for (int i = 0; i < dist; ++i) {
-            switch(cmdCpy[cmdCpy.size()-1]) {
-                case 'h':
-                    editor->CharLeft();
-                    break;
-                case 'j':
-                    editor->LineDown();
-                    break;
-                case 'k':
-                    editor->LineUp();
-                    break;
-                case 'l':
-                    editor->CharRight();
-                    break;
+        std::pair<int, std::string> parsedCmd = command->parse();
+        for (int i = 0; i < parsedCmd.first; ++i) {
+            if (parsedCmd.second == "h") {
+                editor->CharLeft();
+            }
+            else if (parsedCmd.second == "j") {
+                editor->LineDown();
+            }
+            else if (parsedCmd.second == "k") {
+                editor->LineUp();
+            }
+            else if (parsedCmd.second == "l") {
+                editor->CharRight();
             }
         }
     }

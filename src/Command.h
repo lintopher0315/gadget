@@ -3,6 +3,7 @@
 #include <string>
 #include <ctype.h>
 #include <regex>
+#include <utility>
 
 #define NORMAL_PREFIX 0
 #define COMMAND_PREFIX 1
@@ -13,6 +14,7 @@ class Command {
 
         void clear(void);
         int isValid(void);
+        std::pair<int, std::string> parse(void);
 
         unsigned short prefix;
         std::string cmd;

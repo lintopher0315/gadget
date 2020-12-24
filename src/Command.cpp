@@ -28,5 +28,13 @@ int Command::isValid() {
     return -1;
 }
 
-// TODO:
-// create function that automatically parses command into (num, action)
+std::pair<int, std::string> Command::parse() {
+    int num = 0;
+    int i = 0;
+    while (i < cmd.size() && isdigit(cmd[i])) {
+        num *= 10;
+        num += cmd[i] - '0';
+        ++i;
+    }
+    return {std::max(1, num), cmd.substr(i, cmd.size()-i)};
+}
