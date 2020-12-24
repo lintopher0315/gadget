@@ -15,4 +15,10 @@ class Editor : public wxStyledTextCtrl {
         Window *getWindow();
         void onChar(wxKeyEvent& event);
         void onKey(wxKeyEvent& event);
+        void repeatAction(int num, void (*f)());
+
+        void caretLeft(int num);
+        void caretRight(int num);
+        void caretUp(int num);
+        void caretDown(int num);
 };

@@ -28,19 +28,17 @@ void Window::executeCommand(int cmdInd) {
     }
     else if (cmdInd == 1) {
         std::pair<int, std::string> parsedCmd = command->parse();
-        for (int i = 0; i < parsedCmd.first; ++i) {
-            if (parsedCmd.second == "h") {
-                editor->CharLeft();
-            }
-            else if (parsedCmd.second == "j") {
-                editor->LineDown();
-            }
-            else if (parsedCmd.second == "k") {
-                editor->LineUp();
-            }
-            else if (parsedCmd.second == "l") {
-                editor->CharRight();
-            }
+        if (parsedCmd.second == "h") {
+            editor->caretLeft(parsedCmd.first);
+        }
+        else if (parsedCmd.second == "j") {
+            editor->caretDown(parsedCmd.first);
+        }
+        else if (parsedCmd.second == "k") {
+            editor->caretUp(parsedCmd.first);
+        }
+        else if (parsedCmd.second == "l") {
+            editor->caretRight(parsedCmd.first);
         }
     }
     command->clear();
@@ -50,3 +48,8 @@ void Window::executeCommand(int cmdInd) {
 // TODO:
 // create function that accepts (int, *func) and does that func that many times
 // useful for any command that can be prepended by a number
+/*void Window::repeatAction(int num, void (*f)()) {
+    for (int i = 0; i < num; ++i) {
+        (*f)();
+    }
+}*/

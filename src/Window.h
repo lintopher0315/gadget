@@ -16,6 +16,7 @@ class Window : public wxWindow {
         Window(wxWindow *parent);
 
         void executeCommand(int cmdInd);
+        //void repeatAction(int num, void (*f)());
 
         Editor *editor;
         StatusBar *statusBar;

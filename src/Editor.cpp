@@ -82,3 +82,27 @@ void Editor::onKey(wxKeyEvent& event) {
     }
     event.Skip();
 }
+
+void Editor::caretLeft(int num) {
+    for (int i = 0; i < num; ++i) {
+        CharLeft();
+    }
+}
+
+void Editor::caretRight(int num) {
+    for (int i = 0; i < num; ++i) {
+        CharRight();
+    }
+}
+
+void Editor::caretUp(int num) {
+    for (int i = 0; i < num; ++i) {
+        LineUp();
+    }
+}
+
+void Editor::caretDown(int num) {
+    for (int i = 0; i < num; ++i) {
+        LineDown();
+    }
+}
