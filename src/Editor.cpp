@@ -84,25 +84,39 @@ void Editor::onKey(wxKeyEvent& event) {
 }
 
 void Editor::caretLeft(int num) {
+    int start = PositionFromLine(LineFromPosition(GetCurrentPos()));
     for (int i = 0; i < num; ++i) {
+        if (GetCurrentPos() == start) {
+            return;
+        }
         CharLeft();
     }
 }
 
 void Editor::caretRight(int num) {
+    int end = GetLineEndPosition(LineFromPosition(GetCurrentPos()));
     for (int i = 0; i < num; ++i) {
+        if (GetCurrentPos() == end - 1) {
+            return;
+        }
         CharRight();
     }
 }
 
 void Editor::caretUp(int num) {
     for (int i = 0; i < num; ++i) {
+        if (GetCurrentLine() == 0) {
+            return;
+        }
         LineUp();
     }
 }
 
 void Editor::caretDown(int num) {
     for (int i = 0; i < num; ++i) {
+        if (GetCurrentLine() == GetLineCount() - 1) {
+            return;
+        }
         LineDown();
     }
 }

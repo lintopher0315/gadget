@@ -44,12 +44,3 @@ void Window::executeCommand(int cmdInd) {
     command->clear();
     commandBar->Clear();
 }
-
-// TODO:
-// create function that accepts (int, *func) and does that func that many times
-// useful for any command that can be prepended by a number
-/*void Window::repeatAction(int num, void (*f)()) {
-    for (int i = 0; i < num; ++i) {
-        (*f)();
-    }
-}*/
