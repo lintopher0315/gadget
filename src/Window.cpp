@@ -22,6 +22,16 @@ void Window::executeCommand(int cmdInd) {
     if (cmdInd == 0) {
         mode = EDIT_MODE;
 
+        if (command->cmd == "a") {
+            editor->append();
+        }
+        else if (command->cmd == "A") {
+            editor->LineEnd();
+        }
+        else if (command->cmd == "I") {
+            editor->Home();
+        }
+
         // change status bar; prob update this later
         statusBar->Clear();
         statusBar->AppendText("~ EDIT ~");

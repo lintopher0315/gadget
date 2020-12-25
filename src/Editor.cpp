@@ -49,6 +49,9 @@ void Editor::onKey(wxKeyEvent& event) {
     Window *w = getWindow();
     switch (event.GetKeyCode()) {
         case WXK_ESCAPE:
+            if (w->mode == EDIT_MODE) {
+                caretLeft(1);
+            }
             w->mode = NORMAL_MODE;
             w->command->clear();
             w->commandBar->Clear();
@@ -83,10 +86,21 @@ void Editor::onKey(wxKeyEvent& event) {
     event.Skip();
 }
 
+int Editor::linePos() {
+    return GetCurrentPos() - lineStartPos();
+}
+
+int Editor::lineStartPos() {
+    return PositionFromLine(LineFromPosition(GetCurrentPos()));
+}
+
+int Editor::lineEndPos() {
+    return GetLineEndPosition(LineFromPosition(GetCurrentPos()));
+}
+
 void Editor::caretLeft(int num) {
-    int start = PositionFromLine(LineFromPosition(GetCurrentPos()));
     for (int i = 0; i < num; ++i) {
-        if (GetCurrentPos() == start) {
+        if (GetCurrentPos() == lineStartPos()) {
             return;
         }
         CharLeft();
@@ -94,9 +108,8 @@ void Editor::caretLeft(int num) {
 }
 
 void Editor::caretRight(int num) {
-    int end = GetLineEndPosition(LineFromPosition(GetCurrentPos()));
     for (int i = 0; i < num; ++i) {
-        if (GetCurrentPos() == end - 1) {
+        if (GetCurrentPos() == lineEndPos() - 1) {
             return;
         }
         CharRight();
@@ -109,6 +122,9 @@ void Editor::caretUp(int num) {
             return;
         }
         LineUp();
+        if (GetCurrentPos() == lineEndPos()) {
+            caretLeft(1);
+        }
     }
 }
 
@@ -118,5 +134,17 @@ void Editor::caretDown(int num) {
             return;
         }
         LineDown();
+        if (GetCurrentPos() == lineEndPos()) {
+            caretLeft(1);
+        }
+    }
+}
+
+void Editor::append() {
+    if (lineEndPos() - 1 == GetCurrentPos()) {
+        LineEnd();
+    }
+    else {
+        caretRight(1);
     }
 }
