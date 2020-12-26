@@ -21,5 +21,5 @@ class Command {
 
     private:
         const std::string CMD_LIST[2]={"(wq|w|q|e)", "tabedit [^ ]+"};
-        const std::string ACT_LIST[2]={"[iIaA]", "[0-9]*[hjkl]"};
+        const std::string ACT_LIST[4]={"[iIaA]", "[0-9]*[hjkl]", "[0-9]*[oO]", "[_$]"};
 };

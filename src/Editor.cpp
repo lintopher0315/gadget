@@ -148,3 +148,32 @@ void Editor::append() {
         caretRight(1);
     }
 }
+
+void Editor::insertLineBelow(int num) {
+    LineEnd();
+    for (int i = 0; i < num; ++i) {
+        NewLine();
+    }
+    Window *w = getWindow();
+    w->mode = EDIT_MODE;    
+
+    // change status bar; prob update this later
+    w->statusBar->Clear();
+    w->statusBar->AppendText("~ EDIT ~");
+}
+
+void Editor::insertLineAbove(int num) {
+    Home();
+    for (int i = 0; i < num; ++i) {
+        NewLine();
+    }
+    caretUp(1);
+    VCHome();
+
+    Window *w = getWindow();
+    w->mode = EDIT_MODE;    
+
+    // change status bar; prob update this later
+    w->statusBar->Clear();
+    w->statusBar->AppendText("~ EDIT ~");
+}

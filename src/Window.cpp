@@ -19,37 +19,58 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
 }
 
 void Window::executeCommand(int cmdInd) {
-    if (cmdInd == 0) {
-        mode = EDIT_MODE;
+    std::pair<int, std::string> parsedCmd;
+    switch(cmdInd) {
+        case 0:
+            mode = EDIT_MODE;
 
-        if (command->cmd == "a") {
-            editor->append();
-        }
-        else if (command->cmd == "A") {
-            editor->LineEnd();
-        }
-        else if (command->cmd == "I") {
-            editor->Home();
-        }
+            if (command->cmd == "a") {
+                editor->append();
+            }
+            else if (command->cmd == "A") {
+                editor->LineEnd();
+            }
+            else if (command->cmd == "I") {
+                editor->VCHome();
+            }
 
-        // change status bar; prob update this later
-        statusBar->Clear();
-        statusBar->AppendText("~ EDIT ~");
-    }
-    else if (cmdInd == 1) {
-        std::pair<int, std::string> parsedCmd = command->parse();
-        if (parsedCmd.second == "h") {
-            editor->caretLeft(parsedCmd.first);
-        }
-        else if (parsedCmd.second == "j") {
-            editor->caretDown(parsedCmd.first);
-        }
-        else if (parsedCmd.second == "k") {
-            editor->caretUp(parsedCmd.first);
-        }
-        else if (parsedCmd.second == "l") {
-            editor->caretRight(parsedCmd.first);
-        }
+            // change status bar; prob update this later
+            statusBar->Clear();
+            statusBar->AppendText("~ EDIT ~");
+            break;
+        case 1:
+            parsedCmd = command->parse();
+            if (parsedCmd.second == "h") {
+                editor->caretLeft(parsedCmd.first);
+            }
+            else if (parsedCmd.second == "j") {
+                editor->caretDown(parsedCmd.first);
+            }
+            else if (parsedCmd.second == "k") {
+                editor->caretUp(parsedCmd.first);
+            }
+            else if (parsedCmd.second == "l") {
+                editor->caretRight(parsedCmd.first);
+            }
+            break;
+        case 2:
+            parsedCmd = command->parse();
+            if (parsedCmd.second == "o") {
+                editor->insertLineBelow(parsedCmd.first);
+            }
+            else if (parsedCmd.second == "O") {
+                editor->insertLineAbove(parsedCmd.first);
+            }
+            break;
+        case 3:
+            if (command->cmd == "_") {
+                editor->VCHome();
+            }
+            else if (command->cmd == "$") {
+                editor->LineEnd();
+                editor->caretLeft(1);
+            }
+            break;
     }
     command->clear();
     commandBar->Clear();

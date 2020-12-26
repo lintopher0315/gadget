@@ -24,4 +24,6 @@ class Editor : public wxStyledTextCtrl {
         void caretUp(int num);
         void caretDown(int num);
         void append(void);
+        void insertLineBelow(int num);
+        void insertLineAbove(int num);
 };
