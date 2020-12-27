@@ -3,11 +3,11 @@
 Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize) {
     sizer = new wxBoxSizer(wxVERTICAL);
 
-    editor = new Editor(this);
+    panel = new Panel(this);
     statusBar = new StatusBar(this);
     commandBar = new CommandBar(this);
 
-    sizer->Add(editor, 1, wxEXPAND | wxALL, 0);
+    sizer->Add(panel, 1, wxEXPAND | wxALL, 0);
     sizer->Add(statusBar, 0, wxEXPAND | wxALL, -3);
     sizer->Add(commandBar, 0, wxEXPAND | wxALL, 0);
 
@@ -16,8 +16,13 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     command = new Command();
 
     mode = NORMAL_MODE;
+    currEditor = 0;
 
     cwd = std::filesystem::current_path().string();
+}
+
+Editor *Window::getCurrentEditor() {
+    return (Editor *)panel->GetPage(currEditor);
 }
 
 void Window::executeCommand(int cmdInd) {
@@ -27,13 +32,13 @@ void Window::executeCommand(int cmdInd) {
             mode = EDIT_MODE;
 
             if (command->cmd == "a") {
-                editor->append();
+                getCurrentEditor()->append();
             }
             else if (command->cmd == "A") {
-                editor->LineEnd();
+                getCurrentEditor()->LineEnd();
             }
             else if (command->cmd == "I") {
-                editor->VCHome();
+                getCurrentEditor()->VCHome();
             }
 
             // change status bar; prob update this later
@@ -43,34 +48,34 @@ void Window::executeCommand(int cmdInd) {
         case 1:
             parsedCmd = command->parse();
             if (parsedCmd.second == "h") {
-                editor->caretLeft(parsedCmd.first);
+                getCurrentEditor()->caretLeft(parsedCmd.first);
             }
             else if (parsedCmd.second == "j") {
-                editor->caretDown(parsedCmd.first);
+                getCurrentEditor()->caretDown(parsedCmd.first);
             }
             else if (parsedCmd.second == "k") {
-                editor->caretUp(parsedCmd.first);
+                getCurrentEditor()->caretUp(parsedCmd.first);
             }
             else if (parsedCmd.second == "l") {
-                editor->caretRight(parsedCmd.first);
+                getCurrentEditor()->caretRight(parsedCmd.first);
             }
             break;
         case 2:
             parsedCmd = command->parse();
             if (parsedCmd.second == "o") {
-                editor->insertLineBelow(parsedCmd.first);
+                getCurrentEditor()->insertLineBelow(parsedCmd.first);
             }
             else if (parsedCmd.second == "O") {
-                editor->insertLineAbove(parsedCmd.first);
+                getCurrentEditor()->insertLineAbove(parsedCmd.first);
             }
             break;
         case 3:
             if (command->cmd == "_") {
-                editor->VCHome();
+                getCurrentEditor()->VCHome();
             }
             else if (command->cmd == "$") {
-                editor->LineEnd();
-                editor->caretLeft(1);
+                getCurrentEditor()->LineEnd();
+                getCurrentEditor()->caretLeft(1);
             }
             break;
     }

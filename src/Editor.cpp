@@ -15,7 +15,7 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
 }
 
 Window *Editor::getWindow() {
-    return (Window *)GetParent();
+    return (Window *)GetGrandParent();
 }
 
 void Editor::onChar(wxKeyEvent& event) {

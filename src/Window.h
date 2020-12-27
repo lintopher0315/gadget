@@ -3,7 +3,7 @@
 #include <wx/wx.h>
 #include <filesystem>
 
-#include "Editor.h"
+#include "Panel.h"
 #include "StatusBar.h"
 #include "CommandBar.h"
 #include "Command.h"
@@ -16,15 +16,17 @@ class Window : public wxWindow {
     public:
         Window(wxWindow *parent);
 
+        Editor *getCurrentEditor();
         void executeCommand(int cmdInd);
 
-        Editor *editor;
+        Panel *panel;
         StatusBar *statusBar;
         CommandBar *commandBar;
         wxBoxSizer *sizer;
         Command *command;
 
         unsigned short mode;
+        unsigned short currEditor;
 
         std::string cwd;
 };
