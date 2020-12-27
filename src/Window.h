@@ -1,6 +1,7 @@
 #pragma once
 
 #include <wx/wx.h>
+#include <filesystem>
 
 #include "Editor.h"
 #include "StatusBar.h"
@@ -24,4 +25,6 @@ class Window : public wxWindow {
         Command *command;
 
         unsigned short mode;
+
+        std::string cwd;
 };

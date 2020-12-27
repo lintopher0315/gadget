@@ -16,6 +16,8 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     command = new Command();
 
     mode = NORMAL_MODE;
+
+    cwd = std::filesystem::current_path().string();
 }
 
 void Window::executeCommand(int cmdInd) {
