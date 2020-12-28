@@ -28,4 +28,8 @@ void Panel::onTabRemove(wxAuiNotebookEvent& event) {
 
     w->command->clear();
     w->commandBar->Clear();
+
+    if (GetPageCount() == 0) {
+        w->getFrame()->Destroy();
+    }
 }

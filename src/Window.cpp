@@ -21,6 +21,10 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     cwd = std::filesystem::current_path().string();
 }
 
+Frame *Window::getFrame() {
+    return (Frame *)GetParent();
+}
+
 Editor *Window::getCurrentEditor() {
     return (Editor *)panel->GetPage(currEditor);
 }

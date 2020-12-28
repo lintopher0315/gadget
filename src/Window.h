@@ -3,6 +3,10 @@
 #include <wx/wx.h>
 #include <filesystem>
 
+class Frame;
+class Window;
+
+#include "Frame.h"
 #include "Panel.h"
 #include "StatusBar.h"
 #include "CommandBar.h"
@@ -16,6 +20,7 @@ class Window : public wxWindow {
     public:
         Window(wxWindow *parent);
 
+        Frame *getFrame();
         Editor *getCurrentEditor();
         void executeCommand(int cmdInd);
 
