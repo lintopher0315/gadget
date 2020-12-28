@@ -22,7 +22,6 @@ void Panel::onTabChange(wxAuiNotebookEvent& event) {
 }
 
 void Panel::onTabRemove(wxAuiNotebookEvent& event) {
-    // disallow removing all tabs
     Window *w = getWindow();
     w->currEditor = event.GetSelection();
 

@@ -14,12 +14,13 @@ class Command {
 
         void clear(void);
         int isValid(void);
-        std::pair<int, std::string> parse(void);
+        std::pair<int, std::string> parseNormal(void);
+        std::vector<std::string> parseCommand(void);
 
         unsigned short prefix;
         std::string cmd;
 
     private:
-        const std::string CMD_LIST[2]={"(wq|w|q|e)", "tabedit [^ ]+"};
+        const std::string CMD_LIST[3]={"q", "(w|wq|e) [^ ]+", "tabedit( [^ ]+)+"};
         const std::string ACT_LIST[4]={"[iIaA]", "[0-9]*[hjkl]", "[0-9]*[oO]", "[_$]"};
 };

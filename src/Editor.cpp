@@ -82,6 +82,10 @@ void Editor::onKey(wxKeyEvent& event) {
                 return;
             }
             break;
+        case WXK_TAB:
+            if (w->mode == NORMAL_MODE) {
+                return;
+            }
     }
     event.Skip();
 }

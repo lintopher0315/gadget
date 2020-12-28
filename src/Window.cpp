@@ -50,7 +50,7 @@ void Window::executeCommand(int cmdInd) {
             statusBar->AppendText("~ EDIT ~");
             break;
         case 1:
-            parsedCmd = command->parse();
+            parsedCmd = command->parseNormal();
             if (parsedCmd.second == "h") {
                 getCurrentEditor()->caretLeft(parsedCmd.first);
             }
@@ -65,7 +65,7 @@ void Window::executeCommand(int cmdInd) {
             }
             break;
         case 2:
-            parsedCmd = command->parse();
+            parsedCmd = command->parseNormal();
             if (parsedCmd.second == "o") {
                 getCurrentEditor()->insertLineBelow(parsedCmd.first);
             }

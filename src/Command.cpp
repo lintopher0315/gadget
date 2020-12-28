@@ -28,7 +28,7 @@ int Command::isValid() {
     return -1;
 }
 
-std::pair<int, std::string> Command::parse() {
+std::pair<int, std::string> Command::parseNormal() {
     int num = 0;
     int i = 0;
     while (i < cmd.size() && isdigit(cmd[i])) {
@@ -37,4 +37,14 @@ std::pair<int, std::string> Command::parse() {
         ++i;
     }
     return {std::max(1, num), cmd.substr(i, cmd.size()-i)};
+}
+
+std::vector<std::string> Command::parseCommand() {
+    std::vector<std::string> result;
+    std::string token;
+    std::istringstream tokenStream(cmd);
+    while (std::getline(tokenStream, token, ' ')) {
+        result.push_back(token);
+    }
+    return result;
 }
