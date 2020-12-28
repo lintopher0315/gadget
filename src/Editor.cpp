@@ -34,7 +34,7 @@ void Editor::onChar(wxKeyEvent& event) {
                 // if NORMAL_PREFIX
                 // check if command is valid
                 // execute and clear
-                int ind=-1;
+                int ind = -1;
                 if (w->command->prefix == NORMAL_PREFIX && (ind = w->command->isValid()) >= 0) {
                     w->executeCommand(ind);
                 }
