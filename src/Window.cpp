@@ -108,6 +108,10 @@ void Window::executeCommand(int cmdInd) {
                 else {
                     if (isValidPath(parsedCmd[1])) {
                         getCurrentEditor()->relPath = parsedCmd[1];
+                        panel->SetPageText(currEditor, parsedCmd[1]);
+                    }
+                    else {
+                        break;
                     }
                 }
                 getCurrentEditor()->SaveFile(cwd + getCurrentEditor()->relPath);
