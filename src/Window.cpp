@@ -18,7 +18,7 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     mode = NORMAL_MODE;
     currEditor = 0;
 
-    cwd = std::filesystem::current_path().string();
+    cwd = std::filesystem::current_path().string() + "/";
 }
 
 Frame *Window::getFrame() {
@@ -98,6 +98,20 @@ void Window::executeCommand(int cmdInd) {
             break;
         case 1:
             parsedCmd = command->parseCommand();
+            if (parsedCmd[0] == "w") {
+                if (parsedCmd.size() == 1) {
+                    if (getCurrentEditor()->relPath == "") {
+                        // later this should display an error: editor has no file
+                        break;
+                    }
+                }
+                else {
+                    if (isValidPath(parsedCmd[1])) {
+                        getCurrentEditor()->relPath = parsedCmd[1];
+                    }
+                }
+                getCurrentEditor()->SaveFile(cwd + getCurrentEditor()->relPath);
+            }
             break;
         case 2:
             parsedCmd = command->parseCommand();
@@ -105,4 +119,28 @@ void Window::executeCommand(int cmdInd) {
     }
     command->clear();
     commandBar->Clear();
+}
+
+bool Window::isValidPath(std::string relPath) {
+    // currently only allows relative paths from cwd
+    if (relPath.empty()) {
+        return false;
+    }
+    std::string absPath = cwd + relPath;
+    if (std::filesystem::exists(absPath)) {
+        if (std::filesystem::is_regular_file(absPath)) {
+            return true;
+        }
+        return false;
+    }
+    std::string absDir = absPath;
+    // maybe check for backwards slash on Windows
+    while (absDir.back() != '/') {
+        absDir.pop_back();
+    }
+    if (std::filesystem::exists(absDir) && std::filesystem::is_directory(absDir)) {
+        std::ofstream file{absPath};
+        return true;
+    }
+    return false;
 }

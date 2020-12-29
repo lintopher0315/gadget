@@ -11,7 +11,7 @@ class Panel : public wxAuiNotebook {
     public:
         Panel(wxWindow *parent);
 
-        Window *getWindow();
+        Window *getWindow(void);
         void onTabChange(wxAuiNotebookEvent& event);
         void onTabRemove(wxAuiNotebookEvent& event);
 };

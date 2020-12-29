@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include <filesystem>
+#include <fstream>
 
 class Frame;
 class Window;
@@ -20,10 +21,11 @@ class Window : public wxWindow {
     public:
         Window(wxWindow *parent);
 
-        Frame *getFrame();
-        Editor *getCurrentEditor();
+        Frame *getFrame(void);
+        Editor *getCurrentEditor(void);
         void executeNormal(int cmdInd);
         void executeCommand(int cmdInd);
+        bool isValidPath(std::string relPath);
 
         Panel *panel;
         StatusBar *statusBar;
