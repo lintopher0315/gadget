@@ -29,7 +29,7 @@ Editor *Window::getCurrentEditor() {
     return (Editor *)panel->GetPage(currEditor);
 }
 
-void Window::executeCommand(int cmdInd) {
+void Window::executeNormal(int cmdInd) {
     std::pair<int, std::string> parsedCmd;
     switch(cmdInd) {
         case 0:
@@ -81,6 +81,26 @@ void Window::executeCommand(int cmdInd) {
                 getCurrentEditor()->LineEnd();
                 getCurrentEditor()->caretLeft(1);
             }
+            break;
+    }
+    command->clear();
+    commandBar->Clear();
+}
+
+void Window::executeCommand(int cmdInd) {
+    std::vector<std::string> parsedCmd;
+    switch(cmdInd) {
+        case 0:
+            panel->DeletePage(currEditor);
+            if (panel->GetPageCount() == 0) {
+                getFrame()->Destroy();
+            }
+            break;
+        case 1:
+            parsedCmd = command->parseCommand();
+            break;
+        case 2:
+            parsedCmd = command->parseCommand();
             break;
     }
     command->clear();

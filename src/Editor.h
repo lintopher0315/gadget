@@ -26,4 +26,6 @@ class Editor : public wxStyledTextCtrl {
         void append(void);
         void insertLineBelow(int num);
         void insertLineAbove(int num);
+
+        std::string relPath;
 };

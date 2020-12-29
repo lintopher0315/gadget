@@ -22,6 +22,7 @@ class Window : public wxWindow {
 
         Frame *getFrame();
         Editor *getCurrentEditor();
+        void executeNormal(int cmdInd);
         void executeCommand(int cmdInd);
 
         Panel *panel;

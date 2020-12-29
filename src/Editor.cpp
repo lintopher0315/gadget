@@ -30,13 +30,10 @@ void Editor::onChar(wxKeyEvent& event) {
                     return;
                 }
                 w->command->cmd += c;
-                // TODO:
-                // if NORMAL_PREFIX
-                // check if command is valid
-                // execute and clear
+
                 int ind = -1;
                 if (w->command->prefix == NORMAL_PREFIX && (ind = w->command->isValid()) >= 0) {
-                    w->executeCommand(ind);
+                    w->executeNormal(ind);
                 }
                 return;
             }
@@ -62,13 +59,13 @@ void Editor::onKey(wxKeyEvent& event) {
             return;
         case WXK_RETURN:
             if (w->mode == NORMAL_MODE) {
+                int ind = -1;
+                if (w->command->prefix == COMMAND_PREFIX && (ind = w->command->isValid()) >= 0) {
+                    w->executeCommand(ind); 
+                }
                 return;
             }
             break;
-            // TODO:
-            // check mode
-            // if normal, check if command is valid
-            // execute and clear
         case WXK_BACK:
             if (w->mode == NORMAL_MODE) {
                 if (!w->command->cmd.empty()) {
