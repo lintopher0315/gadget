@@ -9,7 +9,7 @@ void Command::clear() {
     cmd = "";
 }
 
-int Command::isValid() {
+int Command::isValid() const {
     // instead of looping; concatenate with proper regex and check for match
     if (prefix == NORMAL_PREFIX) {
         for (int i = 0; i < sizeof(ACT_LIST) / sizeof(ACT_LIST[0]); ++i) {
@@ -28,7 +28,7 @@ int Command::isValid() {
     return -1;
 }
 
-std::pair<int, std::string> Command::parseNormal() {
+std::pair<int, std::string> Command::parseNormal() const {
     int num = 0;
     int i = 0;
     while (i < cmd.size() && isdigit(cmd[i])) {
@@ -39,7 +39,7 @@ std::pair<int, std::string> Command::parseNormal() {
     return {std::max(1, num), cmd.substr(i, cmd.size()-i)};
 }
 
-std::vector<std::string> Command::parseCommand() {
+std::vector<std::string> Command::parseCommand() const {
     std::vector<std::string> result;
     std::string token;
     std::istringstream tokenStream(cmd);

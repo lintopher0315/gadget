@@ -13,9 +13,9 @@ class Command {
         Command();
 
         void clear(void);
-        int isValid(void);
-        std::pair<int, std::string> parseNormal(void);
-        std::vector<std::string> parseCommand(void);
+        int isValid(void) const;
+        std::pair<int, std::string> parseNormal(void) const;
+        std::vector<std::string> parseCommand(void) const;
 
         unsigned short prefix;
         std::string cmd;

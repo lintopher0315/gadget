@@ -87,19 +87,19 @@ void Editor::onKey(wxKeyEvent& event) {
     event.Skip();
 }
 
-int Editor::linePos() {
+int Editor::linePos() const {
     return GetCurrentPos() - lineStartPos();
 }
 
-int Editor::lineStartPos() {
+int Editor::lineStartPos() const {
     return PositionFromLine(LineFromPosition(GetCurrentPos()));
 }
 
-int Editor::lineEndPos() {
+int Editor::lineEndPos() const {
     return GetLineEndPosition(LineFromPosition(GetCurrentPos()));
 }
 
-void Editor::caretLeft(int num) {
+void Editor::caretLeft(const int& num) {
     for (int i = 0; i < num; ++i) {
         if (GetCurrentPos() == lineStartPos()) {
             return;
@@ -108,7 +108,7 @@ void Editor::caretLeft(int num) {
     }
 }
 
-void Editor::caretRight(int num) {
+void Editor::caretRight(const int& num) {
     for (int i = 0; i < num; ++i) {
         if (GetCurrentPos() == lineEndPos() - 1) {
             return;
@@ -117,7 +117,7 @@ void Editor::caretRight(int num) {
     }
 }
 
-void Editor::caretUp(int num) {
+void Editor::caretUp(const int& num) {
     for (int i = 0; i < num; ++i) {
         if (GetCurrentLine() == 0) {
             return;
@@ -129,7 +129,7 @@ void Editor::caretUp(int num) {
     }
 }
 
-void Editor::caretDown(int num) {
+void Editor::caretDown(const int& num) {
     for (int i = 0; i < num; ++i) {
         if (GetCurrentLine() == GetLineCount() - 1) {
             return;
@@ -150,7 +150,7 @@ void Editor::append() {
     }
 }
 
-void Editor::insertLineBelow(int num) {
+void Editor::insertLineBelow(const int& num) {
     LineEnd();
     for (int i = 0; i < num; ++i) {
         NewLine();
@@ -163,7 +163,7 @@ void Editor::insertLineBelow(int num) {
     w->statusBar->AppendText("~ EDIT ~");
 }
 
-void Editor::insertLineAbove(int num) {
+void Editor::insertLineAbove(const int& num) {
     Home();
     for (int i = 0; i < num; ++i) {
         NewLine();

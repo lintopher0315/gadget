@@ -16,16 +16,16 @@ class Editor : public wxStyledTextCtrl {
         void onChar(wxKeyEvent& event);
         void onKey(wxKeyEvent& event);
 
-        int linePos(void);
-        int lineStartPos(void);
-        int lineEndPos(void);
-        void caretLeft(int num);
-        void caretRight(int num);
-        void caretUp(int num);
-        void caretDown(int num);
+        int linePos(void) const;
+        int lineStartPos(void) const;
+        int lineEndPos(void) const;
+        void caretLeft(const int& num);
+        void caretRight(const int& num);
+        void caretUp(const int& num);
+        void caretDown(const int& num);
         void append(void);
-        void insertLineBelow(int num);
-        void insertLineAbove(int num);
+        void insertLineBelow(const int& num);
+        void insertLineAbove(const int& num);
 
         std::string relPath;
 };

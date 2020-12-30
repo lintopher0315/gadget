@@ -21,11 +21,12 @@ class Window : public wxWindow {
     public:
         Window(wxWindow *parent);
 
-        Frame *getFrame(void);
-        Editor *getCurrentEditor(void);
-        void executeNormal(int cmdInd);
-        void executeCommand(int cmdInd);
-        bool isValidPath(std::string relPath);
+        Frame *getFrame(void) const;
+        Editor *getCurrentEditor(void) const;
+        void executeNormal(const int& cmdInd);
+        void executeCommand(const int& cmdInd);
+        bool isExistingPath(const std::string& relPath) const;
+        bool isValidPath(const std::string& relPath) const;
 
         Panel *panel;
         StatusBar *statusBar;

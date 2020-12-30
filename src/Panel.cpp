@@ -32,3 +32,10 @@ void Panel::onTabRemove(wxAuiNotebookEvent& event) {
         w->getFrame()->Destroy();
     }
 }
+
+void Panel::deleteCurr() {
+    DeletePage(GetSelection());
+    if (GetPageCount() == 0) {
+        getWindow()->getFrame()->Destroy();
+    }
+}

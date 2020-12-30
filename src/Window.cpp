@@ -21,28 +21,29 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     cwd = std::filesystem::current_path().string() + "/";
 }
 
-Frame *Window::getFrame() {
+Frame *Window::getFrame() const {
     return (Frame *)GetParent();
 }
 
-Editor *Window::getCurrentEditor() {
+Editor *Window::getCurrentEditor() const {
     return (Editor *)panel->GetPage(currEditor);
 }
 
-void Window::executeNormal(int cmdInd) {
+void Window::executeNormal(const int& cmdInd) {
     std::pair<int, std::string> parsedCmd;
+    Editor *e = getCurrentEditor();
     switch(cmdInd) {
         case 0:
             mode = EDIT_MODE;
 
             if (command->cmd == "a") {
-                getCurrentEditor()->append();
+                e->append();
             }
             else if (command->cmd == "A") {
-                getCurrentEditor()->LineEnd();
+                e->LineEnd();
             }
             else if (command->cmd == "I") {
-                getCurrentEditor()->VCHome();
+                e->VCHome();
             }
 
             // change status bar; prob update this later
@@ -52,34 +53,34 @@ void Window::executeNormal(int cmdInd) {
         case 1:
             parsedCmd = command->parseNormal();
             if (parsedCmd.second == "h") {
-                getCurrentEditor()->caretLeft(parsedCmd.first);
+                e->caretLeft(parsedCmd.first);
             }
             else if (parsedCmd.second == "j") {
-                getCurrentEditor()->caretDown(parsedCmd.first);
+                e->caretDown(parsedCmd.first);
             }
             else if (parsedCmd.second == "k") {
-                getCurrentEditor()->caretUp(parsedCmd.first);
+                e->caretUp(parsedCmd.first);
             }
             else if (parsedCmd.second == "l") {
-                getCurrentEditor()->caretRight(parsedCmd.first);
+                e->caretRight(parsedCmd.first);
             }
             break;
         case 2:
             parsedCmd = command->parseNormal();
             if (parsedCmd.second == "o") {
-                getCurrentEditor()->insertLineBelow(parsedCmd.first);
+                e->insertLineBelow(parsedCmd.first);
             }
             else if (parsedCmd.second == "O") {
-                getCurrentEditor()->insertLineAbove(parsedCmd.first);
+                e->insertLineAbove(parsedCmd.first);
             }
             break;
         case 3:
             if (command->cmd == "_") {
-                getCurrentEditor()->VCHome();
+                e->VCHome();
             }
             else if (command->cmd == "$") {
-                getCurrentEditor()->LineEnd();
-                getCurrentEditor()->caretLeft(1);
+                e->LineEnd();
+                e->caretLeft(1);
             }
             break;
     }
@@ -87,37 +88,46 @@ void Window::executeNormal(int cmdInd) {
     commandBar->Clear();
 }
 
-void Window::executeCommand(int cmdInd) {
+void Window::executeCommand(const int& cmdInd) {
     std::vector<std::string> parsedCmd;
+    Editor *e = getCurrentEditor();
     switch(cmdInd) {
         case 0:
-            panel->DeletePage(currEditor);
-            if (panel->GetPageCount() == 0) {
-                getFrame()->Destroy();
-            }
+            panel->deleteCurr();
             break;
         case 1:
             parsedCmd = command->parseCommand();
-            if (parsedCmd[0] == "w") {
-                if (parsedCmd.size() == 1) {
-                    if (getCurrentEditor()->relPath == "") {
-                        // later this should display an error: editor has no file
-                        break;
-                    }
+            if (parsedCmd.size() == 1) {
+                if (e->relPath == "") {
+                    // later this should display an error: editor has no file
+                    break;
+                }
+            }
+            else {
+                if (isValidPath(parsedCmd[1])) {
+                    e->relPath = parsedCmd[1];
+                    panel->SetPageText(currEditor, parsedCmd[1]);
                 }
                 else {
-                    if (isValidPath(parsedCmd[1])) {
-                        getCurrentEditor()->relPath = parsedCmd[1];
-                        panel->SetPageText(currEditor, parsedCmd[1]);
-                    }
-                    else {
-                        break;
-                    }
+                    // also display error
+                    break;
                 }
-                getCurrentEditor()->SaveFile(cwd + getCurrentEditor()->relPath);
+            }
+            e->SaveFile(cwd + e->relPath);
+            if (parsedCmd[0] == "wq") {
+                panel->deleteCurr();
             }
             break;
         case 2:
+            // later: check if curr editor saved before replacing
+            parsedCmd = command->parseCommand();
+            if (isExistingPath(parsedCmd[1])) {
+                e->relPath = parsedCmd[1];
+                panel->SetPageText(currEditor, parsedCmd[1]);
+                e->LoadFile(cwd + e->relPath);
+            }
+            break;
+        case 3:
             parsedCmd = command->parseCommand();
             break;
     }
@@ -125,7 +135,18 @@ void Window::executeCommand(int cmdInd) {
     commandBar->Clear();
 }
 
-bool Window::isValidPath(std::string relPath) {
+bool Window::isExistingPath(const std::string& relPath) const {
+    if (relPath.empty()) {
+        return false;
+    }
+    std::string absPath = cwd + relPath;
+    if (std::filesystem::exists(absPath) && std::filesystem::is_regular_file(absPath)) {
+        return true;
+    }
+    return false;
+}
+
+bool Window::isValidPath(const std::string& relPath) const {
     // currently only allows relative paths from cwd
     if (relPath.empty()) {
         return false;
