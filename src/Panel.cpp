@@ -4,6 +4,7 @@ Panel::Panel(wxWindow *parent) : wxAuiNotebook(parent, wxID_ANY, wxDefaultPositi
     AddPage(new Editor(this), "[NO FILE]");
     AddPage(new Editor(this), "[NO FILE]");
     AddPage(new Editor(this), "[NO FILE]");
+    // indicate it's a new file
 
     Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &Panel::onTabChange, this);
     Bind(wxEVT_AUINOTEBOOK_PAGE_CLOSED, &Panel::onTabRemove, this);

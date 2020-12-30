@@ -93,6 +93,7 @@ void Window::executeCommand(const int& cmdInd) {
     Editor *e = getCurrentEditor();
     switch(cmdInd) {
         case 0:
+            // later: check if curr editor saved before exiting
             panel->deleteCurr();
             break;
         case 1:
@@ -105,6 +106,9 @@ void Window::executeCommand(const int& cmdInd) {
             }
             else {
                 if (isValidPath(parsedCmd[1])) {
+                    if (!isExistingPath(parsedCmd[1])) {
+                        createFile(parsedCmd[1]);
+                    }
                     e->relPath = parsedCmd[1];
                     panel->SetPageText(currEditor, parsedCmd[1]);
                 }
@@ -121,18 +125,39 @@ void Window::executeCommand(const int& cmdInd) {
         case 2:
             // later: check if curr editor saved before replacing
             parsedCmd = command->parseCommand();
-            if (isExistingPath(parsedCmd[1])) {
+            if (isValidPath(parsedCmd[1])) {
                 e->relPath = parsedCmd[1];
                 panel->SetPageText(currEditor, parsedCmd[1]);
-                e->LoadFile(cwd + e->relPath);
+                if (isExistingPath(parsedCmd[1])) {
+                    e->LoadFile(cwd + e->relPath);
+                }
+                // else indicate that it's a new file
             }
             break;
         case 3:
             parsedCmd = command->parseCommand();
+            /*if (parsedCmd.size() == 1) {
+                panel->InsertPage(currEditor + 1, new Editor(panel), "[NO FILE]", true);
+                break;
+            }
+            for (int i = 1; i < parsedCmd.size(); ++i) {
+                if (!isValidPath(parsedCmd[i])) {
+                    continue;
+                }
+                panel->InsertPage(currEditor + 1, new Editor(panel), parsedCmd[i], true);
+                getCurrentEditor()->relPath = parsedCmd[1];
+                panel->SetPageText(currEditor, parsedCmd[1]);
+                getCurrentEditor->LoadFile(cwd + getCurrentEditor->relPath);
+            }*/
             break;
     }
     command->clear();
     commandBar->Clear();
+}
+
+void Window::createFile(const std::string& relPath) const {
+    std::string absPath = cwd + relPath;
+    std::ofstream file{absPath};
 }
 
 bool Window::isExistingPath(const std::string& relPath) const {
@@ -151,20 +176,12 @@ bool Window::isValidPath(const std::string& relPath) const {
     if (relPath.empty()) {
         return false;
     }
-    std::string absPath = cwd + relPath;
-    if (std::filesystem::exists(absPath)) {
-        if (std::filesystem::is_regular_file(absPath)) {
-            return true;
-        }
-        return false;
-    }
-    std::string absDir = absPath;
+    std::string absDir = cwd + relPath;
     // maybe check for backwards slash on Windows
     while (absDir.back() != '/') {
         absDir.pop_back();
     }
     if (std::filesystem::exists(absDir) && std::filesystem::is_directory(absDir)) {
-        std::ofstream file{absPath};
         return true;
     }
     return false;

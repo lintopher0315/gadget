@@ -25,6 +25,7 @@ class Window : public wxWindow {
         Editor *getCurrentEditor(void) const;
         void executeNormal(const int& cmdInd);
         void executeCommand(const int& cmdInd);
+        void createFile(const std::string& relPath) const;
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
 
