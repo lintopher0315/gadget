@@ -106,9 +106,6 @@ void Window::executeCommand(const int& cmdInd) {
             }
             else {
                 if (isValidPath(parsedCmd[1])) {
-                    if (!isExistingPath(parsedCmd[1])) {
-                        createFile(parsedCmd[1]);
-                    }
                     e->relPath = parsedCmd[1];
                     panel->SetPageText(currEditor, parsedCmd[1]);
                 }
@@ -117,7 +114,10 @@ void Window::executeCommand(const int& cmdInd) {
                     break;
                 }
             }
-            e->SaveFile(cwd + e->relPath);
+            if (isValidPath(e->relPath)) {
+                e->SaveFile(cwd + e->relPath);
+            }
+            // else somehow the file or directory cont the file was deleted after opening editor
             if (parsedCmd[0] == "wq") {
                 panel->deleteCurr();
             }
@@ -136,19 +136,20 @@ void Window::executeCommand(const int& cmdInd) {
             break;
         case 3:
             parsedCmd = command->parseCommand();
-            /*if (parsedCmd.size() == 1) {
-                panel->InsertPage(currEditor + 1, new Editor(panel), "[NO FILE]", true);
+            if (parsedCmd.size() == 1) {
+                panel->AddPage(new Editor(panel), "[NO FILE]", true);
                 break;
             }
             for (int i = 1; i < parsedCmd.size(); ++i) {
                 if (!isValidPath(parsedCmd[i])) {
                     continue;
                 }
-                panel->InsertPage(currEditor + 1, new Editor(panel), parsedCmd[i], true);
-                getCurrentEditor()->relPath = parsedCmd[1];
-                panel->SetPageText(currEditor, parsedCmd[1]);
-                getCurrentEditor->LoadFile(cwd + getCurrentEditor->relPath);
-            }*/
+                panel->AddPage(new Editor(panel), parsedCmd[i], true);
+                getCurrentEditor()->relPath = parsedCmd[i];
+                if (isExistingPath(parsedCmd[i])) {
+                    getCurrentEditor()->LoadFile(cwd + getCurrentEditor()->relPath);
+                }
+            }
             break;
     }
     command->clear();

@@ -24,7 +24,6 @@ void Panel::onTabChange(wxAuiNotebookEvent& event) {
 
 void Panel::onTabRemove(wxAuiNotebookEvent& event) {
     Window *w = getWindow();
-    w->currEditor = event.GetSelection();
 
     w->command->clear();
     w->commandBar->Clear();
