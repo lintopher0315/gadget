@@ -82,7 +82,14 @@ void Window::executeNormal(const int& cmdInd) {
                 e->LineEnd();
                 e->caretLeft(1);
             }
+			else if (command->cmd == "0") {
+				e->Home();
+			}
             break;
+		case 4:
+			parsedCmd = command->parseNormal();
+			panel->setTab(parsedCmd.first);
+			break;
     }
     command->clear();
     commandBar->Clear();

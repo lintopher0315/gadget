@@ -39,3 +39,10 @@ void Panel::deleteCurr() {
         getWindow()->getFrame()->Destroy();
     }
 }
+
+void Panel::setTab(const int& ind) {
+	if (ind <= 0 || ind > GetPageCount()) {
+		return;
+	}
+	SetSelection(ind - 1);
+}
