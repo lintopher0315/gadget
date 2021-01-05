@@ -17,8 +17,6 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
 
     mode = NORMAL_MODE;
     currEditor = 0;
-
-    cwd = std::filesystem::current_path().string() + "/";
 }
 
 Frame *Window::getFrame() const {
@@ -122,9 +120,15 @@ void Window::executeCommand(const int& cmdInd) {
                 }
             }
             if (isValidPath(e->relPath)) {
-                e->SaveFile(cwd + e->relPath);
+				if (!isExistingPath(e->relPath)) {
+					// reload file tree
+                	e->SaveFile(getFrame()->cwd + e->relPath);
+					getFrame()->tree->reloadTree();
+				}
+				else {
+                	e->SaveFile(getFrame()->cwd + e->relPath);
+				}
             }
-            // else somehow the file or directory cont the file was deleted after opening editor
             if (parsedCmd[0] == "wq") {
                 panel->deleteCurr();
             }
@@ -136,7 +140,7 @@ void Window::executeCommand(const int& cmdInd) {
                 e->relPath = parsedCmd[1];
                 panel->SetPageText(currEditor, parsedCmd[1]);
                 if (isExistingPath(parsedCmd[1])) {
-                    e->LoadFile(cwd + e->relPath);
+                    e->LoadFile(getFrame()->cwd + e->relPath);
                 }
                 // else indicate that it's a new file
             }
@@ -154,7 +158,7 @@ void Window::executeCommand(const int& cmdInd) {
                 panel->AddPage(new Editor(panel), parsedCmd[i], true);
                 getCurrentEditor()->relPath = parsedCmd[i];
                 if (isExistingPath(parsedCmd[i])) {
-                    getCurrentEditor()->LoadFile(cwd + getCurrentEditor()->relPath);
+                    getCurrentEditor()->LoadFile(getFrame()->cwd + getCurrentEditor()->relPath);
                 }
             }
             break;
@@ -163,16 +167,11 @@ void Window::executeCommand(const int& cmdInd) {
     commandBar->Clear();
 }
 
-void Window::createFile(const std::string& relPath) const {
-    std::string absPath = cwd + relPath;
-    std::ofstream file{absPath};
-}
-
 bool Window::isExistingPath(const std::string& relPath) const {
     if (relPath.empty()) {
         return false;
     }
-    std::string absPath = cwd + relPath;
+    std::string absPath = getFrame()->cwd + relPath;
     if (std::filesystem::exists(absPath) && std::filesystem::is_regular_file(absPath)) {
         return true;
     }
@@ -184,7 +183,7 @@ bool Window::isValidPath(const std::string& relPath) const {
     if (relPath.empty()) {
         return false;
     }
-    std::string absDir = cwd + relPath;
+    std::string absDir = getFrame()->cwd + relPath;
     // maybe check for backwards slash on Windows
     while (absDir.back() != '/') {
         absDir.pop_back();

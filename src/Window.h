@@ -1,7 +1,6 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <filesystem>
 #include <fstream>
 
 class Frame;
@@ -25,7 +24,6 @@ class Window : public wxWindow {
         Editor *getCurrentEditor(void) const;
         void executeNormal(const int& cmdInd);
         void executeCommand(const int& cmdInd);
-        void createFile(const std::string& relPath) const;
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
 
@@ -37,6 +35,4 @@ class Window : public wxWindow {
 
         unsigned short mode;
         unsigned short currEditor;
-
-        std::string cwd;
 };

@@ -3,7 +3,6 @@
 #include <wx/wx.h>
 #include <wx/stc/stc.h>
 
-class Window;
 class Editor;
 
 #include "Window.h"
