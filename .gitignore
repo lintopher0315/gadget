@@ -1,4 +1,5 @@
 gadget
 **/*.swp
 *.sh
+*.vim
 *.txt
