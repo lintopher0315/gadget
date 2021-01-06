@@ -29,6 +29,11 @@ void FileTree::onActivate(wxTreeEvent& event) {
 void FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
 	for (const auto & file : std::filesystem::directory_iterator(cwd)) {
 		wxTreeItemId item = AppendItem(parent, file.path().filename().string());
+		std::string ext = file.path().extension();
+		if (!ext.empty() && ext[0] == '.') {
+			ext.erase(0, 1);
+		}
+		SetItemTextColour(item, getColorFromExtension(ext));
 		if (std::filesystem::is_directory(file.path())) {
 			loadTree(file.path().string(), item);	
 		}
@@ -52,4 +57,13 @@ std::string FileTree::getRelPathFromItem(const wxTreeItemId& item) const {
 		absPath.pop_back();
 	}
 	return absPath;
+}
+
+wxColour FileTree::getColorFromExtension(const std::string& ext) const {
+	std::hash<std::string> h;
+	unsigned int value = h(ext);
+	unsigned int r = (value >> 16 & 0xff) / 4 * 3;
+	unsigned int g = ((value >> 8) & 0xff) / 4 * 3;
+	unsigned int b = (value & 0xff) / 4 * 3;
+	return wxColour(r, g, b);
 }
