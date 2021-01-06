@@ -24,6 +24,15 @@ class Window : public wxWindow {
         Editor *getCurrentEditor(void) const;
         void executeNormal(const int& cmdInd);
         void executeCommand(const int& cmdInd);
+		void doInsertion(void);
+		void doBasicMovement(void);
+		void doNewLine(void);
+		void doLineJump(void);
+		void doTabChange(void);
+		void doQuitFile(void);
+		void doSaveFile(void);
+		void doOpenFile(void);
+		void doNewTab(void);
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
 

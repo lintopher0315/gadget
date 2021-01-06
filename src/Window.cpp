@@ -28,65 +28,21 @@ Editor *Window::getCurrentEditor() const {
 }
 
 void Window::executeNormal(const int& cmdInd) {
-    std::pair<int, std::string> parsedCmd;
-    Editor *e = getCurrentEditor();
     switch(cmdInd) {
         case 0:
-            mode = EDIT_MODE;
-
-            if (command->cmd == "a") {
-                e->append();
-            }
-            else if (command->cmd == "A") {
-                e->LineEnd();
-            }
-            else if (command->cmd == "I") {
-                e->VCHome();
-            }
-
-            // change status bar; prob update this later
-            statusBar->Clear();
-            statusBar->AppendText("~ EDIT ~");
+			doInsertion();
             break;
         case 1:
-            parsedCmd = command->parseNormal();
-            if (parsedCmd.second == "h") {
-                e->caretLeft(parsedCmd.first);
-            }
-            else if (parsedCmd.second == "j") {
-                e->caretDown(parsedCmd.first);
-            }
-            else if (parsedCmd.second == "k") {
-                e->caretUp(parsedCmd.first);
-            }
-            else if (parsedCmd.second == "l") {
-                e->caretRight(parsedCmd.first);
-            }
+			doBasicMovement();
             break;
         case 2:
-            parsedCmd = command->parseNormal();
-            if (parsedCmd.second == "o") {
-                e->insertLineBelow(parsedCmd.first);
-            }
-            else if (parsedCmd.second == "O") {
-                e->insertLineAbove(parsedCmd.first);
-            }
+			doNewLine();
             break;
         case 3:
-            if (command->cmd == "_") {
-                e->VCHome();
-            }
-            else if (command->cmd == "$") {
-                e->LineEnd();
-                e->caretLeft(1);
-            }
-			else if (command->cmd == "0") {
-				e->Home();
-			}
+			doLineJump();
             break;
 		case 4:
-			parsedCmd = command->parseNormal();
-			panel->setTab(parsedCmd.first);
+			doTabChange();
 			break;
     }
     command->clear();
@@ -94,77 +50,166 @@ void Window::executeNormal(const int& cmdInd) {
 }
 
 void Window::executeCommand(const int& cmdInd) {
-    std::vector<std::string> parsedCmd;
-    Editor *e = getCurrentEditor();
     switch(cmdInd) {
         case 0:
-            // later: check if curr editor saved before exiting
-            panel->deleteCurr();
+			doQuitFile();
             break;
         case 1:
-            parsedCmd = command->parseCommand();
-            if (parsedCmd.size() == 1) {
-                if (e->relPath == "") {
-                    // later this should display an error: editor has no file
-                    break;
-                }
-            }
-            else {
-                if (isValidPath(parsedCmd[1])) {
-                    e->relPath = parsedCmd[1];
-                    panel->SetPageText(currEditor, parsedCmd[1]);
-                }
-                else {
-                    // also display error
-                    break;
-                }
-            }
-            if (isValidPath(e->relPath)) {
-				if (!isExistingPath(e->relPath)) {
-					// reload file tree
-                	e->SaveFile(getFrame()->cwd + e->relPath);
-					getFrame()->tree->reloadTree();
-				}
-				else {
-                	e->SaveFile(getFrame()->cwd + e->relPath);
-				}
-            }
-            if (parsedCmd[0] == "wq") {
-                panel->deleteCurr();
-            }
+			doSaveFile();
             break;
         case 2:
-            // later: check if curr editor saved before replacing
-            parsedCmd = command->parseCommand();
-            if (isValidPath(parsedCmd[1])) {
-                e->relPath = parsedCmd[1];
-                panel->SetPageText(currEditor, parsedCmd[1]);
-                if (isExistingPath(parsedCmd[1])) {
-                    e->LoadFile(getFrame()->cwd + e->relPath);
-                }
-                // else indicate that it's a new file
-            }
+			doOpenFile();
             break;
         case 3:
-            parsedCmd = command->parseCommand();
-            if (parsedCmd.size() == 1) {
-                panel->AddPage(new Editor(panel), "[NO FILE]", true);
-                break;
-            }
-            for (int i = 1; i < parsedCmd.size(); ++i) {
-                if (!isValidPath(parsedCmd[i])) {
-                    continue;
-                }
-                panel->AddPage(new Editor(panel), parsedCmd[i], true);
-                getCurrentEditor()->relPath = parsedCmd[i];
-                if (isExistingPath(parsedCmd[i])) {
-                    getCurrentEditor()->LoadFile(getFrame()->cwd + getCurrentEditor()->relPath);
-                }
-            }
+			doNewTab();
             break;
     }
     command->clear();
     commandBar->Clear();
+}
+
+void Window::doInsertion() {
+    Editor *e = getCurrentEditor();
+
+	mode = EDIT_MODE;
+
+	if (command->cmd == "a") {
+		e->append();
+	}
+	else if (command->cmd == "A") {
+		e->LineEnd();
+	}
+	else if (command->cmd == "I") {
+		e->VCHome();
+	}
+
+	// change status bar; prob update this later
+	statusBar->Clear();
+	statusBar->AppendText("~ EDIT ~");
+}
+
+void Window::doBasicMovement() {
+    std::pair<int, std::string> parsedCmd = command->parseNormal();
+    Editor *e = getCurrentEditor();
+
+	if (parsedCmd.second == "h") {
+		e->caretLeft(parsedCmd.first);
+	}
+	else if (parsedCmd.second == "j") {
+		e->caretDown(parsedCmd.first);
+	}
+	else if (parsedCmd.second == "k") {
+		e->caretUp(parsedCmd.first);
+	}
+	else if (parsedCmd.second == "l") {
+		e->caretRight(parsedCmd.first);
+	}
+}
+
+void Window::doNewLine() {
+    std::pair<int, std::string> parsedCmd = command->parseNormal();
+    Editor *e = getCurrentEditor();
+
+	if (parsedCmd.second == "o") {
+		e->insertLineBelow(parsedCmd.first);
+	}
+	else if (parsedCmd.second == "O") {
+		e->insertLineAbove(parsedCmd.first);
+	}
+}
+
+void Window::doLineJump() {
+    Editor *e = getCurrentEditor();
+
+	if (command->cmd == "_") {
+		e->VCHome();
+	}
+	else if (command->cmd == "$") {
+		e->LineEnd();
+		e->caretLeft(1);
+	}
+	else if (command->cmd == "0") {
+		e->Home();
+	}
+}
+
+void Window::doTabChange() {
+    std::pair<int, std::string> parsedCmd = command->parseNormal();
+	panel->setTab(parsedCmd.first);
+}
+
+void Window::doQuitFile() {
+	// later: check if curr editor saved before exiting
+	panel->deleteCurr();
+}
+
+void Window::doSaveFile() {
+    std::vector<std::string> parsedCmd = command->parseCommand();
+    Editor *e = getCurrentEditor();
+
+	if (parsedCmd.size() == 1) {
+		if (e->relPath == "") {
+			// later this should display an error: editor has no file
+			return;
+		}
+	}
+	else {
+		if (isValidPath(parsedCmd[1])) {
+			e->relPath = parsedCmd[1];
+			panel->SetPageText(currEditor, parsedCmd[1]);
+		}
+		else {
+			// also display error
+			return;
+		}
+	}
+	if (isValidPath(e->relPath)) {
+		if (!isExistingPath(e->relPath)) {
+			// reload file tree
+			e->SaveFile(getFrame()->cwd + e->relPath);
+			getFrame()->tree->reloadTree();
+		}
+		else {
+			e->SaveFile(getFrame()->cwd + e->relPath);
+		}
+	}
+	if (parsedCmd[0] == "wq") {
+		panel->deleteCurr();
+	}
+}
+
+void Window::doOpenFile() {
+    std::vector<std::string> parsedCmd = command->parseCommand();
+    Editor *e = getCurrentEditor();
+
+    // later: check if curr editor saved before replacing
+	if (isValidPath(parsedCmd[1])) {
+		e->relPath = parsedCmd[1];
+		panel->SetPageText(currEditor, parsedCmd[1]);
+		if (isExistingPath(parsedCmd[1])) {
+			e->LoadFile(getFrame()->cwd + e->relPath);
+		}
+		// else indicate that it's a new file
+	}
+}
+
+void Window::doNewTab() {
+    std::vector<std::string> parsedCmd = command->parseCommand();
+
+	if (parsedCmd.size() == 1) {
+		panel->AddPage(new Editor(panel), "[NO FILE]", true);
+		return;
+	}
+	for (int i = 1; i < parsedCmd.size(); ++i) {
+		if (!isValidPath(parsedCmd[i])) {
+			continue;
+		}
+		panel->AddPage(new Editor(panel), parsedCmd[i], true);
+		getCurrentEditor()->relPath = parsedCmd[i];
+		if (isExistingPath(parsedCmd[i])) {
+			getCurrentEditor()->LoadFile(getFrame()->cwd + getCurrentEditor()->relPath);
+		}
+	}
 }
 
 bool Window::isExistingPath(const std::string& relPath) const {
