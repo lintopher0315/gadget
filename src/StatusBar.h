@@ -1,9 +1,17 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <wx/richtext/richtextctrl.h>
 
-class StatusBar : public wxRichTextCtrl {
+#include "StatusSection.h"
+
+class StatusBar : public wxWindow {
     public:
         StatusBar(wxWindow *parent);
+
+		wxBoxSizer *sizer;
+		StatusSection *modeDisplay;
+		StatusSection *fileTypeDisplay;
+		StatusSection *emptySpace;
+		StatusSection *fileEncodingDisplay;
+		StatusSection *positionDisplay;
 };

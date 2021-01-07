@@ -82,10 +82,7 @@ void Window::doInsertion() {
 	else if (command->cmd == "I") {
 		e->VCHome();
 	}
-
-	// change status bar; prob update this later
-	statusBar->Clear();
-	statusBar->AppendText("~ EDIT ~");
+	statusBar->modeDisplay->setCenteredText("~ EDIT ~");
 }
 
 void Window::doBasicMovement() {
