@@ -35,6 +35,7 @@ class Window : public wxWindow {
 		void doNewTab(void);
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
+		void updateStatusBar(void);
 
         Panel *panel;
         StatusBar *statusBar;

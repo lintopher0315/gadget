@@ -12,6 +12,7 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
 
     Bind(wxEVT_CHAR, &Editor::onChar, this);
     Bind(wxEVT_KEY_DOWN, &Editor::onKey, this);
+	Bind(wxEVT_LEFT_UP, &Editor::onClick, this);
 }
 
 Window *Editor::getWindow() {
@@ -37,64 +38,93 @@ void Editor::onChar(wxKeyEvent& event) {
                 }
                 return;
             }
+			AddText(c);
+			w->updateStatusBar();
         }
     }
-    event.Skip();
 }
 
 void Editor::onKey(wxKeyEvent& event) {
     Window *w = getWindow();
-    switch (event.GetKeyCode()) {
-        case WXK_ESCAPE:
-            if (w->mode == EDIT_MODE) {
-                caretLeft(1);
-            }
-            w->mode = NORMAL_MODE;
-            w->command->clear();
-            w->commandBar->Clear();
+	int key = event.GetKeyCode();
+	if (key == WXK_ESCAPE) {
+		if (w->mode == EDIT_MODE) {
+			caretLeft(1);
+		}
+		w->mode = NORMAL_MODE;
+		w->command->clear();
+		w->commandBar->Clear();
 
-			w->statusBar->modeDisplay->setCenteredText("~ NORMAL ~");
-            return;
-        case WXK_RETURN:
-            if (w->mode == NORMAL_MODE) {
-                int ind = -1;
-                if (w->command->prefix == COMMAND_PREFIX && (ind = w->command->isValid()) >= 0) {
-                    w->executeCommand(ind); 
-                }
-                return;
-            }
-            break;
-        case WXK_BACK:
-            if (w->mode == NORMAL_MODE) {
-                if (!w->command->cmd.empty()) {
-                    w->command->cmd.pop_back();
-                    if (w->command->cmd.empty()) {
-                        w->command->prefix = NORMAL_PREFIX;
-                    }
-                }
-                int l = w->commandBar->GetLineLength(0);
-                w->commandBar->Remove(l-1, l);
-                return;
-            }
-            break;
-        case WXK_TAB:
-            if (w->mode == NORMAL_MODE) {
-                return;
-            }
-    }
-    event.Skip();
+		w->statusBar->modeDisplay->setCenteredText("~ NORMAL ~");
+	}
+	else if (key == WXK_RETURN) {
+		if (w->mode == NORMAL_MODE) {
+			int ind = -1;
+			if (w->command->prefix == COMMAND_PREFIX && (ind = w->command->isValid()) >= 0) {
+				w->executeCommand(ind); 
+			}
+		}
+		else {
+			NewLine();
+		}
+	}
+	else if (key == WXK_BACK) {
+		if (w->mode == NORMAL_MODE) {
+			if (!w->command->cmd.empty()) {
+				w->command->cmd.pop_back();
+				if (w->command->cmd.empty()) {
+					w->command->prefix = NORMAL_PREFIX;
+				}
+			}
+			int l = w->commandBar->GetLineLength(0);
+			w->commandBar->Remove(l-1, l);
+		}
+		else {
+			DeleteBack();
+		}
+	}
+	else if (key == WXK_TAB) {
+		if (w->mode == EDIT_MODE) {
+			Tab();
+		}
+	}
+	else if (key == WXK_LEFT) {
+		caretLeft(1);
+	}
+	else if (key == WXK_RIGHT) {
+		caretRight(1);
+	}
+	else if (key == WXK_UP) {
+		caretUp(1);
+	}
+	else if (key == WXK_DOWN) {
+		caretDown(1);
+	}
+	else {
+		event.Skip();
+	}
+	w->updateStatusBar();
+}
+
+void Editor::onClick(wxMouseEvent& event) {
+	getWindow()->updateStatusBar();
+	event.Skip();
 }
 
 int Editor::linePos() const {
     return GetCurrentPos() - lineStartPos();
 }
 
+int Editor::currLine() const {
+	return LineFromPosition(GetCurrentPos());
+}
+
 int Editor::lineStartPos() const {
-    return PositionFromLine(LineFromPosition(GetCurrentPos()));
+    return PositionFromLine(currLine());
 }
 
 int Editor::lineEndPos() const {
-    return GetLineEndPosition(LineFromPosition(GetCurrentPos()));
+    return GetLineEndPosition(currLine());
 }
 
 void Editor::caretLeft(const int& num) {

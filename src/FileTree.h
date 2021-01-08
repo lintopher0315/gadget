@@ -15,6 +15,7 @@ class FileTree : public wxTreeCtrl {
 
 		Frame *getFrame(void) const;
 		void onActivate(wxTreeEvent& event);
+
 		void loadTree(const std::string& cwd, wxTreeItemId parent);
 		void reloadTree(void);
 		std::string getRelPathFromItem(const wxTreeItemId& item) const;

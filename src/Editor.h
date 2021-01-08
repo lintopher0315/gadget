@@ -14,8 +14,10 @@ class Editor : public wxStyledTextCtrl {
         Window *getWindow();
         void onChar(wxKeyEvent& event);
         void onKey(wxKeyEvent& event);
+		void onClick(wxMouseEvent& event);
 
         int linePos(void) const;
+		int currLine(void) const;
         int lineStartPos(void) const;
         int lineEndPos(void) const;
         void caretLeft(const int& num);

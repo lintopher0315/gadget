@@ -10,8 +10,7 @@ class StatusBar : public wxWindow {
 
 		wxBoxSizer *sizer;
 		StatusSection *modeDisplay;
-		StatusSection *fileTypeDisplay;
-		StatusSection *emptySpace;
-		StatusSection *fileEncodingDisplay;
+		StatusSection *pathDisplay;
 		StatusSection *positionDisplay;
+		StatusSection *sizeDisplay;
 };

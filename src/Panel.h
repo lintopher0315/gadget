@@ -14,6 +14,7 @@ class Panel : public wxAuiNotebook {
         Window *getWindow(void);
         void onTabChange(wxAuiNotebookEvent& event);
         void onTabRemove(wxAuiNotebookEvent& event);
+
         void deleteCurr(void);
 		void setTab(const int& ind);
 };

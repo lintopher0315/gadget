@@ -8,16 +8,19 @@ StatusBar::StatusBar(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPos
 
 	modeDisplay = new StatusSection(this);
 	modeDisplay->setCenteredText("~ NORMAL ~");
-	emptySpace = new StatusSection(this);
-	fileTypeDisplay = new StatusSection(this);
-	fileEncodingDisplay = new StatusSection(this);
+
+	pathDisplay = new StatusSection(this);
+	pathDisplay->setCenteredText("[NO FILE]");
+
 	positionDisplay = new StatusSection(this);
+	positionDisplay->setCenteredText("0,0");
+
+	sizeDisplay = new StatusSection(this);
 
 	sizer->Add(modeDisplay, 1, wxEXPAND | wxALL, 0);
-	sizer->Add(emptySpace, 8, wxEXPAND | wxALL, 0);
-	sizer->Add(fileTypeDisplay, 1, wxEXPAND | wxALL, 0);
-	sizer->Add(fileEncodingDisplay, 1, wxEXPAND | wxALL, 0);
+	sizer->Add(pathDisplay, 8, wxEXPAND | wxALL, 0);
 	sizer->Add(positionDisplay, 1, wxEXPAND | wxALL, 0);
+	sizer->Add(sizeDisplay, 1, wxEXPAND | wxALL, 0);
 
 	SetSizer(sizer);
 }

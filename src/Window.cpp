@@ -47,6 +47,7 @@ void Window::executeNormal(const int& cmdInd) {
     }
     command->clear();
     commandBar->Clear();
+	updateStatusBar();
 }
 
 void Window::executeCommand(const int& cmdInd) {
@@ -66,6 +67,7 @@ void Window::executeCommand(const int& cmdInd) {
     }
     command->clear();
     commandBar->Clear();
+	updateStatusBar();
 }
 
 void Window::doInsertion() {
@@ -234,4 +236,16 @@ bool Window::isValidPath(const std::string& relPath) const {
         return true;
     }
     return false;
+}
+
+void Window::updateStatusBar() {
+	Editor *e = getCurrentEditor();
+	if (e->relPath == "") {
+		statusBar->pathDisplay->setCenteredText("[NO FILE]");
+	}
+	else {
+		statusBar->pathDisplay->setCenteredText(getFrame()->cwd + e->relPath);
+	}
+	statusBar->positionDisplay->setCenteredText(std::to_string(e->currLine()) + "," + std::to_string(e->linePos()));
+
 }
