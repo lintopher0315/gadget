@@ -246,6 +246,8 @@ void Window::updateStatusBar() {
 	else {
 		statusBar->pathDisplay->setCenteredText(getFrame()->cwd + e->relPath);
 	}
-	statusBar->positionDisplay->setCenteredText(std::to_string(e->currLine()) + "," + std::to_string(e->linePos()));
-
+	int curr = e->currLine() + 1;
+	int len = e->GetLineCount();
+	statusBar->positionDisplay->setCenteredText(std::to_string(curr) + "," + std::to_string(e->linePos() + 1) + " | " + std::to_string((int)((double)curr * 100 / len)) + "%");
+	statusBar->sizeDisplay->setCenteredText(std::to_string(e->GetLength()) + " bytes | " + std::to_string(len) + " lines");
 }
