@@ -15,7 +15,7 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
 	Bind(wxEVT_LEFT_UP, &Editor::onClick, this);
 }
 
-Window *Editor::getWindow() {
+Window *Editor::getWindow(void) {
     return (Window *)GetGrandParent();
 }
 
@@ -111,19 +111,19 @@ void Editor::onClick(wxMouseEvent& event) {
 	event.Skip();
 }
 
-int Editor::linePos() const {
+int Editor::linePos(void) const {
     return GetCurrentPos() - lineStartPos();
 }
 
-int Editor::currLine() const {
+int Editor::currLine(void) const {
 	return LineFromPosition(GetCurrentPos());
 }
 
-int Editor::lineStartPos() const {
+int Editor::lineStartPos(void) const {
     return PositionFromLine(currLine());
 }
 
-int Editor::lineEndPos() const {
+int Editor::lineEndPos(void) const {
     return GetLineEndPosition(currLine());
 }
 
@@ -169,7 +169,7 @@ void Editor::caretDown(const int& num) {
     }
 }
 
-void Editor::append() {
+void Editor::append(void) {
     if (lineEndPos() - 1 == GetCurrentPos()) {
         LineEnd();
     }

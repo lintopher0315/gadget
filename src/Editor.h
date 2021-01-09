@@ -11,7 +11,7 @@ class Editor : public wxStyledTextCtrl {
     public:
         Editor(wxWindow *parent);
 
-        Window *getWindow();
+        Window *getWindow(void);
         void onChar(wxKeyEvent& event);
         void onKey(wxKeyEvent& event);
 		void onClick(wxMouseEvent& event);

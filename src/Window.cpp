@@ -19,11 +19,11 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
     currEditor = 0;
 }
 
-Frame *Window::getFrame() const {
+Frame *Window::getFrame(void) const {
     return (Frame *)GetParent();
 }
 
-Editor *Window::getCurrentEditor() const {
+Editor *Window::getCurrentEditor(void) const {
     return (Editor *)panel->GetPage(currEditor);
 }
 
@@ -70,7 +70,7 @@ void Window::executeCommand(const int& cmdInd) {
 	updateStatusBar();
 }
 
-void Window::doInsertion() {
+void Window::doInsertion(void) {
     Editor *e = getCurrentEditor();
 
 	mode = EDIT_MODE;
@@ -87,7 +87,7 @@ void Window::doInsertion() {
 	statusBar->modeDisplay->setCenteredText("~ EDIT ~");
 }
 
-void Window::doBasicMovement() {
+void Window::doBasicMovement(void) {
     std::pair<int, std::string> parsedCmd = command->parseNormal();
     Editor *e = getCurrentEditor();
 
@@ -105,7 +105,7 @@ void Window::doBasicMovement() {
 	}
 }
 
-void Window::doNewLine() {
+void Window::doNewLine(void) {
     std::pair<int, std::string> parsedCmd = command->parseNormal();
     Editor *e = getCurrentEditor();
 
@@ -117,7 +117,7 @@ void Window::doNewLine() {
 	}
 }
 
-void Window::doLineJump() {
+void Window::doLineJump(void) {
     Editor *e = getCurrentEditor();
 
 	if (command->cmd == "_") {
@@ -132,17 +132,17 @@ void Window::doLineJump() {
 	}
 }
 
-void Window::doTabChange() {
+void Window::doTabChange(void) {
     std::pair<int, std::string> parsedCmd = command->parseNormal();
 	panel->setTab(parsedCmd.first);
 }
 
-void Window::doQuitFile() {
+void Window::doQuitFile(void) {
 	// later: check if curr editor saved before exiting
 	panel->deleteCurr();
 }
 
-void Window::doSaveFile() {
+void Window::doSaveFile(void) {
     std::vector<std::string> parsedCmd = command->parseCommand();
     Editor *e = getCurrentEditor();
 
@@ -177,7 +177,7 @@ void Window::doSaveFile() {
 	}
 }
 
-void Window::doOpenFile() {
+void Window::doOpenFile(void) {
     std::vector<std::string> parsedCmd = command->parseCommand();
     Editor *e = getCurrentEditor();
 
@@ -192,7 +192,7 @@ void Window::doOpenFile() {
 	}
 }
 
-void Window::doNewTab() {
+void Window::doNewTab(void) {
     std::vector<std::string> parsedCmd = command->parseCommand();
 
 	if (parsedCmd.size() == 1) {
@@ -238,7 +238,7 @@ bool Window::isValidPath(const std::string& relPath) const {
     return false;
 }
 
-void Window::updateStatusBar() {
+void Window::updateStatusBar(void) {
 	Editor *e = getCurrentEditor();
 	if (e->relPath == "") {
 		statusBar->pathDisplay->setCenteredText("[NO FILE]");

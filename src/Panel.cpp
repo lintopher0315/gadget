@@ -10,7 +10,7 @@ Panel::Panel(wxWindow *parent) : wxAuiNotebook(parent, wxID_ANY, wxDefaultPositi
     Bind(wxEVT_AUINOTEBOOK_PAGE_CLOSED, &Panel::onTabRemove, this);
 }
 
-Window *Panel::getWindow() {
+Window *Panel::getWindow(void) {
     return (Window *)GetParent();
 }
 
@@ -36,7 +36,7 @@ void Panel::onTabRemove(wxAuiNotebookEvent& event) {
     }
 }
 
-void Panel::deleteCurr() {
+void Panel::deleteCurr(void) {
     DeletePage(GetSelection());
     if (GetPageCount() == 0) {
         getWindow()->getFrame()->Destroy();

@@ -6,4 +6,6 @@
 class CommandBar : public wxRichTextCtrl {
     public:
         CommandBar(wxWindow *parent);
+
+		void onClick(wxMouseEvent& event);
 };

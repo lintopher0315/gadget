@@ -10,7 +10,7 @@
 
 class Command {
     public:
-        Command();
+        Command(void);
 
         void clear(void);
         int isValid(void) const;

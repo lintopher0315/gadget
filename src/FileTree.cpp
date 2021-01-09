@@ -11,7 +11,7 @@ FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPos
 	Bind(wxEVT_TREE_ITEM_ACTIVATED, &FileTree::onActivate, this);
 }
 
-Frame *FileTree::getFrame() const {
+Frame *FileTree::getFrame(void) const {
 	return (Frame *)GetParent();
 }
 
@@ -41,7 +41,7 @@ void FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
 }
 
 // every time a file is added or deleted, reload tree
-void FileTree::reloadTree() {
+void FileTree::reloadTree(void) {
 	DeleteChildren(root);
 	loadTree(cwd, root);
 }
