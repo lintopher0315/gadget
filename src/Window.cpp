@@ -1,6 +1,8 @@
 #include "Window.h"
 
 Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize) {
+	SetMinClientSize(wxSize(500, 100));
+
     sizer = new wxBoxSizer(wxVERTICAL);
 
     panel = new Panel(this);
@@ -84,7 +86,7 @@ void Window::doInsertion(void) {
 	else if (command->cmd == "I") {
 		e->VCHome();
 	}
-	statusBar->modeDisplay->setCenteredText("~ EDIT ~");
+	statusBar->modeDisplay->setText("~ EDIT ~");
 }
 
 void Window::doBasicMovement(void) {
@@ -241,13 +243,13 @@ bool Window::isValidPath(const std::string& relPath) const {
 void Window::updateStatusBar(void) {
 	Editor *e = getCurrentEditor();
 	if (e->relPath == "") {
-		statusBar->pathDisplay->setCenteredText("[NO FILE]");
+		statusBar->pathDisplay->setText("[NO FILE]");
 	}
 	else {
-		statusBar->pathDisplay->setCenteredText(getFrame()->cwd + e->relPath);
+		statusBar->pathDisplay->setText(getFrame()->cwd + e->relPath);
 	}
 	int curr = e->currLine() + 1;
 	int len = e->GetLineCount();
-	statusBar->positionDisplay->setCenteredText(std::to_string(curr) + "," + std::to_string(e->linePos() + 1) + " | " + std::to_string((int)((double)curr * 100 / len)) + "%");
-	statusBar->sizeDisplay->setCenteredText(std::to_string(e->GetLength()) + " bytes | " + std::to_string(len) + " lines");
+	statusBar->positionDisplay->setText(std::to_string(curr) + "," + std::to_string(e->linePos() + 1) + " | " + std::to_string((int)((double)curr * 100 / len)) + "%");
+	statusBar->sizeDisplay->setText(std::to_string(e->GetLength()) + " bytes | " + std::to_string(len) + " lines");
 }

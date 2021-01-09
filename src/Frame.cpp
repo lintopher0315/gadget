@@ -11,5 +11,6 @@ Frame::Frame(const wxSize& size) : wxFrame(NULL, wxID_ANY, "Gadget", wxDefaultPo
 	sizer->Add(tree, 1, wxEXPAND | wxALL, 10);
 	sizer->Add(window, 3, wxEXPAND | wxALL, 0);
 
-	SetSizer(sizer);
+	SetSizerAndFit(sizer);
+	SetSize(size);
 }

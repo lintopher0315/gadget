@@ -5,9 +5,9 @@
 
 class StatusSection : public wxRichTextCtrl {
 	public:
-		StatusSection(wxWindow *parent);
+		StatusSection(wxWindow *parent, wxSize minSize, wxSize maxSize);
 
 		void onClick(wxMouseEvent& event);
 
-		void setCenteredText(const std::string& text);
+		void setText(const std::string& text);
 };

@@ -55,7 +55,7 @@ void Editor::onKey(wxKeyEvent& event) {
 		w->command->clear();
 		w->commandBar->Clear();
 
-		w->statusBar->modeDisplay->setCenteredText("~ NORMAL ~");
+		w->statusBar->modeDisplay->setText("~ NORMAL ~");
 	}
 	else if (key == WXK_RETURN) {
 		if (w->mode == NORMAL_MODE) {
@@ -186,7 +186,7 @@ void Editor::insertLineBelow(const int& num) {
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
 
-	w->statusBar->modeDisplay->setCenteredText("~ EDIT ~");
+	w->statusBar->modeDisplay->setText("~ EDIT ~");
 }
 
 void Editor::insertLineAbove(const int& num) {
@@ -200,5 +200,5 @@ void Editor::insertLineAbove(const int& num) {
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
 
-	w->statusBar->modeDisplay->setCenteredText("~ EDIT ~");
+	w->statusBar->modeDisplay->setText("~ EDIT ~");
 }

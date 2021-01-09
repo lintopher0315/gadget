@@ -3,6 +3,7 @@
 FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPosition, wxSize(wxGetDisplaySize().GetWidth()/4, wxGetDisplaySize().GetHeight()/2), wxTR_DEFAULT_STYLE, wxDefaultValidator, wxTreeCtrlNameStr) {
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	SetFont(*font);
+	SetMinClientSize(wxSize(100, 100));
 
 	cwd = getFrame()->cwd;
 	root = AddRoot(cwd);
