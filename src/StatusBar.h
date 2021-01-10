@@ -8,9 +8,11 @@ class StatusBar : public wxWindow {
     public:
         StatusBar(wxWindow *parent);
 
-		wxBoxSizer *sizer;
 		StatusSection *modeDisplay;
 		StatusSection *pathDisplay;
 		StatusSection *positionDisplay;
 		StatusSection *sizeDisplay;
+
+	private:
+		wxBoxSizer *sizer;
 };

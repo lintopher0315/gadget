@@ -7,9 +7,15 @@ FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPos
 
 	cwd = getFrame()->cwd;
 	root = AddRoot(cwd);
+
 	loadTree(cwd, root);
+	ClearFocusedItem();
+	Expand(root);
 
 	Bind(wxEVT_TREE_ITEM_ACTIVATED, &FileTree::onActivate, this);
+	Bind(wxEVT_KILL_FOCUS, &FileTree::onKillFocus, this);
+	Bind(wxEVT_LEFT_DOWN, &FileTree::onClick, this);
+	Bind(wxEVT_RIGHT_DOWN, &FileTree::onClick, this);
 }
 
 Frame *FileTree::getFrame(void) const {
@@ -25,6 +31,18 @@ void FileTree::onActivate(wxTreeEvent& event) {
 		w->getCurrentEditor()->relPath = relPath;
 		w->getCurrentEditor()->LoadFile(absPath);
 	}
+	ClearFocusedItem();
+	event.Skip();
+}
+
+void FileTree::onKillFocus(wxFocusEvent& event) {
+	ClearFocusedItem();
+	event.Skip();
+}
+
+void FileTree::onClick(wxMouseEvent& event) {
+	ClearFocusedItem();
+	event.Skip();
 }
 
 void FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
@@ -45,6 +63,7 @@ void FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
 void FileTree::reloadTree(void) {
 	DeleteChildren(root);
 	loadTree(cwd, root);
+	Expand(root);
 }
 
 std::string FileTree::getRelPathFromItem(const wxTreeItemId& item) const {

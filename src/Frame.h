@@ -12,7 +12,9 @@ class Frame : public wxFrame {
 
         Window *window;
 		FileTree *tree;
-		wxBoxSizer *sizer;
 
 		std::string cwd;
+
+	private:
+		wxBoxSizer *sizer;
 };

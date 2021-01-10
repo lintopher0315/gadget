@@ -14,10 +14,14 @@ class FileTree : public wxTreeCtrl {
 		FileTree(wxWindow *parent);
 
 		Frame *getFrame(void) const;
+		void reloadTree(void);
+
+	private:
 		void onActivate(wxTreeEvent& event);
+		void onKillFocus(wxFocusEvent& event);
+		void onClick(wxMouseEvent& event);
 
 		void loadTree(const std::string& cwd, wxTreeItemId parent);
-		void reloadTree(void);
 		std::string getRelPathFromItem(const wxTreeItemId& item) const;
 		wxColour getColorFromExtension(const std::string& ext) const;
 

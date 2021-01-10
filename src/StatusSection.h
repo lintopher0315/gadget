@@ -7,7 +7,8 @@ class StatusSection : public wxRichTextCtrl {
 	public:
 		StatusSection(wxWindow *parent, wxSize minSize, wxSize maxSize);
 
-		void onClick(wxMouseEvent& event);
-
 		void setText(const std::string& text);
+
+	private:
+		void onClick(wxMouseEvent& event);
 };

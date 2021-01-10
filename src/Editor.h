@@ -12,9 +12,6 @@ class Editor : public wxStyledTextCtrl {
         Editor(wxWindow *parent);
 
         Window *getWindow(void);
-        void onChar(wxKeyEvent& event);
-        void onKey(wxKeyEvent& event);
-		void onClick(wxMouseEvent& event);
 
         int linePos(void) const;
 		int currLine(void) const;
@@ -29,4 +26,9 @@ class Editor : public wxStyledTextCtrl {
         void insertLineAbove(const int& num);
 
         std::string relPath;
+
+	private:
+        void onChar(wxKeyEvent& event);
+        void onKey(wxKeyEvent& event);
+		void onClick(wxMouseEvent& event);
 };

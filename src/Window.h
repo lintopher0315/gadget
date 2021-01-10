@@ -24,6 +24,17 @@ class Window : public wxWindow {
         Editor *getCurrentEditor(void) const;
         void executeNormal(const int& cmdInd);
         void executeCommand(const int& cmdInd);
+		void updateStatusBar(void);
+
+        Panel *panel;
+        StatusBar *statusBar;
+        CommandBar *commandBar;
+        Command *command;
+
+        unsigned short mode;
+        unsigned short currEditor;
+
+	private:
 		void doInsertion(void);
 		void doBasicMovement(void);
 		void doNewLine(void);
@@ -35,14 +46,6 @@ class Window : public wxWindow {
 		void doNewTab(void);
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
-		void updateStatusBar(void);
 
-        Panel *panel;
-        StatusBar *statusBar;
-        CommandBar *commandBar;
         wxBoxSizer *sizer;
-        Command *command;
-
-        unsigned short mode;
-        unsigned short currEditor;
 };
