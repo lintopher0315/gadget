@@ -20,4 +20,5 @@ class Panel : public wxAuiNotebook {
         void onTabChange(wxAuiNotebookEvent& event);
         void onTabRemove(wxAuiNotebookEvent& event);
 
+		wxAuiSimpleTabArt *tabArt;
 };

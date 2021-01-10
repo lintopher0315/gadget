@@ -1,6 +1,12 @@
 #include "Panel.h"
 
 Panel::Panel(wxWindow *parent) : wxAuiNotebook(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE) {
+	tabArt = new wxAuiSimpleTabArt();
+	tabArt->SetColour(wxColour(77, 77, 77));
+	tabArt->SetActiveColour(wxColour(77, 77, 77));
+
+	SetArtProvider(tabArt);
+
     AddPage(new Editor(this), "[NO FILE]");
     AddPage(new Editor(this), "[NO FILE]");
     AddPage(new Editor(this), "[NO FILE]");

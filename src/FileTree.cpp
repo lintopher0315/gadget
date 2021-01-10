@@ -1,15 +1,19 @@
 #include "FileTree.h"
 
-FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPosition, wxSize(wxGetDisplaySize().GetWidth()/4, wxGetDisplaySize().GetHeight()/2), wxTR_DEFAULT_STYLE, wxDefaultValidator, wxTreeCtrlNameStr) {
+FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPosition, wxSize(wxGetDisplaySize().GetWidth()/4, wxGetDisplaySize().GetHeight()/2), wxTR_DEFAULT_STYLE | wxTR_FULL_ROW_HIGHLIGHT | wxTR_NO_LINES, wxDefaultValidator, wxTreeCtrlNameStr) {
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	SetFont(*font);
 	SetMinClientSize(wxSize(100, 100));
+	SetBackgroundColour(wxColour(77, 77, 77));
+	SetIndent(20);
 
 	cwd = getFrame()->cwd;
 	root = AddRoot(cwd);
 
 	loadTree(cwd, root);
 	ClearFocusedItem();
+	SetItemBold(root);
+	SetItemBackgroundColour(root, wxColour(120, 152, 161));
 	Expand(root);
 
 	Bind(wxEVT_TREE_ITEM_ACTIVATED, &FileTree::onActivate, this);
@@ -52,9 +56,13 @@ void FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
 		if (!ext.empty() && ext[0] == '.') {
 			ext.erase(0, 1);
 		}
-		SetItemTextColour(item, getColorFromExtension(ext));
 		if (std::filesystem::is_directory(file.path())) {
+			SetItemBackgroundColour(item, wxColour(120, 152, 161));
+			SetItemBold(item);
 			loadTree(file.path().string(), item);	
+		}
+		else {
+			SetItemTextColour(item, getColorFromExtension(ext));
 		}
 	}
 }
@@ -82,8 +90,11 @@ std::string FileTree::getRelPathFromItem(const wxTreeItemId& item) const {
 wxColour FileTree::getColorFromExtension(const std::string& ext) const {
 	std::hash<std::string> h;
 	unsigned int value = h(ext);
-	unsigned int r = (value >> 16 & 0xff) / 4 * 3;
-	unsigned int g = ((value >> 8) & 0xff) / 4 * 3;
-	unsigned int b = (value & 0xff) / 4 * 3;
+	unsigned int r = 255 - (value >> 16 & 0xff);
+	unsigned int g = 255 - ((value >> 8) & 0xff);
+	unsigned int b = 255 - (value & 0xff);
+	r = (255 - r) / 10 * 3 + r;
+	g = (255 - g) / 10 * 3 + g;
+	b = (255 - b) / 10 * 3 + b;
 	return wxColour(r, g, b);
 }
