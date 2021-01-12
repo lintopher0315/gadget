@@ -5,7 +5,7 @@
 
 class StatusSection : public wxRichTextCtrl {
 	public:
-		StatusSection(wxWindow *parent, wxSize minSize, wxSize maxSize);
+		StatusSection(wxWindow *parent, wxSize minSize, wxSize maxSize, wxColour background, wxColour foreground);
 
 		void setText(const std::string& text);
 

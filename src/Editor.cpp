@@ -7,8 +7,15 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
     SetUseHorizontalScrollBar(false);
     SetWrapMode(1);
     SetMarginType(1, wxSTC_MARGIN_NUMBER);
+	SetMarginWidth(1, 30);
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
+	StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour(30, 30, 30));
+	StyleSetForeground(wxSTC_STYLE_DEFAULT, wxColour(255, 255, 255));
+	SetCaretForeground(wxColour(255, 255, 255));
+	StyleClearAll();
     StyleSetFont(0, *font);
+	StyleSetBackground(wxSTC_STYLE_LINENUMBER, wxColour(37, 37, 38));
+	StyleSetForeground(wxSTC_STYLE_LINENUMBER, wxColour(240, 240, 41));
 
     Bind(wxEVT_CHAR, &Editor::onChar, this);
     Bind(wxEVT_KEY_DOWN, &Editor::onKey, this);

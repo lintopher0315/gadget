@@ -1,12 +1,16 @@
 #include "StatusSection.h"
 
-StatusSection::StatusSection(wxWindow *parent, wxSize minSize, wxSize maxSize) : wxRichTextCtrl(parent) {
-    SetBackgroundColour(wxColour(0xB5, 0xB5, 0xB5));
+StatusSection::StatusSection(wxWindow *parent, wxSize minSize, wxSize maxSize, wxColour background, wxColour foreground) : wxRichTextCtrl(parent) {
 	SetEditable(false);
 	EnableVerticalScrollbar(false);
 
 	SetMinClientSize(minSize);
 	SetMaxClientSize(maxSize);
+
+	wxRichTextAttr attr = GetBasicStyle();
+	attr.SetTextColour(foreground);
+	SetBasicStyle(attr);
+	SetBackgroundColour(wxColour(background));
 
 	Bind(wxEVT_LEFT_DOWN, &StatusSection::onClick, this);
 	Bind(wxEVT_RIGHT_DOWN, &StatusSection::onClick, this);

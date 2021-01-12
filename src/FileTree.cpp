@@ -4,7 +4,7 @@ FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPos
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	SetFont(*font);
 	SetMinClientSize(wxSize(100, 100));
-	SetBackgroundColour(wxColour(77, 77, 77));
+	SetBackgroundColour(wxColour(37, 37, 38));
 	SetIndent(20);
 
 	cwd = getFrame()->cwd;

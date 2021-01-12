@@ -1,6 +1,7 @@
 #include "Panel.h"
 
 Panel::Panel(wxWindow *parent) : wxAuiNotebook(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE) {
+	SetBackgroundColour(wxColour(54, 54, 54));
 	tabArt = new wxAuiSimpleTabArt();
 	tabArt->SetColour(wxColour(77, 77, 77));
 	tabArt->SetActiveColour(wxColour(77, 77, 77));
