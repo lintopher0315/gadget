@@ -9,7 +9,7 @@ Frame::Frame(const wxSize& size) : wxFrame(NULL, wxID_ANY, "Gadget", wxDefaultPo
     window = new Window(this);
 	tree = new FileTree(this);
 
-	sizer->Add(tree, 1, wxEXPAND | wxALL, 0); // 10
+	sizer->Add(tree, 1, wxEXPAND | wxALL, 0);
 	sizer->Add(window, 3, wxEXPAND | wxALL, 0);
 
 	SetSizerAndFit(sizer);

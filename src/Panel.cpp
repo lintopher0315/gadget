@@ -4,7 +4,7 @@ Panel::Panel(wxWindow *parent) : wxAuiNotebook(parent, wxID_ANY, wxDefaultPositi
 	SetBackgroundColour(wxColour(54, 54, 54));
 	tabArt = new wxAuiSimpleTabArt();
 	tabArt->SetColour(wxColour(77, 77, 77));
-	tabArt->SetActiveColour(wxColour(77, 77, 77));
+	tabArt->SetActiveColour(wxColour(227, 73, 73));
 
 	SetArtProvider(tabArt);
 

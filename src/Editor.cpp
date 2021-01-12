@@ -8,10 +8,12 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
     SetWrapMode(1);
     SetMarginType(1, wxSTC_MARGIN_NUMBER);
 	SetMarginWidth(1, 30);
+
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour(30, 30, 30));
 	StyleSetForeground(wxSTC_STYLE_DEFAULT, wxColour(255, 255, 255));
 	SetCaretForeground(wxColour(255, 255, 255));
+
 	StyleClearAll();
     StyleSetFont(0, *font);
 	StyleSetBackground(wxSTC_STYLE_LINENUMBER, wxColour(37, 37, 38));
@@ -63,6 +65,7 @@ void Editor::onKey(wxKeyEvent& event) {
 		w->commandBar->Clear();
 
 		w->statusBar->modeDisplay->setText("~ NORMAL ~");
+		w->statusBar->modeDisplay->setBackground(wxColour(219, 131, 0));
 	}
 	else if (key == WXK_RETURN) {
 		if (w->mode == NORMAL_MODE) {
@@ -193,7 +196,8 @@ void Editor::insertLineBelow(const int& num) {
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
 
-	w->statusBar->modeDisplay->setText("~ EDIT ~");
+	w->statusBar->modeDisplay->setText(" ~ EDIT ~");
+	w->statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }
 
 void Editor::insertLineAbove(const int& num) {
@@ -207,5 +211,6 @@ void Editor::insertLineAbove(const int& num) {
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
 
-	w->statusBar->modeDisplay->setText("~ EDIT ~");
+	w->statusBar->modeDisplay->setText(" ~ EDIT ~");
+	w->statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }

@@ -86,7 +86,8 @@ void Window::doInsertion(void) {
 	else if (command->cmd == "I") {
 		e->VCHome();
 	}
-	statusBar->modeDisplay->setText("~ EDIT ~");
+	statusBar->modeDisplay->setText(" ~ EDIT ~");
+	statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }
 
 void Window::doBasicMovement(void) {
@@ -244,12 +245,22 @@ void Window::updateStatusBar(void) {
 	Editor *e = getCurrentEditor();
 	if (e->relPath == "") {
 		statusBar->pathDisplay->setText("[NO FILE]");
+		statusBar->pathDisplay->setForeground(wxColour(227, 11, 11));
+		statusBar->pathDisplay->setBackground(wxColour(214, 141, 141));
 	}
 	else {
 		statusBar->pathDisplay->setText(getFrame()->cwd + e->relPath);
+		statusBar->pathDisplay->setForeground(wxColour(82, 7, 7));
+		statusBar->pathDisplay->setBackground(wxColour(214, 141, 141));
 	}
+
 	int curr = e->currLine() + 1;
 	int len = e->GetLineCount();
-	statusBar->positionDisplay->setText(std::to_string(curr) + "," + std::to_string(e->linePos() + 1) + " | " + std::to_string((int)((double)curr * 100 / len)) + "%");
+	int percent = (int)((double)curr * 100 / len);
+	statusBar->positionDisplay->setText(std::to_string(curr) + "," + std::to_string(e->linePos() + 1) + " | " + std::to_string(percent) + "%");
+	wxColour colour = statusBar->positionDisplay->getForeground();
+	colour.Set(255 - (int)((double)percent * 2.55), 12, 174 - (int)((double)percent * 1.7));
+	statusBar->positionDisplay->setForeground(colour);
+
 	statusBar->sizeDisplay->setText(std::to_string(e->GetLength()) + " bytes | " + std::to_string(len) + " lines");
 }
