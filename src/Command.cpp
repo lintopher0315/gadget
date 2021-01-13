@@ -9,6 +9,10 @@ void Command::clear(void) {
     cmd = "";
 }
 
+bool Command::isClear(void) const {
+	return prefix == NORMAL_PREFIX && cmd.empty();
+}
+
 int Command::isValid(void) const {
     // instead of looping; concatenate with proper regex and check for match
     if (prefix == NORMAL_PREFIX) {

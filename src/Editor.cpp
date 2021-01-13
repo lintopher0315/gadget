@@ -56,7 +56,10 @@ void Editor::onChar(wxKeyEvent& event) {
 void Editor::onKey(wxKeyEvent& event) {
     Window *w = getWindow();
 	int key = event.GetKeyCode();
-	if (key == WXK_ESCAPE) {
+	if (key >= 32 && key <= 127) {
+		event.Skip();
+	}
+	else if (key == WXK_ESCAPE) {
 		if (w->mode == EDIT_MODE) {
 			caretLeft(1);
 		}
@@ -64,7 +67,7 @@ void Editor::onKey(wxKeyEvent& event) {
 		w->command->clear();
 		w->commandBar->Clear();
 
-		w->statusBar->modeDisplay->setText("~ NORMAL ~");
+		w->statusBar->modeDisplay->setText(" ~NORMAL~");
 		w->statusBar->modeDisplay->setBackground(wxColour(219, 131, 0));
 	}
 	else if (key == WXK_RETURN) {
@@ -99,19 +102,45 @@ void Editor::onKey(wxKeyEvent& event) {
 		}
 	}
 	else if (key == WXK_LEFT) {
-		caretLeft(1);
+		if (w->command->isClear()) {
+			caretLeft(1);
+		}
 	}
 	else if (key == WXK_RIGHT) {
-		caretRight(1);
+		if (w->command->isClear()) {
+			caretRight(1);
+		}
 	}
 	else if (key == WXK_UP) {
-		caretUp(1);
+		if (w->command->isClear()) {
+			caretUp(1);
+		}
 	}
 	else if (key == WXK_DOWN) {
-		caretDown(1);
+		if (w->command->isClear()) {
+			caretDown(1);
+		}
 	}
-	else {
-		event.Skip();
+	else if (key == WXK_END) {
+		if (w->command->isClear()) {
+			LineEnd();
+			caretLeft(1);
+		}
+	}
+	else if (key == WXK_HOME) {
+		if (w->command->isClear()) {
+			VCHome();
+		}
+	}
+	else if (key == WXK_PAGEUP) {
+		if (w->command->isClear()) {
+			PageUp();
+		}
+	}
+	else if (key == WXK_PAGEDOWN) {
+		if (w->command->isClear()) {
+			PageDown();
+		}
 	}
 	w->updateStatusBar();
 }
@@ -196,7 +225,7 @@ void Editor::insertLineBelow(const int& num) {
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
 
-	w->statusBar->modeDisplay->setText(" ~ EDIT ~");
+	w->statusBar->modeDisplay->setText("  ~EDIT~");
 	w->statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }
 
@@ -211,6 +240,6 @@ void Editor::insertLineAbove(const int& num) {
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
 
-	w->statusBar->modeDisplay->setText(" ~ EDIT ~");
+	w->statusBar->modeDisplay->setText("  ~EDIT~");
 	w->statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }

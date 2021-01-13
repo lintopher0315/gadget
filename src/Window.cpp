@@ -86,7 +86,7 @@ void Window::doInsertion(void) {
 	else if (command->cmd == "I") {
 		e->VCHome();
 	}
-	statusBar->modeDisplay->setText(" ~ EDIT ~");
+	statusBar->modeDisplay->setText("  ~EDIT~");
 	statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }
 

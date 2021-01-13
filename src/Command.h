@@ -13,6 +13,7 @@ class Command {
         Command(void);
 
         void clear(void);
+		bool isClear(void) const;
         int isValid(void) const;
         std::pair<int, std::string> parseNormal(void) const;
         std::vector<std::string> parseCommand(void) const;

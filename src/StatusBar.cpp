@@ -7,7 +7,7 @@ StatusBar::StatusBar(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPos
 	sizer = new wxBoxSizer(wxHORIZONTAL);
 
 	modeDisplay = new StatusSection(this, wxSize(90, 30), wxSize(90, 30), wxColour(219, 131, 0), wxColour(0, 0, 0));
-	modeDisplay->setText("~ NORMAL ~");
+	modeDisplay->setText(" ~NORMAL~");
 
 	pathDisplay = new StatusSection(this, wxSize(90, 30), parent->GetMaxClientSize(), wxColour(214, 141, 141), wxColour(227, 11, 11));
 	pathDisplay->setText("[NO FILE]");
