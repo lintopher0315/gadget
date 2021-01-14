@@ -14,7 +14,6 @@ bool Command::isClear(void) const {
 }
 
 int Command::isValid(void) const {
-    // instead of looping; concatenate with proper regex and check for match
     if (prefix == NORMAL_PREFIX) {
         for (int i = 0; i < sizeof(ACT_LIST) / sizeof(ACT_LIST[0]); ++i) {
             if (std::regex_match(cmd, std::regex(ACT_LIST[i]))) {

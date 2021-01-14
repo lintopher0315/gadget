@@ -41,9 +41,12 @@ void Window::executeNormal(const int& cmdInd) {
 			doNewLine();
             break;
         case 3:
-			doLineJump();
+			doIntraLineJump();
             break;
 		case 4:
+			doInterLineJump();
+			break;
+		case 5:
 			doTabChange();
 			break;
     }
@@ -120,7 +123,7 @@ void Window::doNewLine(void) {
 	}
 }
 
-void Window::doLineJump(void) {
+void Window::doIntraLineJump(void) {
     Editor *e = getCurrentEditor();
 
 	if (command->cmd == "_") {
@@ -132,6 +135,21 @@ void Window::doLineJump(void) {
 	}
 	else if (command->cmd == "0") {
 		e->Home();
+	}
+}
+
+void Window::doInterLineJump(void) {
+	Editor *e = getCurrentEditor();
+
+	if (command->cmd == "gg") {
+		e->GotoLine(0);
+	}
+	else if (command->cmd == "G") {
+		e->GotoLine(e->GetLineCount() - 1);
+	}
+	else {
+		std::pair<int, std::string> parsedCmd = command->parseNormal();
+		e->GotoLine(parsedCmd.first - 1);
 	}
 }
 

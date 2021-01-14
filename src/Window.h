@@ -38,7 +38,8 @@ class Window : public wxWindow {
 		void doInsertion(void);
 		void doBasicMovement(void);
 		void doNewLine(void);
-		void doLineJump(void);
+		void doIntraLineJump(void);
+		void doInterLineJump(void);
 		void doTabChange(void);
 		void doQuitFile(void);
 		void doSaveFile(void);
