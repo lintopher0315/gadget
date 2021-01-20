@@ -49,6 +49,9 @@ void Window::executeNormal(const int& cmdInd) {
 		case 5:
 			doTabChange();
 			break;
+		case 6:
+			doWordJump();
+			break;
     }
     command->clear();
     commandBar->Clear();
@@ -69,6 +72,9 @@ void Window::executeCommand(const int& cmdInd) {
         case 3:
 			doNewTab();
             break;
+		case 4:
+			doSplitTab();
+			break;
     }
     command->clear();
     commandBar->Clear();
@@ -158,6 +164,18 @@ void Window::doTabChange(void) {
 	panel->setTab(parsedCmd.first);
 }
 
+void Window::doWordJump(void) {
+    std::pair<int, std::string> parsedCmd = command->parseNormal();
+	Editor *e = getCurrentEditor();
+
+	if (parsedCmd.second == "w") {
+		e->wordRight(parsedCmd.first);
+	}
+	else {
+		e->wordLeft(parsedCmd.first);
+	}
+}
+
 void Window::doQuitFile(void) {
 	// later: check if curr editor saved before exiting
 	panel->deleteCurr();
@@ -229,6 +247,15 @@ void Window::doNewTab(void) {
 		if (isExistingPath(parsedCmd[i])) {
 			getCurrentEditor()->LoadFile(getFrame()->cwd + getCurrentEditor()->relPath);
 		}
+	}
+}
+
+void Window::doSplitTab(void) {
+	if (command->cmd == "split") {
+		panel->Split(currEditor, wxBOTTOM);
+	}
+	else {
+		panel->Split(currEditor, wxRIGHT);
 	}
 }
 

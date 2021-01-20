@@ -243,3 +243,15 @@ void Editor::insertLineAbove(const int& num) {
 	w->statusBar->modeDisplay->setText("  ~EDIT~");
 	w->statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }
+
+void Editor::wordLeft(const int& num) {
+	for (int i = 0; i < num; ++i) {
+		WordLeft();
+	}
+}
+
+void Editor::wordRight(const int& num) {
+	for (int i = 0; i < num; ++i) {
+		WordRight();
+	}
+}

@@ -41,10 +41,13 @@ class Window : public wxWindow {
 		void doIntraLineJump(void);
 		void doInterLineJump(void);
 		void doTabChange(void);
+		void doWordJump(void);
+
 		void doQuitFile(void);
 		void doSaveFile(void);
 		void doOpenFile(void);
 		void doNewTab(void);
+		void doSplitTab(void);
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
 
