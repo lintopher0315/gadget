@@ -29,7 +29,7 @@ void Panel::onTabChange(wxAuiNotebookEvent& event) {
     w->commandBar->Clear();
 
 	// call window update status bar
-	w->updateStatusBar();
+	w->updateStatus();
 }
 
 void Panel::onTabRemove(wxAuiNotebookEvent& event) {

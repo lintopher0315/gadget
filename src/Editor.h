@@ -28,9 +28,11 @@ class Editor : public wxStyledTextCtrl {
 		void wordRight(const int& num);
 
         std::string relPath;
+		bool saved;
 
 	private:
         void onChar(wxKeyEvent& event);
         void onKey(wxKeyEvent& event);
 		void onClick(wxMouseEvent& event);
+		void onModified(wxStyledTextEvent& event);
 };

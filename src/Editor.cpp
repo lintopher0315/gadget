@@ -22,6 +22,9 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
     Bind(wxEVT_CHAR, &Editor::onChar, this);
     Bind(wxEVT_KEY_DOWN, &Editor::onKey, this);
 	Bind(wxEVT_LEFT_UP, &Editor::onClick, this);
+	Bind(wxEVT_STC_MODIFIED, &Editor::onModified, this);
+
+	saved = true;
 }
 
 Window *Editor::getWindow(void) {
@@ -48,7 +51,7 @@ void Editor::onChar(wxKeyEvent& event) {
                 return;
             }
 			AddText(c);
-			w->updateStatusBar();
+			w->updateStatus();
         }
     }
 }
@@ -85,9 +88,9 @@ void Editor::onKey(wxKeyEvent& event) {
 		if (w->mode == NORMAL_MODE) {
 			if (!w->command->cmd.empty()) {
 				w->command->cmd.pop_back();
-				if (w->command->cmd.empty()) {
-					w->command->prefix = NORMAL_PREFIX;
-				}
+			}
+			else {
+				w->command->prefix = NORMAL_PREFIX;
 			}
 			int l = w->commandBar->GetLineLength(0);
 			w->commandBar->Remove(l-1, l);
@@ -142,11 +145,16 @@ void Editor::onKey(wxKeyEvent& event) {
 			PageDown();
 		}
 	}
-	w->updateStatusBar();
+	w->updateStatus();
 }
 
 void Editor::onClick(wxMouseEvent& event) {
-	getWindow()->updateStatusBar();
+	getWindow()->updateStatus();
+	event.Skip();
+}
+
+void Editor::onModified(wxStyledTextEvent& event) {
+	saved = false;
 	event.Skip();
 }
 

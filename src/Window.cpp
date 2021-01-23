@@ -55,7 +55,7 @@ void Window::executeNormal(const int& cmdInd) {
     }
     command->clear();
     commandBar->Clear();
-	updateStatusBar();
+	updateStatus();
 }
 
 void Window::executeCommand(const int& cmdInd) {
@@ -78,7 +78,7 @@ void Window::executeCommand(const int& cmdInd) {
     }
     command->clear();
     commandBar->Clear();
-	updateStatusBar();
+	updateStatus();
 }
 
 void Window::doInsertion(void) {
@@ -210,6 +210,7 @@ void Window::doSaveFile(void) {
 		else {
 			e->SaveFile(getFrame()->cwd + e->relPath);
 		}
+		e->saved = true;
 	}
 	if (parsedCmd[0] == "wq") {
 		panel->deleteCurr();
@@ -227,6 +228,7 @@ void Window::doOpenFile(void) {
 		if (isExistingPath(parsedCmd[1])) {
 			e->LoadFile(getFrame()->cwd + e->relPath);
 		}
+		e->saved = true;
 		// else indicate that it's a new file
 	}
 }
@@ -286,7 +288,7 @@ bool Window::isValidPath(const std::string& relPath) const {
     return false;
 }
 
-void Window::updateStatusBar(void) {
+void Window::updateStatus(void) {
 	Editor *e = getCurrentEditor();
 	if (e->relPath == "") {
 		statusBar->pathDisplay->setText("[NO FILE]");
@@ -294,9 +296,29 @@ void Window::updateStatusBar(void) {
 		statusBar->pathDisplay->setBackground(wxColour(214, 141, 141));
 	}
 	else {
-		statusBar->pathDisplay->setText(getFrame()->cwd + e->relPath);
-		statusBar->pathDisplay->setForeground(wxColour(82, 7, 7));
-		statusBar->pathDisplay->setBackground(wxColour(214, 141, 141));
+		std::string pathText = getFrame()->cwd + e->relPath;
+		std::string panelText = std::string(panel->GetPageText(currEditor).mb_str());
+		if (!e->saved) {
+			pathText += "***";
+			statusBar->pathDisplay->setForeground(wxColour(82, 7, 7));
+			statusBar->pathDisplay->setBackground(wxColour(214, 141, 141));
+			statusBar->pathDisplay->BeginBold();
+			statusBar->pathDisplay->setText(pathText);
+			statusBar->pathDisplay->EndBold();
+
+			if (panelText[0] != '*') {
+				panel->SetPageText(currEditor, "*" + panelText);
+			}
+		}
+		else {
+			statusBar->pathDisplay->setForeground(wxColour(82, 7, 7));
+			statusBar->pathDisplay->setBackground(wxColour(214, 141, 141));
+			statusBar->pathDisplay->setText(pathText);
+
+			if (panelText[0] == '*') {
+				panel->SetPageText(currEditor, panelText.substr(1, panelText.size()-1));
+			}
+		}
 	}
 
 	int curr = e->currLine() + 1;

@@ -24,7 +24,7 @@ class Window : public wxWindow {
         Editor *getCurrentEditor(void) const;
         void executeNormal(const int& cmdInd);
         void executeCommand(const int& cmdInd);
-		void updateStatusBar(void);
+		void updateStatus(void);
 
         Panel *panel;
         StatusBar *statusBar;
