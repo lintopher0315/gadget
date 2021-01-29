@@ -52,6 +52,9 @@ void Window::executeNormal(const int& cmdInd) {
 		case 6:
 			doWordJump();
 			break;
+		case 7:
+			doCharSearch();
+			break;
     }
     command->clear();
     commandBar->Clear();
@@ -173,6 +176,23 @@ void Window::doWordJump(void) {
 	}
 	else {
 		e->wordLeft(parsedCmd.first);
+	}
+}
+
+void Window::doCharSearch(void) {
+	Editor *e = getCurrentEditor();
+
+	if (command->cmd[0] == 'f') {
+		e->charSearchAhead(command->cmd[1], 1);
+	}
+	else if (command->cmd[0] == 'F') {
+		e->charSearchBehind(command->cmd[1], 1);
+	}
+	else if (command->cmd[0] == 't') {
+		e->charSearchAhead(command->cmd[1], 0);
+	}
+	else if (command->cmd[0] == 'T') {
+		e->charSearchBehind(command->cmd[1], 0);
 	}
 }
 

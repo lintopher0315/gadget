@@ -26,6 +26,8 @@ class Editor : public wxStyledTextCtrl {
         void insertLineAbove(const int& num);
 		void wordLeft(const int& num);
 		void wordRight(const int& num);
+		void charSearchAhead(const char& c, const bool& inc);
+		void charSearchBehind(const char& c, const bool& inc);
 
         std::string relPath;
 		bool saved;

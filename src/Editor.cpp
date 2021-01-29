@@ -263,3 +263,31 @@ void Editor::wordRight(const int& num) {
 		WordRight();
 	}
 }
+
+void Editor::charSearchAhead(const char& c, const bool& inc) {	
+	for (int i = GetCurrentPos() + 1; i < lineEndPos(); ++i) {
+		if (GetCharAt(i) == c) {
+			if (inc) {
+				GotoPos(i);
+			}
+			else {
+				GotoPos(i-1);
+			}
+			return;
+		}
+	}
+}
+
+void Editor::charSearchBehind(const char& c, const bool& inc) {
+	for (int i = GetCurrentPos() - 1; i >= lineStartPos(); --i) {
+		if (GetCharAt(i) == c) {
+			if (inc) {
+				GotoPos(i);
+			}
+			else {
+				GotoPos(i+1);
+			}
+			return;
+		}
+	}
+}

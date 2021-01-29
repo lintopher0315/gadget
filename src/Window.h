@@ -42,6 +42,7 @@ class Window : public wxWindow {
 		void doInterLineJump(void);
 		void doTabChange(void);
 		void doWordJump(void);
+		void doCharSearch(void);
 
 		void doQuitFile(void);
 		void doSaveFile(void);
