@@ -29,6 +29,12 @@ class Editor : public wxStyledTextCtrl {
 		void charSearchAhead(const char& c, const bool& inc);
 		void charSearchBehind(const char& c, const bool& inc);
 
+		void removeSelection(void);
+		void caretLeftVis(const int& num);
+		void caretRightVis(const int& num);
+		void caretUpVis(const int& num);
+		void caretDownVis(const int& num);
+
         std::string relPath;
 		bool saved;
 

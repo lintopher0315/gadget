@@ -14,7 +14,7 @@ class Window;
 
 #define NORMAL_MODE 0
 #define EDIT_MODE 1
-#define GADGET_MODE 2
+#define VISUAL_MODE 2
 
 class Window : public wxWindow {
     public:
@@ -24,6 +24,8 @@ class Window : public wxWindow {
         Editor *getCurrentEditor(void) const;
         void executeNormal(const int& cmdInd);
         void executeCommand(const int& cmdInd);
+		void executeVisual(const int& cmdInd);
+
 		void updateStatus(void);
 
         Panel *panel;
@@ -43,6 +45,7 @@ class Window : public wxWindow {
 		void doTabChange(void);
 		void doWordJump(void);
 		void doCharSearch(void);
+		void doVisual(void);
 
 		void doQuitFile(void);
 		void doSaveFile(void);
@@ -51,6 +54,8 @@ class Window : public wxWindow {
 		void doSplitTab(void);
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
+
+		void doBasicVisMovement(void);
 
         wxBoxSizer *sizer;
 };

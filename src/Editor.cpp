@@ -45,13 +45,23 @@ void Editor::onChar(wxKeyEvent& event) {
                 w->command->cmd += c;
 
                 int ind = -1;
-                if (w->command->prefix == NORMAL_PREFIX && (ind = w->command->isValid()) >= 0) {
-                    w->executeNormal(ind);
-                }
-                return;
+				if ((ind = w->command->isValidNormal()) >= 0) {
+					w->executeNormal(ind);
+				}
             }
-			AddText(c);
-			w->updateStatus();
+			else if (w->mode == EDIT_MODE) {
+				AddText(c);
+				w->updateStatus();
+			}
+			else if (w->mode == VISUAL_MODE) {
+				w->commandBar->AppendText(c);
+				w->command->cmd += c;
+
+				int ind = -1;
+				if ((ind = w->command->isValidVisual()) >= 0) {
+					w->executeVisual(ind);
+				}
+			}
         }
     }
 }
@@ -66,21 +76,21 @@ void Editor::onKey(wxKeyEvent& event) {
 		if (w->mode == EDIT_MODE) {
 			caretLeft(1);
 		}
+		else if (w->mode == VISUAL_MODE) {
+			removeSelection();
+		}
 		w->mode = NORMAL_MODE;
 		w->command->clear();
 		w->commandBar->Clear();
-
-		w->statusBar->modeDisplay->setText(" ~NORMAL~");
-		w->statusBar->modeDisplay->setBackground(wxColour(219, 131, 0));
 	}
 	else if (key == WXK_RETURN) {
 		if (w->mode == NORMAL_MODE) {
 			int ind = -1;
-			if (w->command->prefix == COMMAND_PREFIX && (ind = w->command->isValid()) >= 0) {
-				w->executeCommand(ind); 
+			if ((ind = w->command->isValidCommand()) >= 0) {
+				w->executeCommand(ind);
 			}
 		}
-		else {
+		else if (w->mode == EDIT_MODE) {
 			NewLine();
 		}
 	}
@@ -95,7 +105,7 @@ void Editor::onKey(wxKeyEvent& event) {
 			int l = w->commandBar->GetLineLength(0);
 			w->commandBar->Remove(l-1, l);
 		}
-		else {
+		else if (w->mode == EDIT_MODE) {
 			DeleteBack();
 		}
 	}
@@ -232,9 +242,6 @@ void Editor::insertLineBelow(const int& num) {
     }
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
-
-	w->statusBar->modeDisplay->setText("  ~EDIT~");
-	w->statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }
 
 void Editor::insertLineAbove(const int& num) {
@@ -247,9 +254,6 @@ void Editor::insertLineAbove(const int& num) {
 
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
-
-	w->statusBar->modeDisplay->setText("  ~EDIT~");
-	w->statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }
 
 void Editor::wordLeft(const int& num) {
@@ -290,4 +294,50 @@ void Editor::charSearchBehind(const char& c, const bool& inc) {
 			return;
 		}
 	}
+}
+
+void Editor::removeSelection(void) {
+	SetEmptySelection(GetCurrentPos());
+}
+
+void Editor::caretLeftVis(const int& num) {
+    for (int i = 0; i < num; ++i) {
+        if (GetCurrentPos() == lineStartPos()) {
+            return;
+        }
+        CharLeftExtend();
+    }
+}
+
+void Editor::caretRightVis(const int& num) {
+    for (int i = 0; i < num; ++i) {
+        if (GetCurrentPos() == lineEndPos() - 1) {
+            return;
+        }
+        CharRightExtend();
+    }
+}
+
+void Editor::caretUpVis(const int& num) {
+    for (int i = 0; i < num; ++i) {
+        if (GetCurrentLine() == 0) {
+            return;
+        }
+        LineUpExtend();
+        if (GetCurrentPos() == lineEndPos()) {
+            caretLeftVis(1);
+        }
+    }
+}
+
+void Editor::caretDownVis(const int& num) {
+    for (int i = 0; i < num; ++i) {
+        if (GetCurrentLine() == GetLineCount() - 1) {
+            return;
+        }
+        LineDownExtend();
+        if (GetCurrentPos() == lineEndPos()) {
+            caretLeftVis(1);
+        }
+    }
 }

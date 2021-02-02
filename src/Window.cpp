@@ -55,6 +55,9 @@ void Window::executeNormal(const int& cmdInd) {
 		case 7:
 			doCharSearch();
 			break;
+		case 8:
+			doVisual();
+			break;
     }
     command->clear();
     commandBar->Clear();
@@ -84,6 +87,17 @@ void Window::executeCommand(const int& cmdInd) {
 	updateStatus();
 }
 
+void Window::executeVisual(const int& cmdInd) {
+	switch(cmdInd) {
+		case 0:
+			doBasicVisMovement();
+			break;
+	}
+	command->clear();
+	commandBar->Clear();
+	updateStatus();
+}
+
 void Window::doInsertion(void) {
     Editor *e = getCurrentEditor();
 
@@ -98,8 +112,6 @@ void Window::doInsertion(void) {
 	else if (command->cmd == "I") {
 		e->VCHome();
 	}
-	statusBar->modeDisplay->setText("  ~EDIT~");
-	statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
 }
 
 void Window::doBasicMovement(void) {
@@ -193,6 +205,16 @@ void Window::doCharSearch(void) {
 	}
 	else if (command->cmd[0] == 'T') {
 		e->charSearchBehind(command->cmd[1], 0);
+	}
+}
+
+void Window::doVisual(void) {
+	Editor *e = getCurrentEditor();
+
+	mode = VISUAL_MODE;
+
+	if (command->cmd == "V") {
+		// add case for 'shift-v'
 	}
 }
 
@@ -308,8 +330,40 @@ bool Window::isValidPath(const std::string& relPath) const {
     return false;
 }
 
+void Window::doBasicVisMovement(void) {
+    std::pair<int, std::string> parsedCmd = command->parseNormal();
+    Editor *e = getCurrentEditor();
+
+	if (parsedCmd.second == "h") {
+		e->caretLeftVis(parsedCmd.first);
+	}
+	else if (parsedCmd.second == "j") {
+		e->caretDownVis(parsedCmd.first);
+	}
+	else if (parsedCmd.second == "k") {
+		e->caretUpVis(parsedCmd.first);
+	}
+	else if (parsedCmd.second == "l") {
+		e->caretRightVis(parsedCmd.first);
+	}
+}
+
 void Window::updateStatus(void) {
 	Editor *e = getCurrentEditor();
+
+	if (mode == NORMAL_MODE) {
+		statusBar->modeDisplay->setText(" ~NORMAL~");
+		statusBar->modeDisplay->setBackground(wxColour(219, 131, 0));
+	}
+	else if (mode == EDIT_MODE) {
+		statusBar->modeDisplay->setText("  ~EDIT~");
+		statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
+	}
+	else if (mode == VISUAL_MODE) {
+		statusBar->modeDisplay->setText(" ~VISUAL~");
+		statusBar->modeDisplay->setBackground(wxColour(116, 136, 176));
+	}
+
 	if (e->relPath == "") {
 		statusBar->pathDisplay->setText("[NO FILE]");
 		statusBar->pathDisplay->setForeground(wxColour(227, 11, 11));

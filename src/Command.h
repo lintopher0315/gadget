@@ -14,7 +14,9 @@ class Command {
 
         void clear(void);
 		bool isClear(void) const;
-        int isValid(void) const;
+        int isValidNormal(void) const;
+		int isValidCommand(void) const;
+		int isValidVisual(void) const;
         std::pair<int, std::string> parseNormal(void) const;
         std::vector<std::string> parseCommand(void) const;
 
@@ -23,5 +25,6 @@ class Command {
 
     private:
         const std::string CMD_LIST[5]={"q", "(w|wq)( [^ ]+)?", "e [^ ]+", "tabedit( [^ ]+)*", "v?split"};
-        const std::string ACT_LIST[8]={"[iIaA]", "([1-9][0-9]*)?[hjkl]", "([1-9][0-9]*)?[oO]", "[_$0]", "(gg|G|[1-9][0-9]*G)", "[1-9][0-9]*gt", "([1-9][0-9]*)?[wb]", "[fFtT]."};
+        const std::string ACT_LIST[9]={"[iIaA]", "([1-9][0-9]*)?[hjkl]", "([1-9][0-9]*)?[oO]", "[_$0]", "(gg|G|[1-9][0-9]*G)", "[1-9][0-9]*gt", "([1-9][0-9]*)?[wb]", "[fFtT].", "[vV]"};
+		const std::string VIS_LIST[1]={"([1-9][0-9]*)?[hjkl]"};
 };

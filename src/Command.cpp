@@ -13,7 +13,7 @@ bool Command::isClear(void) const {
 	return prefix == NORMAL_PREFIX && cmd.empty();
 }
 
-int Command::isValid(void) const {
+int Command::isValidNormal(void) const {
     if (prefix == NORMAL_PREFIX) {
         for (int i = 0; i < sizeof(ACT_LIST) / sizeof(ACT_LIST[0]); ++i) {
             if (std::regex_match(cmd, std::regex(ACT_LIST[i]))) {
@@ -21,9 +21,24 @@ int Command::isValid(void) const {
             }
         }
     }
-    else if (prefix == COMMAND_PREFIX) {
+    return -1;
+}
+
+int Command::isValidCommand(void) const {
+    if (prefix == COMMAND_PREFIX) {
         for (int i = 0; i < sizeof(CMD_LIST) / sizeof(CMD_LIST[0]); ++i) {
             if (std::regex_match(cmd, std::regex(CMD_LIST[i]))) {
+                return i;
+            }
+        }
+    }
+	return -1;
+}
+
+int Command::isValidVisual(void) const {
+    if (prefix == NORMAL_PREFIX) {
+        for (int i = 0; i < sizeof(VIS_LIST) / sizeof(VIS_LIST[0]); ++i) {
+            if (std::regex_match(cmd, std::regex(VIS_LIST[i]))) {
                 return i;
             }
         }
