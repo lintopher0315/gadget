@@ -41,6 +41,7 @@ class Editor : public wxStyledTextCtrl {
 	private:
         void onChar(wxKeyEvent& event);
         void onKey(wxKeyEvent& event);
-		void onClick(wxMouseEvent& event);
+		void onClickUp(wxMouseEvent& event);
+		void onClickDown(wxMouseEvent& event);
 		void onModified(wxStyledTextEvent& event);
 };

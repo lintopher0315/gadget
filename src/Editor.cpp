@@ -21,7 +21,8 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
 
     Bind(wxEVT_CHAR, &Editor::onChar, this);
     Bind(wxEVT_KEY_DOWN, &Editor::onKey, this);
-	Bind(wxEVT_LEFT_UP, &Editor::onClick, this);
+	Bind(wxEVT_LEFT_UP, &Editor::onClickUp, this);
+	Bind(wxEVT_LEFT_DOWN, &Editor::onClickDown, this);
 	Bind(wxEVT_STC_MODIFIED, &Editor::onModified, this);
 
 	saved = true;
@@ -69,7 +70,7 @@ void Editor::onChar(wxKeyEvent& event) {
 void Editor::onKey(wxKeyEvent& event) {
     Window *w = getWindow();
 	int key = event.GetKeyCode();
-	if (key >= 32 && key <= 127) {
+	if (key >= 32 && key <= 127 && !event.ControlDown()) {
 		event.Skip();
 	}
 	else if (key == WXK_ESCAPE) {
@@ -158,8 +159,27 @@ void Editor::onKey(wxKeyEvent& event) {
 	w->updateStatus();
 }
 
-void Editor::onClick(wxMouseEvent& event) {
+void Editor::onClickUp(wxMouseEvent& event) {
+	Window *w = getWindow();
+
+	if (GetSelectionStart() != GetSelectionEnd()) {
+		w->mode = VISUAL_MODE;
+	}
+	else {
+		if (w->mode == VISUAL_MODE) {
+			w->mode = NORMAL_MODE;
+		}
+	}
 	getWindow()->updateStatus();
+	event.Skip();
+}
+
+void Editor::onClickDown(wxMouseEvent& event) {
+	Window *w = getWindow();
+
+	removeSelection();
+	w->command->clear();
+	w->commandBar->Clear();
 	event.Skip();
 }
 
