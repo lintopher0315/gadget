@@ -56,7 +56,10 @@ void Window::executeNormal(const int& cmdInd) {
 			doCharSearch();
 			break;
 		case 8:
-			doVisual();
+			doVisualMode();
+			break;
+		case 9:
+			doLineMode();
 			break;
     }
     command->clear();
@@ -91,6 +94,17 @@ void Window::executeVisual(const int& cmdInd) {
 	switch(cmdInd) {
 		case 0:
 			doBasicVisMovement();
+			break;
+	}
+	command->clear();
+	commandBar->Clear();
+	updateStatus();
+}
+
+void Window::executeLine(const int& cmdInd) {
+	switch(cmdInd) {
+		case 0:
+			doBasicLineMovement();
 			break;
 	}
 	command->clear();
@@ -208,14 +222,17 @@ void Window::doCharSearch(void) {
 	}
 }
 
-void Window::doVisual(void) {
+void Window::doVisualMode(void) {
+	mode = VISUAL_MODE;
+}
+
+void Window::doLineMode(void) {
 	Editor *e = getCurrentEditor();
 
-	mode = VISUAL_MODE;
+	mode = LINE_MODE;
 
-	if (command->cmd == "V") {
-		// add case for 'shift-v'
-	}
+	e->SetAnchor(e->lineStartPos());
+	e->SetCurrentPos(e->lineEndPos());
 }
 
 void Window::doQuitFile(void) {
@@ -348,6 +365,18 @@ void Window::doBasicVisMovement(void) {
 	}
 }
 
+void Window::doBasicLineMovement(void) {
+	std::pair<int, std::string> parsedCmd = command->parseNormal();
+	Editor *e = getCurrentEditor();
+
+	if (parsedCmd.second == "j") {
+		e->caretDownLine(parsedCmd.first);
+	}
+	else if (parsedCmd.second == "k") {
+		e->caretUpLine(parsedCmd.first);
+	}
+}
+
 void Window::updateStatus(void) {
 	Editor *e = getCurrentEditor();
 
@@ -362,6 +391,10 @@ void Window::updateStatus(void) {
 	else if (mode == VISUAL_MODE) {
 		statusBar->modeDisplay->setText(" ~VISUAL~");
 		statusBar->modeDisplay->setBackground(wxColour(116, 136, 176));
+	}
+	else if (mode == LINE_MODE) {
+		statusBar->modeDisplay->setText("  ~LINE~");
+		statusBar->modeDisplay->setBackground(wxColour(132, 163, 224));
 	}
 
 	if (e->relPath == "") {

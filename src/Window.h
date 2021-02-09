@@ -15,6 +15,7 @@ class Window;
 #define NORMAL_MODE 0
 #define EDIT_MODE 1
 #define VISUAL_MODE 2
+#define LINE_MODE 3
 
 class Window : public wxWindow {
     public:
@@ -25,6 +26,7 @@ class Window : public wxWindow {
         void executeNormal(const int& cmdInd);
         void executeCommand(const int& cmdInd);
 		void executeVisual(const int& cmdInd);
+		void executeLine(const int& cmdInd);
 
 		void updateStatus(void);
 
@@ -45,7 +47,8 @@ class Window : public wxWindow {
 		void doTabChange(void);
 		void doWordJump(void);
 		void doCharSearch(void);
-		void doVisual(void);
+		void doVisualMode(void);
+		void doLineMode(void);
 
 		void doQuitFile(void);
 		void doSaveFile(void);
@@ -56,6 +59,8 @@ class Window : public wxWindow {
         bool isValidPath(const std::string& relPath) const;
 
 		void doBasicVisMovement(void);
+
+		void doBasicLineMovement(void);
 
         wxBoxSizer *sizer;
 };

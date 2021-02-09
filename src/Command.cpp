@@ -46,6 +46,17 @@ int Command::isValidVisual(void) const {
     return -1;
 }
 
+int Command::isValidLine(void) const {
+    if (prefix == NORMAL_PREFIX) {
+        for (int i = 0; i < sizeof(LIN_LIST) / sizeof(LIN_LIST[0]); ++i) {
+            if (std::regex_match(cmd, std::regex(LIN_LIST[i]))) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 std::pair<int, std::string> Command::parseNormal() const {
     int num = 0;
     int i = 0;

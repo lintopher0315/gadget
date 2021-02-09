@@ -17,6 +17,7 @@ class Editor : public wxStyledTextCtrl {
 		int currLine(void) const;
         int lineStartPos(void) const;
         int lineEndPos(void) const;
+
         void caretLeft(const int& num);
         void caretRight(const int& num);
         void caretUp(const int& num);
@@ -34,6 +35,9 @@ class Editor : public wxStyledTextCtrl {
 		void caretRightVis(const int& num);
 		void caretUpVis(const int& num);
 		void caretDownVis(const int& num);
+
+		void caretUpLine(const int& num);
+		void caretDownLine(const int& num);
 
         std::string relPath;
 		bool saved;

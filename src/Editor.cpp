@@ -63,6 +63,15 @@ void Editor::onChar(wxKeyEvent& event) {
 					w->executeVisual(ind);
 				}
 			}
+			else if (w->mode == LINE_MODE) {
+				w->commandBar->AppendText(c);
+				w->command->cmd += c;
+
+				int ind = -1;
+				if ((ind = w->command->isValidLine()) >= 0) {
+					w->executeLine(ind);
+				}
+			}
         }
     }
 }
@@ -77,7 +86,7 @@ void Editor::onKey(wxKeyEvent& event) {
 		if (w->mode == EDIT_MODE) {
 			caretLeft(1);
 		}
-		else if (w->mode == VISUAL_MODE) {
+		else if (w->mode == VISUAL_MODE || w->mode == LINE_MODE) {
 			removeSelection();
 		}
 		w->mode = NORMAL_MODE;
@@ -166,7 +175,7 @@ void Editor::onClickUp(wxMouseEvent& event) {
 		w->mode = VISUAL_MODE;
 	}
 	else {
-		if (w->mode == VISUAL_MODE) {
+		if (w->mode == VISUAL_MODE || w->mode == LINE_MODE) {
 			w->mode = NORMAL_MODE;
 		}
 	}
@@ -360,4 +369,28 @@ void Editor::caretDownVis(const int& num) {
             caretLeftVis(1);
         }
     }
+}
+
+void Editor::caretUpLine(const int& num) {
+	int endLine = std::max(currLine() - num, 0);
+	int startLine = LineFromPosition(GetAnchor());
+	if (endLine <= startLine) {
+		SetAnchor(GetLineEndPosition(startLine));
+		SetCurrentPos(PositionFromLine(endLine));
+	}
+	else {
+		SetCurrentPos(GetLineEndPosition(endLine));
+	}
+}
+
+void Editor::caretDownLine(const int& num) {
+	int endLine = std::min(currLine() + num, GetLineCount());
+	int startLine = LineFromPosition(GetAnchor());
+	if (endLine >= startLine) {
+		SetAnchor(PositionFromLine(startLine));
+		SetCurrentPos(GetLineEndPosition(endLine));
+	}
+	else {
+		SetCurrentPos(PositionFromLine(endLine));
+	}
 }
