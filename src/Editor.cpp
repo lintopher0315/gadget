@@ -214,45 +214,23 @@ int Editor::lineEndPos(void) const {
 }
 
 void Editor::caretLeft(const int& num) {
-    for (int i = 0; i < num; ++i) {
-        if (GetCurrentPos() == lineStartPos()) {
-            return;
-        }
-        CharLeft();
-    }
+	SetSelectionEnd(std::max(lineStartPos(), GetCurrentPos() - num));
 }
 
 void Editor::caretRight(const int& num) {
-    for (int i = 0; i < num; ++i) {
-        if (GetCurrentPos() == lineEndPos() - 1) {
-            return;
-        }
-        CharRight();
-    }
+	SetSelectionStart(std::min(lineEndPos() - 1, GetCurrentPos() + num));
 }
 
 void Editor::caretUp(const int& num) {
-    for (int i = 0; i < num; ++i) {
-        if (GetCurrentLine() == 0) {
-            return;
-        }
-        LineUp();
-        if (GetCurrentPos() == lineEndPos()) {
-            caretLeft(1);
-        }
-    }
+	int pos = linePos();
+	GotoLine(std::max(0, currLine() - num));
+	caretRight(pos);
 }
 
 void Editor::caretDown(const int& num) {
-    for (int i = 0; i < num; ++i) {
-        if (GetCurrentLine() == GetLineCount() - 1) {
-            return;
-        }
-        LineDown();
-        if (GetCurrentPos() == lineEndPos()) {
-            caretLeft(1);
-        }
-    }
+	int pos = linePos();
+	GotoLine(std::min(GetLineCount() - 1, currLine() + num));
+	caretRight(pos);
 }
 
 void Editor::append(void) {
@@ -330,45 +308,39 @@ void Editor::removeSelection(void) {
 }
 
 void Editor::caretLeftVis(const int& num) {
-    for (int i = 0; i < num; ++i) {
-        if (GetCurrentPos() == lineStartPos()) {
-            return;
-        }
-        CharLeftExtend();
-    }
+	int pos = std::max(lineStartPos(), GetCurrentPos() - num);
+	if (GetCurrentPos() == GetAnchor()) {
+		SetAnchor(GetAnchor() + 1);
+	}
+	SetCurrentPos(pos);
 }
 
 void Editor::caretRightVis(const int& num) {
-    for (int i = 0; i < num; ++i) {
-        if (GetCurrentPos() == lineEndPos() - 1) {
-            return;
-        }
-        CharRightExtend();
-    }
+	int pos = std::min(lineEndPos() - 1, GetCurrentPos() + num);
+	if (pos == GetAnchor() - 1) {
+		SetAnchor(GetAnchor() - 1);
+	}
+	SetCurrentPos(pos);
 }
 
 void Editor::caretUpVis(const int& num) {
-    for (int i = 0; i < num; ++i) {
-        if (GetCurrentLine() == 0) {
-            return;
-        }
-        LineUpExtend();
-        if (GetCurrentPos() == lineEndPos()) {
-            caretLeftVis(1);
-        }
-    }
+	int pos = linePos();
+	int endLine = std::max(0, currLine() - num);
+	int endPos = std::min(GetLineEndPosition(endLine) - 1, PositionFromLine(endLine) + pos);
+	if (endPos < GetAnchor() && GetAnchor() <= GetCurrentPos()) {
+		SetAnchor(GetAnchor() + 1);
+	}
+	SetCurrentPos(endPos);
 }
 
 void Editor::caretDownVis(const int& num) {
-    for (int i = 0; i < num; ++i) {
-        if (GetCurrentLine() == GetLineCount() - 1) {
-            return;
-        }
-        LineDownExtend();
-        if (GetCurrentPos() == lineEndPos()) {
-            caretLeftVis(1);
-        }
-    }
+	int pos = linePos();
+	int endLine = std::min(GetLineCount() - 1, currLine() + num);
+	int endPos = std::min(GetLineEndPosition(endLine) - 1, PositionFromLine(endLine) + pos);
+	if (endPos >= GetAnchor() - 1 && GetAnchor() > GetCurrentPos()) {
+		SetAnchor(GetAnchor() - 1);
+	}
+	SetCurrentPos(endPos);
 }
 
 void Editor::caretUpLine(const int& num) {
