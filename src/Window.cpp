@@ -386,15 +386,15 @@ void Window::updateStatus(void) {
 	}
 	else if (mode == EDIT_MODE) {
 		statusBar->modeDisplay->setText("  ~EDIT~");
-		statusBar->modeDisplay->setBackground(wxColour(118, 158, 108));
+		statusBar->modeDisplay->setBackground(wxColour(120, 161, 109));
 	}
 	else if (mode == VISUAL_MODE) {
 		statusBar->modeDisplay->setText(" ~VISUAL~");
-		statusBar->modeDisplay->setBackground(wxColour(116, 136, 176));
+		statusBar->modeDisplay->setBackground(wxColour(147, 196, 82));
 	}
 	else if (mode == LINE_MODE) {
 		statusBar->modeDisplay->setText("  ~LINE~");
-		statusBar->modeDisplay->setBackground(wxColour(132, 163, 224));
+		statusBar->modeDisplay->setBackground(wxColour(222, 149, 222));
 	}
 
 	if (e->relPath == "") {
