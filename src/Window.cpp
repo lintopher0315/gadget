@@ -95,6 +95,9 @@ void Window::executeVisual(const int& cmdInd) {
 		case 0:
 			doBasicVisMovement();
 			break;
+		case 1:
+			doVisOrLineDelete();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -105,6 +108,9 @@ void Window::executeLine(const int& cmdInd) {
 	switch(cmdInd) {
 		case 0:
 			doBasicLineMovement();
+			break;
+		case 1:
+			doVisOrLineDelete();
 			break;
 	}
 	command->clear();
@@ -363,6 +369,13 @@ void Window::doBasicVisMovement(void) {
 	else if (parsedCmd.second == "l") {
 		e->caretRightVis(parsedCmd.first);
 	}
+}
+
+void Window::doVisOrLineDelete(void) {
+	Editor *e = getCurrentEditor();
+
+	e->cutSelection();
+	mode = NORMAL_MODE;
 }
 
 void Window::doBasicLineMovement(void) {

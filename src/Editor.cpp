@@ -307,6 +307,13 @@ void Editor::removeSelection(void) {
 	SetEmptySelection(GetCurrentPos());
 }
 
+void Editor::cutSelection(void) {
+	if (GetAnchor() <= GetCurrentPos()) {
+		CharRightExtend();
+	}
+	Cut();
+}
+
 void Editor::caretLeftVis(const int& num) {
 	int pos = std::max(lineStartPos(), GetCurrentPos() - num);
 	if (GetCurrentPos() == GetAnchor()) {

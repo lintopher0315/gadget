@@ -31,6 +31,8 @@ class Editor : public wxStyledTextCtrl {
 		void charSearchBehind(const char& c, const bool& inc);
 
 		void removeSelection(void);
+		void cutSelection(void);
+
 		void caretLeftVis(const int& num);
 		void caretRightVis(const int& num);
 		void caretUpVis(const int& num);

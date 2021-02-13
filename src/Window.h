@@ -59,6 +59,7 @@ class Window : public wxWindow {
         bool isValidPath(const std::string& relPath) const;
 
 		void doBasicVisMovement(void);
+		void doVisOrLineDelete(void);
 
 		void doBasicLineMovement(void);
 
