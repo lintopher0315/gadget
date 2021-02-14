@@ -98,6 +98,9 @@ void Window::executeVisual(const int& cmdInd) {
 		case 1:
 			doVisOrLineDelete();
 			break;
+		case 2:
+			doVisOrLineCaseChange();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -111,6 +114,9 @@ void Window::executeLine(const int& cmdInd) {
 			break;
 		case 1:
 			doVisOrLineDelete();
+			break;
+		case 2:
+			doVisOrLineCaseChange();
 			break;
 	}
 	command->clear();
@@ -375,6 +381,20 @@ void Window::doVisOrLineDelete(void) {
 	Editor *e = getCurrentEditor();
 
 	e->cutSelection();
+	mode = NORMAL_MODE;
+}
+
+void Window::doVisOrLineCaseChange(void) {
+	Editor *e = getCurrentEditor();
+
+	if (command->cmd == "u") {
+		e->caseChangeSelection(false);
+	}
+	else if (command->cmd == "U") {
+		e->caseChangeSelection(true);
+	}
+
+	e->removeSelection();
 	mode = NORMAL_MODE;
 }
 

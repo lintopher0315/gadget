@@ -3,7 +3,7 @@
 Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, "editor") {
     SetCaretStyle(2);
     SetCaretPeriod(0);
-    SetTabWidth(10);
+    SetTabWidth(8);
     SetUseHorizontalScrollBar(false);
     SetWrapMode(1);
     SetMarginType(1, wxSTC_MARGIN_NUMBER);
@@ -312,6 +312,21 @@ void Editor::cutSelection(void) {
 		CharRightExtend();
 	}
 	Cut();
+}
+
+void Editor::caseChangeSelection(const bool& upper) {
+	if (GetAnchor() <= GetCurrentPos()) {
+		CharRightExtend();
+	}
+	if (upper) {
+		UpperCase();
+	}
+	else {
+		LowerCase();
+	}
+	if (GetAnchor() <= GetCurrentPos()) {
+		CharLeftExtend();
+	}
 }
 
 void Editor::caretLeftVis(const int& num) {

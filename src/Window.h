@@ -60,6 +60,7 @@ class Window : public wxWindow {
 
 		void doBasicVisMovement(void);
 		void doVisOrLineDelete(void);
+		void doVisOrLineCaseChange(void);
 
 		void doBasicLineMovement(void);
 
