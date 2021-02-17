@@ -17,6 +17,7 @@ class Editor : public wxStyledTextCtrl {
 		int currLine(void) const;
         int lineStartPos(void) const;
         int lineEndPos(void) const;
+		std::string getIndentSpace(void);
 
         void caretLeft(const int& num);
         void caretRight(const int& num);

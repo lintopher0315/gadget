@@ -3,11 +3,12 @@
 Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, "editor") {
     SetCaretStyle(2);
     SetCaretPeriod(0);
-    SetTabWidth(8);
+    SetTabWidth(4);
     SetUseHorizontalScrollBar(false);
     SetWrapMode(1);
     SetMarginType(1, wxSTC_MARGIN_NUMBER);
 	SetMarginWidth(1, 30);
+	SetUseTabs(false);
 
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour(30, 30, 30));
@@ -101,7 +102,9 @@ void Editor::onKey(wxKeyEvent& event) {
 			}
 		}
 		else if (w->mode == EDIT_MODE) {
+			std::string indentSpace = getIndentSpace();
 			NewLine();
+			AddText(indentSpace);
 		}
 	}
 	else if (key == WXK_BACK) {
@@ -213,12 +216,23 @@ int Editor::lineEndPos(void) const {
     return GetLineEndPosition(currLine());
 }
 
+std::string Editor::getIndentSpace(void) {
+	std::string line = std::string(GetCurLine().mb_str());
+	int ind = 0;
+	while (ind < line.size() && line[ind] == ' ') {
+		++ind;
+	}
+	return line.substr(0, ind);
+}
+
 void Editor::caretLeft(const int& num) {
 	SetSelectionEnd(std::max(lineStartPos(), GetCurrentPos() - num));
 }
 
 void Editor::caretRight(const int& num) {
-	SetSelectionStart(std::min(lineEndPos() - 1, GetCurrentPos() + num));
+	if (lineStartPos() < lineEndPos()) {
+		SetSelectionStart(std::min(lineEndPos() - 1, GetCurrentPos() + num));
+	}
 }
 
 void Editor::caretUp(const int& num) {
@@ -244,20 +258,23 @@ void Editor::append(void) {
 
 void Editor::insertLineBelow(const int& num) {
     LineEnd();
+	std::string indentSpace = getIndentSpace();
     for (int i = 0; i < num; ++i) {
         NewLine();
+		AddText(indentSpace);
     }
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
 }
 
 void Editor::insertLineAbove(const int& num) {
-    Home();
+	std::string indentSpace = getIndentSpace();
     for (int i = 0; i < num; ++i) {
+		Home();
         NewLine();
+    	caretUp(1);
+		AddText(indentSpace);
     }
-    caretUp(1);
-    VCHome();
 
     Window *w = getWindow();
     w->mode = EDIT_MODE;    
@@ -349,6 +366,9 @@ void Editor::caretUpVis(const int& num) {
 	int pos = linePos();
 	int endLine = std::max(0, currLine() - num);
 	int endPos = std::min(GetLineEndPosition(endLine) - 1, PositionFromLine(endLine) + pos);
+	if (PositionFromLine(endLine) == GetLineEndPosition(endLine)) {
+		++endPos;
+	}
 	if (endPos < GetAnchor() && GetAnchor() <= GetCurrentPos()) {
 		SetAnchor(GetAnchor() + 1);
 	}
@@ -359,6 +379,9 @@ void Editor::caretDownVis(const int& num) {
 	int pos = linePos();
 	int endLine = std::min(GetLineCount() - 1, currLine() + num);
 	int endPos = std::min(GetLineEndPosition(endLine) - 1, PositionFromLine(endLine) + pos);
+	if (PositionFromLine(endLine) == GetLineEndPosition(endLine)) {
+		++endPos;
+	}
 	if (endPos >= GetAnchor() - 1 && GetAnchor() > GetCurrentPos()) {
 		SetAnchor(GetAnchor() - 1);
 	}
