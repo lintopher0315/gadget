@@ -102,7 +102,7 @@ void Editor::onKey(wxKeyEvent& event) {
 			}
 		}
 		else if (w->mode == EDIT_MODE) {
-			std::string indentSpace = getIndentSpace();
+			std::string indentSpace = getIndentSpace(currLine());
 			NewLine();
 			AddText(indentSpace);
 		}
@@ -216,13 +216,13 @@ int Editor::lineEndPos(void) const {
     return GetLineEndPosition(currLine());
 }
 
-std::string Editor::getIndentSpace(void) {
-	std::string line = std::string(GetCurLine().mb_str());
+std::string Editor::getIndentSpace(const int& line) const {
+	std::string lineIndent = std::string(GetLine(line).mb_str());
 	int ind = 0;
-	while (ind < line.size() && line[ind] == ' ') {
+	while (ind < lineIndent.size() && lineIndent[ind] == ' ') {
 		++ind;
 	}
-	return line.substr(0, ind);
+	return lineIndent.substr(0, ind);
 }
 
 void Editor::caretLeft(const int& num) {
@@ -258,7 +258,7 @@ void Editor::append(void) {
 
 void Editor::insertLineBelow(const int& num) {
     LineEnd();
-	std::string indentSpace = getIndentSpace();
+	std::string indentSpace = getIndentSpace(currLine());
     for (int i = 0; i < num; ++i) {
         NewLine();
 		AddText(indentSpace);
@@ -268,7 +268,7 @@ void Editor::insertLineBelow(const int& num) {
 }
 
 void Editor::insertLineAbove(const int& num) {
-	std::string indentSpace = getIndentSpace();
+	std::string indentSpace = getIndentSpace(currLine());
     for (int i = 0; i < num; ++i) {
 		Home();
         NewLine();
@@ -409,5 +409,22 @@ void Editor::caretDownLine(const int& num) {
 	}
 	else {
 		SetCurrentPos(PositionFromLine(endLine));
+	}
+}
+
+void Editor::shiftLine(const int& num, const bool& dir) {
+	int startLine = LineFromPosition(GetSelectionStart());
+	int endLine = LineFromPosition(GetSelectionEnd());
+	if (dir == 1) {
+		std::string indent(num * 4, ' ');
+		for (int i = startLine; i <= endLine; ++i) {
+			InsertText(PositionFromLine(i), indent);
+		}
+	}
+	else {
+		for (int i = startLine; i <= endLine; ++i) {
+			int rem = std::min((int)getIndentSpace(i).size(), num * 4);
+			DeleteRange(PositionFromLine(i), rem);
+		}
 	}
 }

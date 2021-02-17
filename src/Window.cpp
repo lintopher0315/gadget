@@ -118,6 +118,9 @@ void Window::executeLine(const int& cmdInd) {
 		case 2:
 			doVisOrLineCaseChange();
 			break;
+		case 3:
+			doLineShift();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -408,6 +411,21 @@ void Window::doBasicLineMovement(void) {
 	else if (parsedCmd.second == "k") {
 		e->caretUpLine(parsedCmd.first);
 	}
+}
+
+void Window::doLineShift(void) {
+	std::pair<int, std::string> parsedCmd = command->parseNormal();
+	Editor *e = getCurrentEditor();
+
+	if (parsedCmd.second == "<") {
+		e->shiftLine(parsedCmd.first, 0);
+	}
+	else if (parsedCmd.second == ">") {
+		e->shiftLine(parsedCmd.first, 1);
+	}
+
+	e->removeSelection();
+	mode = NORMAL_MODE;
 }
 
 void Window::updateStatus(void) {

@@ -63,6 +63,7 @@ class Window : public wxWindow {
 		void doVisOrLineCaseChange(void);
 
 		void doBasicLineMovement(void);
+		void doLineShift(void);
 
         wxBoxSizer *sizer;
 };
