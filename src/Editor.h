@@ -33,6 +33,7 @@ class Editor : public wxStyledTextCtrl {
 
 		void removeSelection(void);
 		void cutSelection(void);
+		void copySelection(void);
 		void caseChangeSelection(const bool& upper);
 
 		void caretLeftVis(const int& num);

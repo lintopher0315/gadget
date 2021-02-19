@@ -26,7 +26,7 @@ class Command {
 
     private:
         const std::string CMD_LIST[5]={"q", "(w|wq)( [^ ]+)?", "e [^ ]+", "tabedit( [^ ]+)*", "v?split"};
-        const std::string ACT_LIST[10]={"[iIaA]", "([1-9][0-9]*)?[hjkl]", "([1-9][0-9]*)?[oO]", "[_$0]", "(gg|G|[1-9][0-9]*G)", "[1-9][0-9]*gt", "([1-9][0-9]*)?[wb]", "[fFtT].", "v", "V"};
-		const std::string VIS_LIST[4]={"([1-9][0-9]*)?[hjkl]", "[xd]", "[uU]", "(gg|G|[1-9][0-9]*G)"};
-		const std::string LIN_LIST[4]={"([1-9][0-9]*)?[jk]", "[xd]", "[uU]", "([1-9][0-9]*)?[<>]"};
+        const std::string ACT_LIST[11]={"[iIaA]", "([1-9][0-9]*)?[hjkl]", "([1-9][0-9]*)?[oO]", "[_$0]", "(gg|G|[1-9][0-9]*G)", "[1-9][0-9]*gt", "([1-9][0-9]*)?[wb]", "[fFtT].", "v", "V", "[pP]"};
+		const std::string VIS_LIST[5]={"([1-9][0-9]*)?[hjkl]", "[xd]", "[uU]", "(gg|G|[1-9][0-9]*G)", "y"};
+		const std::string LIN_LIST[5]={"([1-9][0-9]*)?[jk]", "[xd]", "[uU]", "([1-9][0-9]*)?[<>]", "y"};
 };

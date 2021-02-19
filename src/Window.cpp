@@ -19,6 +19,7 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
 
     mode = NORMAL_MODE;
     currEditor = 0;
+	lastCopiedMode = NORMAL_MODE;
 }
 
 Frame *Window::getFrame(void) const {
@@ -60,6 +61,9 @@ void Window::executeNormal(const int& cmdInd) {
 			break;
 		case 9:
 			doLineMode();
+			break;
+		case 10:
+			doPaste();
 			break;
     }
     command->clear();
@@ -104,6 +108,9 @@ void Window::executeVisual(const int& cmdInd) {
 		case 3:
 			doVisInterLineJump();
 			break;
+		case 4:
+			doVisOrLineCopy();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -123,6 +130,9 @@ void Window::executeLine(const int& cmdInd) {
 			break;
 		case 3:
 			doLineShift();
+			break;
+		case 4:
+			doVisOrLineCopy();
 			break;
 	}
 	command->clear();
@@ -251,6 +261,33 @@ void Window::doLineMode(void) {
 
 	e->SetAnchor(e->lineStartPos());
 	e->SetCurrentPos(e->lineEndPos());
+}
+
+void Window::doPaste(void) {
+	Editor *e = getCurrentEditor();
+
+	if (lastCopiedMode == NORMAL_MODE) {
+		return;
+	}
+	if (lastCopiedMode == VISUAL_MODE) {
+		if (command->cmd == "p") {
+			e->CharRight();
+		}
+		e->Paste();
+	}
+	else if (lastCopiedMode == LINE_MODE) {
+		if (command->cmd == "P") {
+			e->Home();
+			e->NewLine();
+			e->caretUp(1);
+			e->Paste();
+		}
+		else if (command->cmd == "p") {
+			e->LineEnd();
+			e->NewLine();
+			e->Paste();
+		}
+	}
 }
 
 void Window::doQuitFile(void) {
@@ -386,6 +423,7 @@ void Window::doBasicVisMovement(void) {
 void Window::doVisOrLineDelete(void) {
 	Editor *e = getCurrentEditor();
 
+	lastCopiedMode = mode;
 	e->cutSelection();
 	mode = NORMAL_MODE;
 }
@@ -417,6 +455,15 @@ void Window::doVisInterLineJump(void) {
 		std::pair<int, std::string> parsedCmd = command->parseNormal();
 		e->jumpLineVis(parsedCmd.first - 1);
 	}
+}
+
+void Window::doVisOrLineCopy(void) {
+	Editor *e = getCurrentEditor();
+
+	lastCopiedMode = mode;
+	e->copySelection();
+	e->removeSelection();
+	mode = NORMAL_MODE;
 }
 
 void Window::doBasicLineMovement(void) {

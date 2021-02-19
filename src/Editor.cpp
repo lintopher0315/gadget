@@ -331,6 +331,13 @@ void Editor::cutSelection(void) {
 	Cut();
 }
 
+void Editor::copySelection(void) {
+	if (GetAnchor() <= GetCurrentPos()) {
+		CharRightExtend();
+	}
+	Copy();	
+}
+
 void Editor::caseChangeSelection(const bool& upper) {
 	if (GetAnchor() <= GetCurrentPos()) {
 		CharRightExtend();

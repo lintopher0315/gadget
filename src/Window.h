@@ -37,6 +37,7 @@ class Window : public wxWindow {
 
         unsigned short mode;
         unsigned short currEditor;
+		unsigned short lastCopiedMode;
 
 	private:
 		void doInsertion(void);
@@ -49,6 +50,7 @@ class Window : public wxWindow {
 		void doCharSearch(void);
 		void doVisualMode(void);
 		void doLineMode(void);
+		void doPaste(void);
 
 		void doQuitFile(void);
 		void doSaveFile(void);
@@ -63,6 +65,7 @@ class Window : public wxWindow {
 		void doVisOrLineDelete(void);
 		void doVisOrLineCaseChange(void);
 		void doVisInterLineJump(void);
+		void doVisOrLineCopy(void);
 
 		void doBasicLineMovement(void);
 		void doLineShift(void);
