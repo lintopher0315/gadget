@@ -388,6 +388,31 @@ void Editor::caretDownVis(const int& num) {
 	SetCurrentPos(endPos);
 }
 
+void Editor::jumpStartVis(void) {
+	if (GetCurrentPos() >= GetAnchor()) {
+		SetAnchor(GetAnchor() + 1);
+	}
+	SetCurrentPos(0);
+}
+
+void Editor::jumpEndVis(void) {
+	if (GetCurrentPos() < GetAnchor()) {
+		SetAnchor(GetAnchor() - 1);	
+	}
+	SetCurrentPos(GetTextLength() - 1);
+}
+
+void Editor::jumpLineVis(const int& line) {
+	int endPos = PositionFromLine(line);
+	if (endPos >= GetAnchor() - 1 && GetAnchor() > GetCurrentPos()) {
+		SetAnchor(GetAnchor() - 1);
+	}
+	else if (endPos < GetAnchor() && GetAnchor() <= GetCurrentPos()) {
+		SetAnchor(GetAnchor() + 1);
+	}
+	SetCurrentPos(endPos);
+}
+
 void Editor::caretUpLine(const int& num) {
 	int endLine = std::max(currLine() - num, 0);
 	int startLine = LineFromPosition(GetAnchor());

@@ -101,6 +101,9 @@ void Window::executeVisual(const int& cmdInd) {
 		case 2:
 			doVisOrLineCaseChange();
 			break;
+		case 3:
+			doVisInterLineJump();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -399,6 +402,21 @@ void Window::doVisOrLineCaseChange(void) {
 
 	e->removeSelection();
 	mode = NORMAL_MODE;
+}
+
+void Window::doVisInterLineJump(void) {
+	Editor *e = getCurrentEditor();
+
+	if (command->cmd == "gg") {
+		e->jumpStartVis();
+	}
+	else if (command->cmd == "G") {
+		e->jumpEndVis();
+	}
+	else {
+		std::pair<int, std::string> parsedCmd = command->parseNormal();
+		e->jumpLineVis(parsedCmd.first - 1);
+	}
 }
 
 void Window::doBasicLineMovement(void) {

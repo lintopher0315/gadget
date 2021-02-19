@@ -55,12 +55,14 @@ class Window : public wxWindow {
 		void doOpenFile(void);
 		void doNewTab(void);
 		void doSplitTab(void);
+
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
 
 		void doBasicVisMovement(void);
 		void doVisOrLineDelete(void);
 		void doVisOrLineCaseChange(void);
+		void doVisInterLineJump(void);
 
 		void doBasicLineMovement(void);
 		void doLineShift(void);
