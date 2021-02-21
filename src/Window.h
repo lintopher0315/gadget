@@ -69,6 +69,7 @@ class Window : public wxWindow {
 
 		void doBasicLineMovement(void);
 		void doLineShift(void);
+		void doLineInterLineJump(void);
 
         wxBoxSizer *sizer;
 };

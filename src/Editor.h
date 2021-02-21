@@ -47,6 +47,9 @@ class Editor : public wxStyledTextCtrl {
 		void caretUpLine(const int& num);
 		void caretDownLine(const int& num);
 		void shiftLine(const int& num, const bool& dir);
+		void jumpStartLine(void);
+		void jumpEndLine(void);
+		void jumpLineLine(const int& line);
 
         std::string relPath;
 		bool saved;

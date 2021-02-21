@@ -460,3 +460,27 @@ void Editor::shiftLine(const int& num, const bool& dir) {
 		}
 	}
 }
+
+void Editor::jumpStartLine(void) {
+	int startLine = LineFromPosition(GetAnchor());
+	SetAnchor(GetLineEndPosition(startLine));
+	SetCurrentPos(0);
+}
+
+void Editor::jumpEndLine(void) {
+	int startLine = LineFromPosition(GetAnchor());
+	SetAnchor(PositionFromLine(startLine));
+	SetCurrentPos(GetTextLength() - 1);
+}
+
+void Editor::jumpLineLine(const int& line) {
+	int startLine = LineFromPosition(GetAnchor());
+	if (line >= startLine) {
+		SetAnchor(PositionFromLine(startLine));
+		SetCurrentPos(GetLineEndPosition(line));
+	}
+	else {
+		SetAnchor(GetLineEndPosition(startLine));
+		SetCurrentPos(PositionFromLine(line));
+	}
+}

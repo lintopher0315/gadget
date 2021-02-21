@@ -134,6 +134,9 @@ void Window::executeLine(const int& cmdInd) {
 		case 4:
 			doVisOrLineCopy();
 			break;
+		case 5:
+			doLineInterLineJump();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -491,6 +494,21 @@ void Window::doLineShift(void) {
 
 	e->removeSelection();
 	mode = NORMAL_MODE;
+}
+
+void Window::doLineInterLineJump(void) {
+	Editor *e = getCurrentEditor();
+
+	if (command->cmd == "gg") {
+		e->jumpStartLine();
+	}
+	else if (command->cmd == "G") {
+		e->jumpEndLine();
+	}
+	else {
+		std::pair<int, std::string> parsedCmd = command->parseNormal();
+		e->jumpLineLine(parsedCmd.first - 1);
+	}
 }
 
 void Window::updateStatus(void) {
