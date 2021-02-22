@@ -114,6 +114,9 @@ void Window::executeVisual(const int& cmdInd) {
 		case 4:
 			doVisOrLineCopy();
 			break;
+		case 5:
+			doVisWordJump();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -470,6 +473,18 @@ void Window::doVisOrLineCopy(void) {
 	e->copySelection();
 	e->removeSelection();
 	mode = NORMAL_MODE;
+}
+
+void Window::doVisWordJump(void) {
+	std::pair<int, std::string> parsedCmd = command->parseNormal();
+	Editor *e = getCurrentEditor();
+
+	if (parsedCmd.second == "w") {
+		e->wordRightVis(parsedCmd.first);
+	}
+	else {
+		e->wordLeftVis(parsedCmd.first);
+	}
 }
 
 void Window::doBasicLineMovement(void) {

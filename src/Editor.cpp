@@ -10,6 +10,9 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
 	SetMarginWidth(1, 30);
 	SetUseTabs(false);
 
+	std::string whitespaceChars = std::string(GetWhitespaceChars().mb_str()) + "\n";
+	SetWhitespaceChars(whitespaceChars);
+
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour(30, 30, 30));
 	StyleSetForeground(wxSTC_STYLE_DEFAULT, wxColour(255, 255, 255));
@@ -418,6 +421,26 @@ void Editor::jumpLineVis(const int& line) {
 		SetAnchor(GetAnchor() + 1);
 	}
 	SetCurrentPos(endPos);
+}
+
+void Editor::wordLeftVis(const int& num) {
+	for (int i = 0; i < num; ++i) {
+		int startPos = GetCurrentPos();
+		WordLeftExtend();
+		if (GetCurrentPos() <= GetAnchor() && GetAnchor() <= startPos) {
+			SetAnchor(GetAnchor() + 1);
+		}
+	}
+}
+
+void Editor::wordRightVis(const int& num) {
+	for (int i = 0; i < num; ++i) {
+		int startPos = GetCurrentPos();
+		WordRightExtend();
+		if (GetCurrentPos() >= GetAnchor() - 1 && GetAnchor() - 1 >= startPos) {
+			SetAnchor(GetAnchor() - 1);
+		}
+	}
 }
 
 void Editor::caretUpLine(const int& num) {

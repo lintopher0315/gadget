@@ -43,6 +43,8 @@ class Editor : public wxStyledTextCtrl {
 		void jumpStartVis(void);
 		void jumpEndVis(void);
 		void jumpLineVis(const int& line);
+		void wordLeftVis(const int& num);
+		void wordRightVis(const int& num);
 
 		void caretUpLine(const int& num);
 		void caretDownLine(const int& num);
