@@ -19,7 +19,7 @@ Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition,
 
     mode = NORMAL_MODE;
     currEditor = 0;
-	lastCopiedMode = NORMAL_MODE;
+	lastCopiedMode = EDIT_MODE;
 }
 
 Frame *Window::getFrame(void) const {
@@ -65,6 +65,9 @@ void Window::executeNormal(const int& cmdInd) {
 		case 10:
 			doPaste();
 			break;
+		case 11:
+			doVisOrLineOrNormalDelete();
+			break;
     }
     command->clear();
     commandBar->Clear();
@@ -100,7 +103,7 @@ void Window::executeVisual(const int& cmdInd) {
 			doBasicVisMovement();
 			break;
 		case 1:
-			doVisOrLineDelete();
+			doVisOrLineOrNormalDelete();
 			break;
 		case 2:
 			doVisOrLineCaseChange();
@@ -123,7 +126,7 @@ void Window::executeLine(const int& cmdInd) {
 			doBasicLineMovement();
 			break;
 		case 1:
-			doVisOrLineDelete();
+			doVisOrLineOrNormalDelete();
 			break;
 		case 2:
 			doVisOrLineCaseChange();
@@ -269,10 +272,10 @@ void Window::doLineMode(void) {
 void Window::doPaste(void) {
 	Editor *e = getCurrentEditor();
 
-	if (lastCopiedMode == NORMAL_MODE) {
+	if (lastCopiedMode == EDIT_MODE) {
 		return;
 	}
-	if (lastCopiedMode == VISUAL_MODE) {
+	if (lastCopiedMode == VISUAL_MODE || lastCopiedMode == NORMAL_MODE) {
 		if (command->cmd == "p") {
 			e->CharRight();
 		}
@@ -423,7 +426,7 @@ void Window::doBasicVisMovement(void) {
 	}
 }
 
-void Window::doVisOrLineDelete(void) {
+void Window::doVisOrLineOrNormalDelete(void) {
 	Editor *e = getCurrentEditor();
 
 	lastCopiedMode = mode;

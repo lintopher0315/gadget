@@ -433,7 +433,7 @@ void Editor::caretUpLine(const int& num) {
 }
 
 void Editor::caretDownLine(const int& num) {
-	int endLine = std::min(currLine() + num, GetLineCount());
+	int endLine = std::min(currLine() + num, GetLineCount() - 1);
 	int startLine = LineFromPosition(GetAnchor());
 	if (endLine >= startLine) {
 		SetAnchor(PositionFromLine(startLine));
