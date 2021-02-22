@@ -92,6 +92,9 @@ void Editor::onKey(wxKeyEvent& event) {
 		}
 		else if (w->mode == VISUAL_MODE || w->mode == LINE_MODE) {
 			removeSelection();
+			if (GetCurrentPos() == lineEndPos()) {
+				caretLeft(1);
+			}
 		}
 		w->mode = NORMAL_MODE;
 		w->command->clear();
@@ -358,7 +361,7 @@ void Editor::caseChangeSelection(const bool& upper) {
 
 void Editor::caretLeftVis(const int& num) {
 	int pos = std::max(lineStartPos(), GetCurrentPos() - num);
-	if (GetCurrentPos() == GetAnchor()) {
+	if (GetCurrentPos() != pos && GetCurrentPos() == GetAnchor()) {
 		SetAnchor(GetAnchor() + 1);
 	}
 	SetCurrentPos(pos);
@@ -427,7 +430,10 @@ void Editor::wordLeftVis(const int& num) {
 	for (int i = 0; i < num; ++i) {
 		int startPos = GetCurrentPos();
 		WordLeftExtend();
-		if (GetCurrentPos() <= GetAnchor() && GetAnchor() <= startPos) {
+		if (GetCurrentPos() == startPos) {
+			return;
+		}
+		if (GetCurrentPos() < GetAnchor() && GetAnchor() <= startPos) {
 			SetAnchor(GetAnchor() + 1);
 		}
 	}
@@ -437,9 +443,37 @@ void Editor::wordRightVis(const int& num) {
 	for (int i = 0; i < num; ++i) {
 		int startPos = GetCurrentPos();
 		WordRightExtend();
+		if (GetCurrentPos() == startPos) {
+			return;
+		}
 		if (GetCurrentPos() >= GetAnchor() - 1 && GetAnchor() - 1 >= startPos) {
 			SetAnchor(GetAnchor() - 1);
 		}
+	}
+}
+
+void Editor::lineEndVis(void) {
+	int startPos = GetCurrentPos();
+	LineEndExtend();
+	if (GetCurrentPos() >= GetAnchor() - 1 && GetAnchor() - 1 >= startPos) {
+		SetAnchor(GetAnchor() - 1);
+	}
+	caretLeftVis(1);
+}
+
+void Editor::lineStartVis(void) {
+	int startPos = GetCurrentPos();
+	HomeExtend();
+	if (GetCurrentPos() != startPos && GetCurrentPos() < GetAnchor() && GetAnchor() <= startPos) {
+		SetAnchor(GetAnchor() + 1);
+	}
+}
+
+void Editor::lineHomeVis(void) {
+	int startPos = GetCurrentPos();
+	VCHomeExtend();
+	if (GetCurrentPos() != startPos && GetCurrentPos() < GetAnchor() && GetAnchor() <= startPos) {
+		SetAnchor(GetAnchor() + 1);
 	}
 }
 

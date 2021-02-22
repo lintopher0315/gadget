@@ -117,6 +117,9 @@ void Window::executeVisual(const int& cmdInd) {
 		case 5:
 			doVisWordJump();
 			break;
+		case 6:
+			doVisIntraLineJump();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -484,6 +487,20 @@ void Window::doVisWordJump(void) {
 	}
 	else {
 		e->wordLeftVis(parsedCmd.first);
+	}
+}
+
+void Window::doVisIntraLineJump(void) {
+    Editor *e = getCurrentEditor();
+
+	if (command->cmd == "_") {
+		e->lineHomeVis();
+	}
+	else if (command->cmd == "$") {
+		e->lineEndVis();
+	}
+	else if (command->cmd == "0") {
+		e->lineStartVis();
 	}
 }
 
