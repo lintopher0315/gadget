@@ -68,6 +68,7 @@ class Window : public wxWindow {
 		void doVisOrLineCopy(void);
 		void doVisWordJump(void);
 		void doVisIntraLineJump(void);
+		void doVisCharSearch(void);
 
 		void doBasicLineMovement(void);
 		void doLineShift(void);

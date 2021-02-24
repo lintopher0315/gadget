@@ -477,6 +477,40 @@ void Editor::lineHomeVis(void) {
 	}
 }
 
+void Editor::charSearchAheadVis(const char& c, const bool& inc) {
+	int endPos = GetCurrentPos() + 1;
+	while (endPos < lineEndPos() && GetCharAt(endPos) != c) {
+		++endPos;
+	}
+	if (endPos >= lineEndPos()) {
+		return;
+	}
+	if (!inc) {
+		--endPos;
+	}
+	if (endPos >= GetAnchor() - 1 && GetAnchor() - 1 >= GetCurrentPos()) {
+		SetAnchor(GetAnchor() - 1);
+	}
+	SetCurrentPos(endPos);
+}
+
+void Editor::charSearchBehindVis(const char& c, const bool& inc) {
+	int endPos = GetCurrentPos() - 1;
+	while (endPos >= lineStartPos() && GetCharAt(endPos) != c) {
+		--endPos;
+	}
+	if (endPos < lineStartPos()) {
+		return;
+	}
+	if (!inc) {
+		++endPos;
+	}
+	if (endPos < GetAnchor() && GetAnchor() <= GetCurrentPos()) {
+		SetAnchor(GetAnchor() + 1);
+	}
+	SetCurrentPos(endPos);
+}
+
 void Editor::caretUpLine(const int& num) {
 	int endLine = std::max(currLine() - num, 0);
 	int startLine = LineFromPosition(GetAnchor());

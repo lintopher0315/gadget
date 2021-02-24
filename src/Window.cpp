@@ -120,6 +120,9 @@ void Window::executeVisual(const int& cmdInd) {
 		case 6:
 			doVisIntraLineJump();
 			break;
+		case 7:
+			doVisCharSearch();
+			break;
 	}
 	command->clear();
 	commandBar->Clear();
@@ -501,6 +504,23 @@ void Window::doVisIntraLineJump(void) {
 	}
 	else if (command->cmd == "0") {
 		e->lineStartVis();
+	}
+}
+
+void Window::doVisCharSearch(void) {
+	Editor *e = getCurrentEditor();
+
+	if (command->cmd[0] == 'f') {
+		e->charSearchAheadVis(command->cmd[1], 1);
+	}
+	else if (command->cmd[0] == 'F') {
+		e->charSearchBehindVis(command->cmd[1], 1);
+	}
+	else if (command->cmd[0] == 't') {
+		e->charSearchAheadVis(command->cmd[1], 0);
+	}
+	else if (command->cmd[0] == 'T') {
+		e->charSearchBehindVis(command->cmd[1], 0);
 	}
 }
 

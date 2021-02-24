@@ -48,6 +48,8 @@ class Editor : public wxStyledTextCtrl {
 		void lineEndVis(void);
 		void lineStartVis(void);
 		void lineHomeVis(void);
+		void charSearchAheadVis(const char& c, const bool& inc);
+		void charSearchBehindVis(const char& c, const bool& inc);
 
 		void caretUpLine(const int& num);
 		void caretDownLine(const int& num);
