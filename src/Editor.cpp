@@ -83,8 +83,10 @@ void Editor::onChar(wxKeyEvent& event) {
 void Editor::onKey(wxKeyEvent& event) {
     Window *w = getWindow();
 	int key = event.GetKeyCode();
-	if (key >= 32 && key <= 127 && !event.ControlDown()) {
-		event.Skip();
+	if (key >= 32 && key <= 127) {
+		if (!event.ControlDown() || key == 67 || key == 86) {
+			event.Skip();
+		}
 	}
 	else if (key == WXK_ESCAPE) {
 		if (w->mode == EDIT_MODE) {
