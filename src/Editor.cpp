@@ -125,7 +125,13 @@ void Editor::onKey(wxKeyEvent& event) {
 			w->commandBar->Remove(l-1, l);
 		}
 		else if (w->mode == EDIT_MODE) {
-			DeleteBack();
+			std::string upToCaret = std::string(GetTextRange(lineStartPos(), GetCurrentPos()));
+			if (upToCaret.empty() || upToCaret.find_first_not_of(' ') != std::string::npos) {
+				DeleteBack();
+			}
+			else {
+				DeleteRange(std::max(lineStartPos(), GetCurrentPos() - 4), std::min(linePos(), 4));
+			}
 		}
 	}
 	else if (key == WXK_TAB) {
