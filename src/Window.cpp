@@ -68,6 +68,9 @@ void Window::executeNormal(const int& cmdInd) {
 		case 11:
 			doVisOrLineOrNormalDelete();
 			break;
+		case 12:
+			doLineCut();
+			break;
     }
     command->clear();
     commandBar->Clear();
@@ -302,7 +305,28 @@ void Window::doPaste(void) {
 			e->NewLine();
 			e->Paste();
 		}
+		std::string line = std::string(e->GetCurLine().mb_str());
+		if (line.empty() || line == "\n") {
+			e->DeleteBack();
+		}
+		e->VCHome();
 	}
+}
+
+void Window::doLineCut(void) {
+	Editor *e = getCurrentEditor();
+
+	if (command->cmd == "D") {
+		e->cutToLineEnd();
+		lastCopiedMode = NORMAL_MODE;
+	}
+	else {
+    	std::pair<int, std::string> parsedCmd = command->parseNormal();
+
+		e->cutLines(parsedCmd.first);
+		lastCopiedMode = LINE_MODE;
+	}
+	mode = NORMAL_MODE;
 }
 
 void Window::doQuitFile(void) {

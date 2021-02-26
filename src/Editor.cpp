@@ -326,6 +326,23 @@ void Editor::charSearchBehind(const char& c, const bool& inc) {
 	}
 }
 
+void Editor::cutToLineEnd(void) {
+	SetAnchor(GetCurrentPos());
+	SetCurrentPos(lineEndPos() - 1);
+	cutSelection();
+	caretLeft(1);
+}
+
+void Editor::cutLines(const int& num) {
+	GotoPos(lineStartPos());
+	DeleteBack();
+	int endLine = std::min(GetLineCount() - 1, currLine() + num - 1);
+	SetAnchor(GetLineEndPosition(endLine));
+	cutSelection();
+	caretDown(1);
+	VCHome();
+}
+
 void Editor::removeSelection(void) {
 	SetEmptySelection(GetCurrentPos());
 }

@@ -51,6 +51,7 @@ class Window : public wxWindow {
 		void doVisualMode(void);
 		void doLineMode(void);
 		void doPaste(void);
+		void doLineCut(void);
 
 		void doQuitFile(void);
 		void doSaveFile(void);

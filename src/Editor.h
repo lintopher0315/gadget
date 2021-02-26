@@ -30,6 +30,8 @@ class Editor : public wxStyledTextCtrl {
 		void wordRight(const int& num);
 		void charSearchAhead(const char& c, const bool& inc);
 		void charSearchBehind(const char& c, const bool& inc);
+		void cutToLineEnd(void);
+		void cutLines(const int& num);
 
 		void removeSelection(void);
 		void cutSelection(void);
