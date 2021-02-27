@@ -94,6 +94,9 @@ void Window::executeCommand(const int& cmdInd) {
 		case 4:
 			doSplitTab();
 			break;
+		case 5:
+			doOpenHelpFile();
+			break;
     }
     command->clear();
     commandBar->Clear();
@@ -412,6 +415,10 @@ void Window::doSplitTab(void) {
 	else {
 		panel->Split(currEditor, wxRIGHT);
 	}
+}
+
+void Window::doOpenHelpFile(void) {
+	panel->AddPage(new HelpFile(panel), "Help", true);
 }
 
 bool Window::isExistingPath(const std::string& relPath) const {

@@ -11,6 +11,7 @@ class Window;
 #include "StatusBar.h"
 #include "CommandBar.h"
 #include "Command.h"
+#include "HelpFile.h"
 
 #define NORMAL_MODE 0
 #define EDIT_MODE 1
@@ -58,6 +59,7 @@ class Window : public wxWindow {
 		void doOpenFile(void);
 		void doNewTab(void);
 		void doSplitTab(void);
+		void doOpenHelpFile(void);
 
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;

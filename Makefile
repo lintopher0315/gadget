@@ -4,7 +4,7 @@ RM=rm -f
 CXXFLAGS=`wx-config --cxxflags` -std=c++17 -lstdc++fs
 LDLIBS=`wx-config --libs core,aui,richtext,stc`
 
-SRCS=Gadget.cpp Frame.cpp Window.cpp Editor.cpp FileTree.cpp Panel.cpp Command.cpp CommandBar.cpp StatusBar.cpp StatusSection.cpp
+SRCS=Gadget.cpp Frame.cpp Window.cpp Editor.cpp FileTree.cpp Panel.cpp Command.cpp CommandBar.cpp StatusBar.cpp StatusSection.cpp HelpFile.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 VPATH=./src
@@ -20,7 +20,7 @@ Gadget.o: Gadget.cpp Gadget.h
 Frame.o: Frame.cpp Frame.h Window.h FileTree.h
 	$(CXX) -c ./src/Frame.cpp $(CXXFLAGS)
 
-Window.o: Window.cpp Window.h Frame.h Panel.h StatusBar.h CommandBar.h Command.h
+Window.o: Window.cpp Window.h Frame.h Panel.h StatusBar.h CommandBar.h Command.h HelpFile.h
 	$(CXX) -c ./src/Window.cpp $(CXXFLAGS)
 
 Editor.o: Editor.cpp Editor.h Window.h
@@ -43,6 +43,9 @@ StatusBar.o: StatusBar.cpp StatusBar.h
 
 StatusSection.o: StatusSection.cpp StatusSection.h
 	$(CXX) -c ./src/StatusSection.cpp $(CXXFLAGS)
+
+HelpFile.o: HelpFile.cpp HelpFile.h Editor.h
+	$(CXX) -c ./src/HelpFile.cpp $(CXXFLAGS)
 
 clean:
 	$(RM) $(OBJS)

@@ -3,3 +3,4 @@ gadget
 *.sh
 *.vim
 *.txt
+*.o
