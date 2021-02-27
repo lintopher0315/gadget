@@ -591,6 +591,9 @@ void Window::doLineInterLineJump(void) {
 }
 
 void Window::updateStatus(void) {
+	if (panel->GetPageCount() == 0) {
+		return;
+	}
 	Editor *e = getCurrentEditor();
 
 	if (mode == NORMAL_MODE) {

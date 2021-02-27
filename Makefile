@@ -1,9 +1,51 @@
-gadget:
-	g++ `wx-config --cxxflags` -o gadget ./src/*.cpp `wx-config --libs core,aui,richtext,stc` -std=c++17 -lstdc++fs
+CC=gcc
+CXX=g++
+RM=rm -f
+CXXFLAGS=`wx-config --cxxflags` -std=c++17 -lstdc++fs
+LDLIBS=`wx-config --libs core,aui,richtext,stc`
 
-#  --libs core,aui,richtext,stc:	links all required libraries
-#  -std=c++17:						compile under C++17 standard; for filesystem library
-#  -lstdc++fs:						also for filesystem library
+SRCS=Gadget.cpp Frame.cpp Window.cpp Editor.cpp FileTree.cpp Panel.cpp Command.cpp CommandBar.cpp StatusBar.cpp StatusSection.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
+
+VPATH=./src
+
+all: gadget
+
+gadget: $(OBJS)
+	$(CXX) -o gadget $(OBJS) $(CXXFLAGS) $(LDLIBS)
+
+Gadget.o: Gadget.cpp Gadget.h
+	$(CXX) -c ./src/Gadget.cpp $(CXXFLAGS)
+
+Frame.o: Frame.cpp Frame.h Window.h FileTree.h
+	$(CXX) -c ./src/Frame.cpp $(CXXFLAGS)
+
+Window.o: Window.cpp Window.h Frame.h Panel.h StatusBar.h CommandBar.h Command.h
+	$(CXX) -c ./src/Window.cpp $(CXXFLAGS)
+
+Editor.o: Editor.cpp Editor.h Window.h
+	$(CXX) -c ./src/Editor.cpp $(CXXFLAGS)
+
+FileTree.o: FileTree.cpp FileTree.h Frame.h
+	$(CXX) -c ./src/FileTree.cpp $(CXXFLAGS)
+
+Panel.o: Panel.cpp Panel.h Editor.h
+	$(CXX) -c ./src/Panel.cpp $(CXXFLAGS)
+
+Command.o: Command.cpp Command.h
+	$(CXX) -c ./src/Command.cpp $(CXXFLAGS)
+
+CommandBar.o: CommandBar.cpp CommandBar.h
+	$(CXX) -c ./src/CommandBar.cpp $(CXXFLAGS)
+
+StatusBar.o: StatusBar.cpp StatusBar.h
+	$(CXX) -c ./src/StatusBar.cpp $(CXXFLAGS)
+
+StatusSection.o: StatusSection.cpp StatusSection.h
+	$(CXX) -c ./src/StatusSection.cpp $(CXXFLAGS)
 
 clean:
-	rm -f gadget
+	$(RM) $(OBJS)
+
+distclean: clean
+	$(RM) gadget
