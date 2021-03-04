@@ -1,3 +1,5 @@
+#include "Frame.h"
+#include "Window.h"
 #include "FileTree.h"
 
 FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPosition, wxSize(wxGetDisplaySize().GetWidth()/4, wxGetDisplaySize().GetHeight()/2), wxTR_DEFAULT_STYLE | wxTR_FULL_ROW_HIGHLIGHT | wxTR_NO_LINES, wxDefaultValidator, wxTreeCtrlNameStr) {

@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Frame.h"
 
 Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize) {
 	SetMinClientSize(wxSize(500, 100));

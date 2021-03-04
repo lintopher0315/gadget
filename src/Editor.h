@@ -3,9 +3,7 @@
 #include <wx/wx.h>
 #include <wx/stc/stc.h>
 
-class Editor;
-
-#include "Window.h"
+class Window;
 
 class Editor : public wxStyledTextCtrl {
     public:

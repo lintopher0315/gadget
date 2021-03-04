@@ -4,7 +4,6 @@
 #include <filesystem>
 
 #include "Window.h"
-#include "FileTree.h"
 
 class Frame : public wxFrame {
     public:

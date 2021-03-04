@@ -17,19 +17,19 @@ gadget: $(OBJS)
 Gadget.o: Gadget.cpp Gadget.h
 	$(CXX) -c ./src/Gadget.cpp $(CXXFLAGS)
 
-Frame.o: Frame.cpp Frame.h Window.h FileTree.h
+Frame.o: Frame.cpp Frame.h
 	$(CXX) -c ./src/Frame.cpp $(CXXFLAGS)
 
-Window.o: Window.cpp Window.h Frame.h Panel.h StatusBar.h CommandBar.h Command.h HelpFile.h
+Window.o: Window.cpp Window.h
 	$(CXX) -c ./src/Window.cpp $(CXXFLAGS)
 
-Editor.o: Editor.cpp Editor.h Window.h
+Editor.o: Editor.cpp Editor.h
 	$(CXX) -c ./src/Editor.cpp $(CXXFLAGS)
 
-FileTree.o: FileTree.cpp FileTree.h Frame.h
+FileTree.o: FileTree.cpp FileTree.h
 	$(CXX) -c ./src/FileTree.cpp $(CXXFLAGS)
 
-Panel.o: Panel.cpp Panel.h Editor.h
+Panel.o: Panel.cpp Panel.h
 	$(CXX) -c ./src/Panel.cpp $(CXXFLAGS)
 
 Command.o: Command.cpp Command.h
@@ -44,7 +44,7 @@ StatusBar.o: StatusBar.cpp StatusBar.h
 StatusSection.o: StatusSection.cpp StatusSection.h
 	$(CXX) -c ./src/StatusSection.cpp $(CXXFLAGS)
 
-HelpFile.o: HelpFile.cpp HelpFile.h Editor.h
+HelpFile.o: HelpFile.cpp HelpFile.h
 	$(CXX) -c ./src/HelpFile.cpp $(CXXFLAGS)
 
 clean:

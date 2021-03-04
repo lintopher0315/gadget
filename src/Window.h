@@ -4,13 +4,12 @@
 #include <fstream>
 
 class Frame;
-class Window;
 
-#include "Frame.h"
 #include "Panel.h"
-#include "StatusBar.h"
+#include "FileTree.h"
 #include "CommandBar.h"
 #include "Command.h"
+#include "StatusBar.h"
 #include "HelpFile.h"
 
 #define NORMAL_MODE 0

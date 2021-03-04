@@ -1,3 +1,4 @@
+#include "Window.h"
 #include "Editor.h"
 
 Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, "editor") {

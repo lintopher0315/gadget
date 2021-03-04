@@ -1,4 +1,4 @@
-#include "HelpFile.h"
+#include "Window.h"
 
 HelpFile::HelpFile(wxWindow *parent) : Editor(parent) {
 	AddText(

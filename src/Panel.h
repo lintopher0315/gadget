@@ -3,7 +3,8 @@
 #include <wx/wx.h>
 #include <wx/aui/auibook.h>
 
-class Panel;
+class Frame;
+class Window;
 
 #include "Editor.h"
 

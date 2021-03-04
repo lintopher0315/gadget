@@ -2,7 +2,7 @@
 
 #include <wx/wx.h>
 
-#include "Editor.h"
+class Window;
 
 class HelpFile : public Editor {
 	public:

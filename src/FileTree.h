@@ -5,9 +5,8 @@
 #include <filesystem>
 #include <functional>
 
-class FileTree;
-
-#include "Frame.h"
+class Frame;
+class Window;
 
 class FileTree : public wxTreeCtrl {
 	public:
