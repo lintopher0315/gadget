@@ -60,6 +60,7 @@ class Editor : public wxStyledTextCtrl {
 
         std::string relPath;
 		bool saved;
+		bool readOnly;
 
 	private:
         void onChar(wxKeyEvent& event);

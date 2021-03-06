@@ -382,10 +382,21 @@ void Window::doOpenFile(void) {
 	if (isValidPath(parsedCmd[1])) {
 		e->relPath = parsedCmd[1];
 		panel->SetPageText(currEditor, parsedCmd[1]);
+		e->SetEditable(true);
+		e->SetReadOnly(false);
+		e->ClearAll();
 		if (isExistingPath(parsedCmd[1])) {
 			e->LoadFile(getFrame()->cwd + e->relPath);
+			if (isReadOnlyFile(e->relPath)) {
+				e->SetEditable(false);
+				e->SetReadOnly(true);
+				e->readOnly = true;
+			}
+			else {
+				e->readOnly = false;
+			}
+			e->saved = true;
 		}
-		e->saved = true;
 		// else indicate that it's a new file
 	}
 }
@@ -402,9 +413,19 @@ void Window::doNewTab(void) {
 			continue;
 		}
 		panel->AddPage(new Editor(panel), parsedCmd[i], true);
-		getCurrentEditor()->relPath = parsedCmd[i];
+		Editor *e = getCurrentEditor();
+		e->relPath = parsedCmd[i];
 		if (isExistingPath(parsedCmd[i])) {
-			getCurrentEditor()->LoadFile(getFrame()->cwd + getCurrentEditor()->relPath);
+			e->LoadFile(getFrame()->cwd + e->relPath);
+			if (isReadOnlyFile(e->relPath)) {
+				e->SetEditable(false);
+				e->SetReadOnly(true);
+				e->readOnly = true;
+			}
+			else {
+				e->readOnly = false;
+			}
+			e->saved = true;
 		}
 	}
 }
@@ -447,6 +468,17 @@ bool Window::isValidPath(const std::string& relPath) const {
         return true;
     }
     return false;
+}
+
+bool Window::isReadOnlyFile(const std::string& relPath) const {
+	std::string absPath = getFrame()->cwd + relPath;
+	if (isExistingPath(relPath)) {
+		std::filesystem::perms p = std::filesystem::status(absPath).permissions();
+		if ((p & std::filesystem::perms::owner_write) == std::filesystem::perms::none) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void Window::doBasicVisMovement(void) {
@@ -607,18 +639,22 @@ void Window::updateStatus(void) {
 	if (mode == NORMAL_MODE) {
 		statusBar->modeDisplay->setText(" ~NORMAL~");
 		statusBar->modeDisplay->setBackground(wxColour(219, 131, 0));
+		e->SetCaretForeground(wxColour(219, 131, 0));
 	}
 	else if (mode == EDIT_MODE) {
 		statusBar->modeDisplay->setText("  ~EDIT~");
 		statusBar->modeDisplay->setBackground(wxColour(120, 161, 109));
+		e->SetCaretForeground(wxColour(120, 161, 109));
 	}
 	else if (mode == VISUAL_MODE) {
 		statusBar->modeDisplay->setText(" ~VISUAL~");
 		statusBar->modeDisplay->setBackground(wxColour(147, 196, 82));
+		e->SetCaretForeground(wxColour(147, 196, 82));
 	}
 	else if (mode == LINE_MODE) {
 		statusBar->modeDisplay->setText("  ~LINE~");
 		statusBar->modeDisplay->setBackground(wxColour(222, 149, 222));
+		e->SetCaretForeground(wxColour(222, 149, 222));
 	}
 
 	if (e->relPath == "") {
@@ -649,6 +685,9 @@ void Window::updateStatus(void) {
 			if (panelText[0] == '*') {
 				panel->SetPageText(currEditor, panelText.substr(1, panelText.size()-1));
 			}
+		}
+		if (e->readOnly) {
+			statusBar->pathDisplay->AppendText(" [R]");
 		}
 	}
 

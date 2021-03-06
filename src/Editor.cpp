@@ -17,7 +17,7 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour(30, 30, 30));
 	StyleSetForeground(wxSTC_STYLE_DEFAULT, wxColour(255, 255, 255));
-	SetCaretForeground(wxColour(255, 255, 255));
+	SetCaretForeground(wxColour(219, 131, 0));
 
 	StyleClearAll();
     StyleSetFont(0, *font);
@@ -31,6 +31,7 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
 	Bind(wxEVT_STC_MODIFIED, &Editor::onModified, this);
 
 	saved = true;
+	readOnly = false;
 }
 
 Window *Editor::getWindow(void) {

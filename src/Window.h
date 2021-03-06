@@ -62,6 +62,7 @@ class Window : public wxWindow {
 
         bool isExistingPath(const std::string& relPath) const;
         bool isValidPath(const std::string& relPath) const;
+		bool isReadOnlyFile(const std::string& relPath) const;
 
 		void doBasicVisMovement(void);
 		void doVisOrLineOrNormalDelete(void);
