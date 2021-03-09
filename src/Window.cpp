@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "Frame.h"
+#include "FileHelper.h"
 
 Window::Window(wxWindow *parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize) {
 	SetMinClientSize(wxSize(500, 100));
@@ -349,7 +350,7 @@ void Window::doSaveFile(void) {
 		}
 	}
 	else {
-		if (isValidPath(parsedCmd[1])) {
+		if (FileHelper::isValidPath(getFrame()->cwd, parsedCmd[1])) {
 			e->relPath = parsedCmd[1];
 			panel->SetPageText(currEditor, parsedCmd[1]);
 		}
@@ -358,8 +359,8 @@ void Window::doSaveFile(void) {
 			return;
 		}
 	}
-	if (isValidPath(e->relPath)) {
-		if (!isExistingPath(e->relPath)) {
+	if (FileHelper::isValidPath(getFrame()->cwd, e->relPath)) {
+		if (!FileHelper::isExistingPath(getFrame()->cwd, e->relPath)) {
 			// reload file tree
 			e->SaveFile(getFrame()->cwd + e->relPath);
 			getFrame()->tree->reloadTree();
@@ -379,15 +380,17 @@ void Window::doOpenFile(void) {
     Editor *e = getCurrentEditor();
 
     // later: check if curr editor saved before replacing
-	if (isValidPath(parsedCmd[1])) {
+	if (FileHelper::isValidPath(getFrame()->cwd, parsedCmd[1])) {
 		e->relPath = parsedCmd[1];
 		panel->SetPageText(currEditor, parsedCmd[1]);
 		e->SetEditable(true);
 		e->SetReadOnly(false);
 		e->ClearAll();
-		if (isExistingPath(parsedCmd[1])) {
+		int lexer = FileHelper::getExtension(e->relPath);
+		e->applyLexer(lexer);
+		if (FileHelper::isExistingPath(getFrame()->cwd, parsedCmd[1])) {
 			e->LoadFile(getFrame()->cwd + e->relPath);
-			if (isReadOnlyFile(e->relPath)) {
+			if (FileHelper::isReadOnlyFile(getFrame()->cwd, e->relPath)) {
 				e->SetEditable(false);
 				e->SetReadOnly(true);
 				e->readOnly = true;
@@ -405,19 +408,20 @@ void Window::doNewTab(void) {
     std::vector<std::string> parsedCmd = command->parseCommand();
 
 	if (parsedCmd.size() == 1) {
-		panel->AddPage(new Editor(panel), "[NO FILE]", true);
+		panel->AddPage(new Editor(panel, NULL_LEX), "[NO FILE]", true);
 		return;
 	}
 	for (int i = 1; i < parsedCmd.size(); ++i) {
-		if (!isValidPath(parsedCmd[i])) {
+		if (!FileHelper::isValidPath(getFrame()->cwd, parsedCmd[i])) {
 			continue;
 		}
-		panel->AddPage(new Editor(panel), parsedCmd[i], true);
+		int lexer = FileHelper::getExtension(parsedCmd[i]);
+		panel->AddPage(new Editor(panel, lexer), parsedCmd[i], true);
 		Editor *e = getCurrentEditor();
 		e->relPath = parsedCmd[i];
-		if (isExistingPath(parsedCmd[i])) {
+		if (FileHelper::isExistingPath(getFrame()->cwd, parsedCmd[i])) {
 			e->LoadFile(getFrame()->cwd + e->relPath);
-			if (isReadOnlyFile(e->relPath)) {
+			if (FileHelper::isReadOnlyFile(getFrame()->cwd, e->relPath)) {
 				e->SetEditable(false);
 				e->SetReadOnly(true);
 				e->readOnly = true;
@@ -441,44 +445,6 @@ void Window::doSplitTab(void) {
 
 void Window::doOpenHelpFile(void) {
 	panel->AddPage(new HelpFile(panel), "Help", true);
-}
-
-bool Window::isExistingPath(const std::string& relPath) const {
-    if (relPath.empty()) {
-        return false;
-    }
-    std::string absPath = getFrame()->cwd + relPath;
-    if (std::filesystem::exists(absPath) && std::filesystem::is_regular_file(absPath)) {
-        return true;
-    }
-    return false;
-}
-
-bool Window::isValidPath(const std::string& relPath) const {
-    // currently only allows relative paths from cwd
-    if (relPath.empty()) {
-        return false;
-    }
-    std::string absDir = getFrame()->cwd + relPath;
-    // maybe check for backwards slash on Windows
-    while (absDir.back() != '/') {
-        absDir.pop_back();
-    }
-    if (std::filesystem::exists(absDir) && std::filesystem::is_directory(absDir)) {
-        return true;
-    }
-    return false;
-}
-
-bool Window::isReadOnlyFile(const std::string& relPath) const {
-	std::string absPath = getFrame()->cwd + relPath;
-	if (isExistingPath(relPath)) {
-		std::filesystem::perms p = std::filesystem::status(absPath).permissions();
-		if ((p & std::filesystem::perms::owner_write) == std::filesystem::perms::none) {
-			return true;
-		}
-	}
-	return false;
 }
 
 void Window::doBasicVisMovement(void) {

@@ -1,6 +1,7 @@
 #include "Window.h"
+#include "FileHelper.h"
 
-HelpFile::HelpFile(wxWindow *parent) : Editor(parent) {
+HelpFile::HelpFile(wxWindow *parent) : Editor(parent, NULL_LEX) {
 	AddText(
 		"Welcome to the Gadget help file!\n"
 		"This file is read-only\n\n"

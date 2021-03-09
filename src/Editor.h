@@ -7,9 +7,11 @@ class Window;
 
 class Editor : public wxStyledTextCtrl {
     public:
-        Editor(wxWindow *parent);
+        Editor(wxWindow *parent, int lexer);
 
         Window *getWindow(void);
+
+		void applyLexer(const int& lexer);
 
         int linePos(void) const;
 		int currLine(void) const;

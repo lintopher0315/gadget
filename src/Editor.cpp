@@ -1,7 +1,8 @@
 #include "Window.h"
 #include "Editor.h"
+#include "FileHelper.h"
 
-Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, "editor") {
+Editor::Editor(wxWindow *parent, int lexer) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, "editor") {
     SetCaretStyle(2);
     SetCaretPeriod(0);
     SetTabWidth(4);
@@ -20,6 +21,9 @@ Editor::Editor(wxWindow *parent) : wxStyledTextCtrl(parent, wxID_ANY, wxDefaultP
 	SetCaretForeground(wxColour(219, 131, 0));
 
 	StyleClearAll();
+
+	applyLexer(lexer);
+
     StyleSetFont(0, *font);
 	StyleSetBackground(wxSTC_STYLE_LINENUMBER, wxColour(37, 37, 38));
 	StyleSetForeground(wxSTC_STYLE_LINENUMBER, wxColour(240, 240, 41));
@@ -214,6 +218,24 @@ void Editor::onClickDown(wxMouseEvent& event) {
 void Editor::onModified(wxStyledTextEvent& event) {
 	saved = false;
 	event.Skip();
+}
+
+void Editor::applyLexer(const int& lexer) {
+	if (lexer == CPP_LEX) {
+		SetLexer(wxSTC_LEX_CPP);
+
+		StyleSetForeground(wxSTC_C_COMMENTLINE, wxColor(60, 162, 2));
+		StyleSetForeground(wxSTC_C_PREPROCESSOR, wxColor(0, 0, 255));
+		StyleSetForeground(wxSTC_C_STRING, wxColor(255, 60, 10));
+		StyleSetForeground(wxSTC_C_WORD, wxColor(0, 0, 255));
+		SetKeyWords(0, wxT("return int char"));
+
+    	wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
+    	StyleSetFont(0, *font);
+	}
+	else {
+		SetLexer(wxSTC_LEX_NULL);
+	}
 }
 
 int Editor::linePos(void) const {

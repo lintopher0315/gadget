@@ -1,7 +1,6 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <fstream>
 
 class Frame;
 
@@ -59,10 +58,6 @@ class Window : public wxWindow {
 		void doNewTab(void);
 		void doSplitTab(void);
 		void doOpenHelpFile(void);
-
-        bool isExistingPath(const std::string& relPath) const;
-        bool isValidPath(const std::string& relPath) const;
-		bool isReadOnlyFile(const std::string& relPath) const;
 
 		void doBasicVisMovement(void);
 		void doVisOrLineOrNormalDelete(void);

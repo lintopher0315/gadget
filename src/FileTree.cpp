@@ -1,6 +1,7 @@
 #include "Frame.h"
 #include "Window.h"
 #include "FileTree.h"
+#include "FileHelper.h"
 
 FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPosition, wxSize(wxGetDisplaySize().GetWidth()/4, wxGetDisplaySize().GetHeight()/2), wxTR_DEFAULT_STYLE | wxTR_FULL_ROW_HIGHLIGHT | wxTR_NO_LINES, wxDefaultValidator, wxTreeCtrlNameStr) {
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
@@ -33,7 +34,8 @@ void FileTree::onActivate(wxTreeEvent& event) {
 	std::string absPath = cwd + relPath;
 	if (std::filesystem::is_regular_file(absPath)) {
 		Window *w = getFrame()->window;
-		w->panel->AddPage(new Editor(w->panel), relPath, true);
+		int lexer = FileHelper::getExtension(relPath);
+		w->panel->AddPage(new Editor(w->panel, lexer), relPath, true);
 		w->getCurrentEditor()->relPath = relPath;
 		w->getCurrentEditor()->LoadFile(absPath);
 	}

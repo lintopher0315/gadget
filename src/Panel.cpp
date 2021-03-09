@@ -1,6 +1,7 @@
 #include "Frame.h"
 #include "Window.h"
 #include "Panel.h"
+#include "FileHelper.h"
 
 Panel::Panel(wxWindow *parent) : wxAuiNotebook(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE) {
 	SetBackgroundColour(wxColour(54, 54, 54));
@@ -10,9 +11,9 @@ Panel::Panel(wxWindow *parent) : wxAuiNotebook(parent, wxID_ANY, wxDefaultPositi
 
 	SetArtProvider(tabArt);
 
-    AddPage(new Editor(this), "[NO FILE]");
-    AddPage(new Editor(this), "[NO FILE]");
-    AddPage(new Editor(this), "[NO FILE]");
+    AddPage(new Editor(this, NULL_LEX), "[NO FILE]");
+    AddPage(new Editor(this, NULL_LEX), "[NO FILE]");
+    AddPage(new Editor(this, NULL_LEX), "[NO FILE]");
     // indicate it's a new file
 
     Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &Panel::onTabChange, this);
