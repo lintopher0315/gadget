@@ -15,7 +15,6 @@ Editor::Editor(wxWindow *parent, int lexer) : wxStyledTextCtrl(parent, wxID_ANY,
 	std::string whitespaceChars = std::string(GetWhitespaceChars().mb_str()) + "\n";
 	SetWhitespaceChars(whitespaceChars);
 
-    wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	StyleSetBackground(wxSTC_STYLE_DEFAULT, wxColour(30, 30, 30));
 	StyleSetForeground(wxSTC_STYLE_DEFAULT, wxColour(255, 255, 255));
 	SetCaretForeground(wxColour(219, 131, 0));
@@ -24,7 +23,6 @@ Editor::Editor(wxWindow *parent, int lexer) : wxStyledTextCtrl(parent, wxID_ANY,
 
 	applyLexer(lexer);
 
-    StyleSetFont(0, *font);
 	StyleSetBackground(wxSTC_STYLE_LINENUMBER, wxColour(37, 37, 38));
 	StyleSetForeground(wxSTC_STYLE_LINENUMBER, wxColour(240, 240, 41));
 
@@ -32,7 +30,7 @@ Editor::Editor(wxWindow *parent, int lexer) : wxStyledTextCtrl(parent, wxID_ANY,
     Bind(wxEVT_KEY_DOWN, &Editor::onKey, this);
 	Bind(wxEVT_LEFT_UP, &Editor::onClickUp, this);
 	Bind(wxEVT_LEFT_DOWN, &Editor::onClickDown, this);
-	Bind(wxEVT_STC_MODIFIED, &Editor::onModified, this);
+	Bind(wxEVT_STC_CHANGE, &Editor::onChange, this);
 
 	saved = true;
 	readOnly = false;
@@ -215,7 +213,7 @@ void Editor::onClickDown(wxMouseEvent& event) {
 	event.Skip();
 }
 
-void Editor::onModified(wxStyledTextEvent& event) {
+void Editor::onChange(wxStyledTextEvent& event) {
 	saved = false;
 	event.Skip();
 }
@@ -225,16 +223,29 @@ void Editor::applyLexer(const int& lexer) {
 		SetLexer(wxSTC_LEX_CPP);
 
 		StyleSetForeground(wxSTC_C_COMMENTLINE, wxColor(60, 162, 2));
-		StyleSetForeground(wxSTC_C_PREPROCESSOR, wxColor(0, 0, 255));
-		StyleSetForeground(wxSTC_C_STRING, wxColor(255, 60, 10));
-		StyleSetForeground(wxSTC_C_WORD, wxColor(0, 0, 255));
-		SetKeyWords(0, wxT("return int char"));
-
-    	wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
-    	StyleSetFont(0, *font);
+		StyleSetForeground(wxSTC_C_COMMENT, wxColor(60, 162, 2));
+		StyleSetForeground(wxSTC_C_PREPROCESSOR, wxColor(250,128,114));
+		StyleSetForeground(wxSTC_C_STRING, wxColor(222, 203, 62));
+		StyleSetForeground(wxSTC_C_WORD, wxColor(245, 113, 208));
+		StyleSetForeground(wxSTC_C_NUMBER, wxColor(83, 195, 230));
+		SetKeyWords(0, wxT(
+					"alignas alignof and and_eq asm atomic_cancel atomic_commit atomic_noexcept auto"
+					" bitand bitor bool break case catch char char8_t char16_t char32_t class compl"
+					" concept const consteval constexpr constinit const_cast continue co_await co_return"
+					" co_yield decltype default delete do double dynamic_cast else enum explicit export"
+					" extern false float for friend goto if inline int long mutable namespace new noexcept"
+					" not not_eq nullptr operator or or_eq private protected public reflexpr register"
+					" reinterpret_cast requires return short signed sizeof static static_assert static_cast"
+					" struct switch synchronized template this thread_local throw true try typedef typeid"
+					" typename union unsigned using virtual void volatile wchar_t while xor xor_eq"
+					));
 	}
 	else {
 		SetLexer(wxSTC_LEX_NULL);
+	}
+	wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
+	for (int i = 0; i < 32; ++i) {
+		StyleSetFont(i, *font);
 	}
 }
 
