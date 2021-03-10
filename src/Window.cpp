@@ -241,7 +241,9 @@ void Window::doInterLineJump(void) {
 
 void Window::doTabChange(void) {
     std::pair<int, std::string> parsedCmd = command->parseNormal();
-	panel->setTab(parsedCmd.first);
+	if (parsedCmd.first != panel->GetSelection() + 1) {
+		panel->setTab(parsedCmd.first);
+	}
 }
 
 void Window::doWordJump(void) {

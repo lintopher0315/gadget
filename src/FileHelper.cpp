@@ -44,7 +44,7 @@ int FileHelper::getExtension(const std::string& relPath) {
 		return NULL_LEX;
 	}
 	std::string ext = relPath.substr(start + 1, relPath.size() - start - 1);
-	if (ext == "cpp" || ext == "cc" || ext == "cxx") {
+	if (ext == "cpp" || ext == "cc" || ext == "cxx" || ext == "h" || ext == "hpp") {
 		return CPP_LEX;
 	}
 	return NULL_LEX;
