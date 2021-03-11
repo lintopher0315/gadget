@@ -14,7 +14,7 @@ all: gadget
 gadget: $(OBJS)
 	$(CXX) -o gadget $(OBJS) $(CXXFLAGS) $(LDLIBS)
 
-Gadget.o: Gadget.cpp Gadget.h
+Gadget.o: Gadget.cpp Gadget.h ./src/res/gadget.xpm
 	$(CXX) -c ./src/Gadget.cpp $(CXXFLAGS)
 
 Frame.o: Frame.cpp Frame.h

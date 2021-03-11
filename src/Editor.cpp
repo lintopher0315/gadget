@@ -245,6 +245,7 @@ void Editor::applyLexer(const int& lexer) {
 					"const class private protected public false true if for goto break case catch"
 					" continue else return switch throw try while"
 					));
+		SetProperty("styling.within.preprocessor", "1");
 	}
 	else {
 		SetLexer(wxSTC_LEX_NULL);

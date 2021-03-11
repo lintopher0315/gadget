@@ -1,5 +1,6 @@
 #include "Gadget.h"
 #include "Frame.h"
+#include "res/gadget.xpm"
 
 bool Gadget::OnInit() {
     wxSize s = wxGetDisplaySize();
@@ -7,6 +8,10 @@ bool Gadget::OnInit() {
 
     Frame *f = new Frame(s);
     f->Show(true);
+
+	wxIcon icon(gadget_icon);
+	f->SetIcon(icon);
+
     return true;
 }
 
