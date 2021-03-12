@@ -36,7 +36,7 @@ void Window::executeNormal(const int& cmdInd) {
     switch(cmdInd) {
         case 0:
 			doInsertion();
-            break;
+			break;
         case 1:
 			doBasicMovement();
             break;
