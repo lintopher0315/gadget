@@ -388,7 +388,7 @@ void Window::doOpenFile(void) {
 		e->SetEditable(true);
 		e->SetReadOnly(false);
 		e->ClearAll();
-		int lexer = FileHelper::getExtension(e->relPath);
+		int lexer = FileHelper::getLexerFromExtension(e->relPath);
 		e->applyLexer(lexer);
 		if (FileHelper::isExistingPath(getFrame()->cwd, parsedCmd[1])) {
 			e->loadFormatted(getFrame()->cwd + e->relPath);
@@ -417,7 +417,7 @@ void Window::doNewTab(void) {
 		if (!FileHelper::isValidPath(getFrame()->cwd, parsedCmd[i])) {
 			continue;
 		}
-		int lexer = FileHelper::getExtension(parsedCmd[i]);
+		int lexer = FileHelper::getLexerFromExtension(parsedCmd[i]);
 		panel->AddPage(new Editor(panel, lexer), parsedCmd[i], true);
 		Editor *e = getCurrentEditor();
 		e->relPath = parsedCmd[i];

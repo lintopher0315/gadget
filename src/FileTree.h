@@ -25,6 +25,8 @@ class FileTree : public wxTreeCtrl {
 		wxColour getColorFromExtension(const std::string& ext) const;
 		wxColour getDirectoryColor(const int& num) const;
 
+		int OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId& item2);
+
 		std::string cwd;
 		wxTreeItemId root;
 };

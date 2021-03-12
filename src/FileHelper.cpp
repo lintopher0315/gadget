@@ -38,12 +38,38 @@ bool FileHelper::isReadOnlyFile(const std::string& cwd, const std::string& relPa
 	return false;
 }
 
-int FileHelper::getExtension(const std::string& relPath) {
+bool FileHelper::isDotFile(const std::string& relPath) {
+	std::string cp = relPath;
+	int dir = cp.find_last_of('/');
+	if (dir != std::string::npos) {
+		cp = cp.substr(dir + 1, cp.size() - dir - 1);	
+	}
+	int dot = cp.find_last_of('.');
+	if (dot == std::string::npos) {
+		return false;
+	}
+	if (dot == 0) {
+		return true;
+	}
+	return false;
+}
+
+std::string FileHelper::getExtension(const std::string& relPath) {
 	int start = relPath.find_last_of('.');
 	if (start == std::string::npos) {
+		return "";
+	}
+	if (FileHelper::isDotFile(relPath)) {
+		return "";
+	}
+	return relPath.substr(start + 1, relPath.size() - start - 1);
+}
+
+int FileHelper::getLexerFromExtension(const std::string& relPath) {
+	std::string ext = getExtension(relPath);
+	if (ext.empty()) {
 		return NULL_LEX;
 	}
-	std::string ext = relPath.substr(start + 1, relPath.size() - start - 1);
 	if (ext == "cpp" || ext == "cc" || ext == "cxx" || ext == "h" || ext == "hpp") {
 		return CPP_LEX;
 	}

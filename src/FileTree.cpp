@@ -3,7 +3,7 @@
 #include "FileTree.h"
 #include "FileHelper.h"
 
-FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPosition, wxSize(wxGetDisplaySize().GetWidth()/4, wxGetDisplaySize().GetHeight()/2), wxTR_DEFAULT_STYLE | wxTR_FULL_ROW_HIGHLIGHT | wxTR_NO_LINES, wxDefaultValidator, wxTreeCtrlNameStr) {
+FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPosition, wxSize(wxGetDisplaySize().GetWidth()/4, wxGetDisplaySize().GetHeight()/2), wxTR_DEFAULT_STYLE | wxTR_NO_LINES, wxDefaultValidator, wxTreeCtrlNameStr) {
     wxFont *font = new wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString);
 	SetFont(*font);
 	SetMinClientSize(wxSize(100, 100));
@@ -14,6 +14,7 @@ FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPos
 	root = AddRoot(cwd);
 
 	int numFiles = loadTree(cwd, root);
+	SortChildren(root);
 	ClearFocusedItem();
 	SetItemBold(root);
 	SetItemBackgroundColour(root, getDirectoryColor(numFiles));
@@ -34,7 +35,7 @@ void FileTree::onActivate(wxTreeEvent& event) {
 	std::string absPath = cwd + relPath;
 	if (std::filesystem::is_regular_file(absPath)) {
 		Window *w = getFrame()->window;
-		int lexer = FileHelper::getExtension(relPath);
+		int lexer = FileHelper::getLexerFromExtension(relPath);
 		w->panel->AddPage(new Editor(w->panel, lexer), relPath, true);
 		w->getCurrentEditor()->relPath = relPath;
 		w->getCurrentEditor()->loadFormatted(absPath);
@@ -65,6 +66,7 @@ int FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
 		if (std::filesystem::is_directory(file.path())) {
 			int num = loadTree(file.path().string(), item);	
 			numFiles += num;
+			SortChildren(item);
 			SetItemBackgroundColour(item, wxColour(getDirectoryColor(num)));
 			SetItemBold(item);
 		}
@@ -80,6 +82,7 @@ int FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
 void FileTree::reloadTree(void) {
 	DeleteChildren(root);
 	int numFiles = loadTree(cwd, root);
+	SortChildren(root);
 	SetItemBackgroundColour(root, getDirectoryColor(numFiles));
 	Expand(root);
 }
@@ -126,4 +129,46 @@ wxColour FileTree::getDirectoryColor(const int& num) const {
 		return wxColour(76, 173, 173);
 	}
 	return wxColour(102, 102, 232);
+}
+
+int FileTree::OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId& item2) {
+	std::string text1 = std::string(GetItemText(item1).mb_str());
+	std::string text2 = std::string(GetItemText(item2).mb_str());
+	std::string ext1 = FileHelper::getExtension(text1);
+	std::string ext2 = FileHelper::getExtension(text2);
+
+	if (ItemHasChildren(item1) && ItemHasChildren(item2)) {
+		return text1.compare(text2);
+	}
+	else if (ItemHasChildren(item1) && !ItemHasChildren(item2)) {
+		return -1;
+	}
+	else if (!ItemHasChildren(item1) && ItemHasChildren(item2)) {
+		return 1;
+	}
+	
+	if (FileHelper::isDotFile(text1) && FileHelper::isDotFile(text2)) {
+		return text1.compare(text2);
+	}
+	else if (FileHelper::isDotFile(text1) && !FileHelper::isDotFile(text2)) {
+		return -1;
+	}
+	else if (!FileHelper::isDotFile(text1) && FileHelper::isDotFile(text2)) {
+		return 1;
+	}
+
+	if (ext1.empty() && ext2.empty()) {
+		return text1.compare(text2);
+	}
+	else if (ext1.empty() && !ext2.empty()) {
+		return -1;
+	}
+	else if (!ext1.empty() && ext2.empty()) {
+		return 1;
+	}
+
+	if (ext1 == ext2) {
+		return text1.compare(text2);
+	}
+	return ext1.compare(ext2);
 }
