@@ -256,6 +256,26 @@ void Editor::applyLexer(const int& lexer) {
 	}
 }
 
+void Editor::loadFormatted(const std::string& file) {
+	LoadFile(file);
+	convertTabs();
+}
+
+void Editor::convertTabs(void) {
+	std::string oldText = std::string(GetText().mb_str());
+	std::string newText;
+	for (char c : oldText) {
+		if (c == '\t') {
+			newText.append("    ");
+		}
+		else {
+			newText.push_back(c);
+		}
+	}
+	wxString docText(newText);
+	SetText(docText);
+}
+
 int Editor::linePos(void) const {
     return GetCurrentPos() - lineStartPos();
 }

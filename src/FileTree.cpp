@@ -37,7 +37,8 @@ void FileTree::onActivate(wxTreeEvent& event) {
 		int lexer = FileHelper::getExtension(relPath);
 		w->panel->AddPage(new Editor(w->panel, lexer), relPath, true);
 		w->getCurrentEditor()->relPath = relPath;
-		w->getCurrentEditor()->LoadFile(absPath);
+		w->getCurrentEditor()->loadFormatted(absPath);
+		w->getCurrentEditor()->saved = true;
 	}
 	ClearFocusedItem();
 	event.Skip();

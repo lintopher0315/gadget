@@ -391,7 +391,7 @@ void Window::doOpenFile(void) {
 		int lexer = FileHelper::getExtension(e->relPath);
 		e->applyLexer(lexer);
 		if (FileHelper::isExistingPath(getFrame()->cwd, parsedCmd[1])) {
-			e->LoadFile(getFrame()->cwd + e->relPath);
+			e->loadFormatted(getFrame()->cwd + e->relPath);
 			if (FileHelper::isReadOnlyFile(getFrame()->cwd, e->relPath)) {
 				e->SetEditable(false);
 				e->SetReadOnly(true);
@@ -422,7 +422,7 @@ void Window::doNewTab(void) {
 		Editor *e = getCurrentEditor();
 		e->relPath = parsedCmd[i];
 		if (FileHelper::isExistingPath(getFrame()->cwd, parsedCmd[i])) {
-			e->LoadFile(getFrame()->cwd + e->relPath);
+			e->loadFormatted(getFrame()->cwd + e->relPath);
 			if (FileHelper::isReadOnlyFile(getFrame()->cwd, e->relPath)) {
 				e->SetEditable(false);
 				e->SetReadOnly(true);

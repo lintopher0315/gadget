@@ -12,6 +12,8 @@ class Editor : public wxStyledTextCtrl {
         Window *getWindow(void);
 
 		void applyLexer(const int& lexer);
+		void loadFormatted(const std::string& file);
+		void convertTabs(void);
 
         int linePos(void) const;
 		int currLine(void) const;
