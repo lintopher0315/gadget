@@ -13,10 +13,10 @@ FileTree::FileTree(wxWindow *parent) : wxTreeCtrl(parent, wxID_ANY, wxDefaultPos
 	cwd = getFrame()->cwd;
 	root = AddRoot(cwd);
 
-	loadTree(cwd, root);
+	int numFiles = loadTree(cwd, root);
 	ClearFocusedItem();
 	SetItemBold(root);
-	SetItemBackgroundColour(root, wxColour(120, 152, 161));
+	SetItemBackgroundColour(root, getDirectoryColor(numFiles));
 	Expand(root);
 
 	Bind(wxEVT_TREE_ITEM_ACTIVATED, &FileTree::onActivate, this);
@@ -54,7 +54,8 @@ void FileTree::onClick(wxMouseEvent& event) {
 	event.Skip();
 }
 
-void FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
+int FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
+	int numFiles = 0;
 	for (const auto & file : std::filesystem::directory_iterator(cwd)) {
 		wxTreeItemId item = AppendItem(parent, file.path().filename().string());
 		std::string ext = file.path().extension();
@@ -62,20 +63,24 @@ void FileTree::loadTree(const std::string& cwd, wxTreeItemId parent) {
 			ext.erase(0, 1);
 		}
 		if (std::filesystem::is_directory(file.path())) {
-			SetItemBackgroundColour(item, wxColour(120, 152, 161));
+			int num = loadTree(file.path().string(), item);	
+			numFiles += num;
+			SetItemBackgroundColour(item, wxColour(getDirectoryColor(num)));
 			SetItemBold(item);
-			loadTree(file.path().string(), item);	
 		}
 		else {
 			SetItemTextColour(item, getColorFromExtension(ext));
+			++numFiles;
 		}
 	}
+	return numFiles;
 }
 
 // every time a file is added or deleted, reload tree
 void FileTree::reloadTree(void) {
 	DeleteChildren(root);
-	loadTree(cwd, root);
+	int numFiles = loadTree(cwd, root);
+	SetItemBackgroundColour(root, getDirectoryColor(numFiles));
 	Expand(root);
 }
 
@@ -102,4 +107,23 @@ wxColour FileTree::getColorFromExtension(const std::string& ext) const {
 	g = (255 - g) / 10 * 3 + g;
 	b = (255 - b) / 10 * 3 + b;
 	return wxColour(r, g, b);
+}
+
+wxColour FileTree::getDirectoryColor(const int& num) const {
+	if (num == 0) {
+		return wxColour(225, 191, 227);
+	}
+	if (num <= 10) {
+		return wxColour(207, 109, 109);
+	}
+	if (num <= 30) {
+		return wxColour(173, 173, 76);
+	}
+	if (num <= 50) {
+		return wxColour(76, 173, 76);
+	}
+	if (num <= 70) {
+		return wxColour(76, 173, 173);
+	}
+	return wxColour(102, 102, 232);
 }

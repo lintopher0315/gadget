@@ -20,9 +20,10 @@ class FileTree : public wxTreeCtrl {
 		void onKillFocus(wxFocusEvent& event);
 		void onClick(wxMouseEvent& event);
 
-		void loadTree(const std::string& cwd, wxTreeItemId parent);
+		int loadTree(const std::string& cwd, wxTreeItemId parent);
 		std::string getRelPathFromItem(const wxTreeItemId& item) const;
 		wxColour getColorFromExtension(const std::string& ext) const;
+		wxColour getDirectoryColor(const int& num) const;
 
 		std::string cwd;
 		wxTreeItemId root;
