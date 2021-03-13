@@ -1,8 +1,23 @@
 language: cpp
 compiler: gcc
 dist: bionic
+
 before_install:
     - sudo apt-get update
     - sudo apt-get -y install libgtk2.0-dev
+
+install:
+    - cd $HOME
+    - curl https://www.wxwidgets.org/downloads/wxWidgets-3.0.5.tar.bz2
+    - tar xzf wxWidgets-*.tar.bz2
+    - cd wxWidgets-3.0.5
+    - mkdir gtk-build
+    - cd gtk-build
+    - ../configure
+    - make -j3
+    - sudo make install
+    - sudo ldconfig
+
 script:
+    - cd $TRAVIS_BUILD_DIR
     - make
