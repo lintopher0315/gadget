@@ -8,7 +8,7 @@ before_install:
 
 install:
     - cd $HOME
-    - curl https://www.wxwidgets.org/downloads/wxWidgets-3.0.5.tar.bz2
+    - curl -fsSL -O https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxWidgets-3.0.5.tar.bz2
     - tar -xjf wxWidgets-3.0.5.tar.bz2
     - cd wxWidgets-3.0.5
     - mkdir gtk-build
