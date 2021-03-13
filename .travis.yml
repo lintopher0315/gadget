@@ -1,0 +1,5 @@
+language: cpp
+compiler: gcc
+before_install: sudo apt install libgtk2.0-dev
+script:
+    - make
