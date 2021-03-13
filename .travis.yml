@@ -15,8 +15,8 @@ before_install:
     - sudo apt-get -y install libgtk2.0-dev
 
 install:
-    - ln -s /usr/bin/gcc-8 /usr/local/bin/gcc
-    - ls -s /usr/bin/g++-8 /usr/local/bin/g++
+    - sudo ln -s /usr/bin/gcc-8 /usr/local/bin/gcc
+    - sudo ls -s /usr/bin/g++-8 /usr/local/bin/g++
     - export CC=/usr/bin/gcc-8
     - export CXX=/usr/bin/g++-8
     - gcc -v && g++ -v
