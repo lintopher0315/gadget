@@ -31,7 +31,7 @@ HelpFile::HelpFile(wxWindow *parent) : Editor(parent, NULL_LEX) {
 		"b\n\t\t\t\tjump backward to the start of the previous word; can be prepended with [num]\n"
 		"gg\n\t\t\t\tjump to the beginning of the file\n"
 		"G\n\t\t\t\tjump to the end of the file\n"
-		"<num>G\n\t\t\t\tjump to the beginning of the line indicated by [num]\n"
+		"[num]G\n\t\t\t\tjump to the beginning of the line indicated by [num]\n"
 		"_\n\t\t\t\tjump to the first non-whitespace character of the current line\n"
 		"0\n\t\t\t\tjump to the beginning of the current line\n"
 		"$\n\t\t\t\tjump to the end of the current line\n"

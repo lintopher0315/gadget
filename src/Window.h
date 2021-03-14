@@ -24,10 +24,10 @@ class Window : public wxWindow {
         Editor *getCurrentEditor(void) const;
         void executeNormal(const int& cmdInd);
         void executeCommand(const int& cmdInd);
-		void executeVisual(const int& cmdInd);
-		void executeLine(const int& cmdInd);
+        void executeVisual(const int& cmdInd);
+        void executeLine(const int& cmdInd);
 
-		void updateStatus(void);
+        void updateStatus(void);
 
         Panel *panel;
         StatusBar *statusBar;
@@ -36,41 +36,41 @@ class Window : public wxWindow {
 
         unsigned short mode;
         unsigned short currEditor;
-		unsigned short lastCopiedMode;
+        unsigned short lastCopiedMode;
 
-	private:
-		void doInsertion(void);
-		void doBasicMovement(void);
-		void doNewLine(void);
-		void doIntraLineJump(void);
-		void doInterLineJump(void);
-		void doTabChange(void);
-		void doWordJump(void);
-		void doCharSearch(void);
-		void doVisualMode(void);
-		void doLineMode(void);
-		void doPaste(void);
-		void doLineCut(void);
+    private:
+        void doInsertion(void);
+        void doBasicMovement(void);
+        void doNewLine(void);
+        void doIntraLineJump(void);
+        void doInterLineJump(void);
+        void doTabChange(void);
+        void doWordJump(void);
+        void doCharSearch(void);
+        void doVisualMode(void);
+        void doLineMode(void);
+        void doPaste(void);
+        void doLineCut(void);
 
-		void doQuitFile(void);
-		void doSaveFile(void);
-		void doOpenFile(void);
-		void doNewTab(void);
-		void doSplitTab(void);
-		void doOpenHelpFile(void);
+        void doQuitFile(void);
+        void doSaveFile(void);
+        void doOpenFile(void);
+        void doNewTab(void);
+        void doSplitTab(void);
+        void doOpenHelpFile(void);
 
-		void doBasicVisMovement(void);
-		void doVisOrLineOrNormalDelete(void);
-		void doVisOrLineCaseChange(void);
-		void doVisInterLineJump(void);
-		void doVisOrLineCopy(void);
-		void doVisWordJump(void);
-		void doVisIntraLineJump(void);
-		void doVisCharSearch(void);
+        void doBasicVisMovement(void);
+        void doVisOrLineOrNormalDelete(void);
+        void doVisOrLineCaseChange(void);
+        void doVisInterLineJump(void);
+        void doVisOrLineCopy(void);
+        void doVisWordJump(void);
+        void doVisIntraLineJump(void);
+        void doVisCharSearch(void);
 
-		void doBasicLineMovement(void);
-		void doLineShift(void);
-		void doLineInterLineJump(void);
+        void doBasicLineMovement(void);
+        void doLineShift(void);
+        void doLineInterLineJump(void);
 
         wxBoxSizer *sizer;
 };
